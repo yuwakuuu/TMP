@@ -3,6 +3,9 @@
   doc.classList.add('js');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const M = !reduceMotion && window.Motion && window.Motion.animate ? window.Motion : null;
+  if (M) doc.classList.add('has-motion');
+  const spring = (stiffness = 140, damping = 20, extra = {}) => ({ type: 'spring', stiffness, damping, ...extra });
 
   /* Loading screen: fonts, page and the 3D logo each fill part of the bar ------- */
   const loader = document.getElementById('loader');
@@ -22,6 +25,7 @@
       if (done) return;
       done = true;
       doc.classList.add('loaded');
+      window.dispatchEvent(new Event('tmp:loaded'));
       try { sessionStorage.setItem('tmp-loaded', '1'); } catch (e) { /* private mode */ }
       setTimeout(() => loader.remove(), 1400);
     };
@@ -45,6 +49,7 @@
     requestAnimationFrame(tick);
   } else {
     doc.classList.add('loaded');
+    window.dispatchEvent(new Event('tmp:loaded'));
   }
 
   /* Navigation: border on scroll, mobile sheet, active link ------------------ */
@@ -92,7 +97,16 @@
     const i = siblings.indexOf(el);
     if (i > 0) { el.style.transitionDelay = Math.min(i, 5) * 80 + 'ms'; el.style.setProperty('--i', Math.min(i, 5)); }
   });
-  if ('IntersectionObserver' in window && !reduceMotion) {
+  if (M) {
+    // hidden under the loading screen, then sprung into place as each one scrolls in
+    reveals.forEach((el) => { el.style.opacity = '0'; el.style.transform = 'translateY(44px)'; });
+    M.inView('.reveal', (el) => {
+      const i = +(el.style.getPropertyValue('--i') || 0);
+      M.animate(el, { opacity: [0, 1], y: [44, 0], scale: [0.97, 1], filter: ['blur(6px)', 'blur(0px)'] },
+        { ...spring(110, 19), opacity: { duration: 0.6, delay: i * 0.08 }, filter: { duration: 0.6, delay: i * 0.08 }, delay: i * 0.08 })
+        .then(() => { el.style.transform = ''; el.style.filter = ''; });
+    }, { margin: '0px 0px -12% 0px' });
+  } else if ('IntersectionObserver' in window && !reduceMotion) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
@@ -268,9 +282,10 @@
       btn.addEventListener('pointermove', (e) => {
         const r = btn.getBoundingClientRect();
         const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
-        btn.style.transform = `translate(${(dx * 0.18).toFixed(1)}px, ${(dy * 0.28).toFixed(1)}px)`;
+        if (M) M.animate(btn, { x: dx * 0.18, y: dy * 0.28 }, spring(300, 18));
+        else btn.style.transform = `translate(${(dx * 0.18).toFixed(1)}px, ${(dy * 0.28).toFixed(1)}px)`;
       });
-      btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
+      btn.addEventListener('pointerleave', () => { if (M) M.animate(btn, { x: 0, y: 0 }, spring(220, 12)); else btn.style.transform = ''; });
     });
   }
 
@@ -288,7 +303,8 @@
         const step = (now) => {
           const p = Math.min(1, (now - t0) / dur);
           const eased = 1 - Math.pow(1 - p, 4);
-          out.textContent = fmt(Math.round(end * eased / (end >= 1000 ? 10 : 5)) * (end >= 1000 ? 10 : 5));
+          const unit = end >= 1000 ? 10 : end >= 100 ? 5 : 1;
+          out.textContent = fmt(Math.round(end * eased / unit) * unit);
           if (p < 1) requestAnimationFrame(step); else out.textContent = fmt(end);
         };
         requestAnimationFrame(step);
@@ -299,6 +315,101 @@
 
   /* A tap on a chrome object gives a tiny buzz on phones that support it */
   document.addEventListener('tmp:splash', () => { try { navigator.vibrate && navigator.vibrate(12); } catch (e) { /* not supported */ } });
+
+  /* Motion: entrance, scroll-linked scenes and springy touch feedback --------- */
+  if (M) {
+    const { animate, scroll, inView, stagger, press, hover } = M;
+
+    // hero: the logo springs up out of the dark, then the headline arrives word by word
+    const heroTitle = document.querySelector('.hero__title');
+    if (heroTitle) {
+      const first = heroTitle.firstChild;
+      if (first && first.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        first.textContent.split(/(\s+)/).forEach((w) => {
+          if (!w) return;
+          if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
+          const span = document.createElement('span');
+          span.className = 'word'; span.textContent = w;
+          frag.appendChild(span);
+        });
+        first.replaceWith(frag);
+      }
+    }
+    const heroIns = [...document.querySelectorAll('.hero__in')];
+    const heroWords = [...document.querySelectorAll('.hero__title .word')];
+    const heroChrome = document.querySelector('.hero__title .chrome');
+    const stage = document.querySelector('.hero__stage');
+    const intro = () => {
+      animate(stage, { opacity: [0, 1], scale: [0.6, 1], y: [40, 0] }, { ...spring(55, 11), opacity: { duration: 0.8 } });
+      heroIns.forEach((el) => { el.style.opacity = '1'; el.style.transform = 'none'; });
+      animate(heroIns.filter((el) => el !== heroTitle), { opacity: [0, 1], y: [30, 0], filter: ['blur(8px)', 'blur(0px)'] },
+        { ...spring(120, 18), delay: stagger(0.12, { startDelay: 0.35 }) });
+      animate(heroWords, { opacity: [0, 1], y: [50, 0], rotateX: [-70, 0], filter: ['blur(10px)', 'blur(0px)'] },
+        { ...spring(130, 16), delay: stagger(0.08, { startDelay: 0.2 }) });
+      if (heroChrome) animate(heroChrome, { opacity: [0, 1], scale: [0.4, 1], y: [30, 0] }, { ...spring(170, 9), delay: 0.5, opacity: { duration: 0.4, delay: 0.5 } });
+    };
+    if (doc.classList.contains('loaded')) intro(); else window.addEventListener('tmp:loaded', intro, { once: true });
+
+    // the logo floats back and dims as the hero scrolls away
+    const hero = document.querySelector('.hero');
+    scroll(animate('.hero__float', { y: ['0%', '30%'], scale: [1, 0.82], opacity: [1, 0.1] }, { ease: 'linear' }),
+      { target: hero, offset: ['start start', 'end start'] });
+
+    // the laptop hinges open toward you
+    const showcase = document.querySelector('.showcase');
+    if (showcase) {
+      scroll(animate('.showcase__stage', { rotateX: [34, 0], scale: [0.84, 1], y: [80, 0], opacity: [0.35, 1] }, { ease: 'linear' }),
+        { target: showcase, offset: ['start end', 'center center'] });
+      scroll(animate('.phone', { x: [80, 0], rotate: [8, 0] }, { ease: 'linear' }),
+        { target: showcase, offset: ['start end', 'center center'] });
+    }
+
+    // page progress and the process line
+    scroll(animate('.progress', { scaleX: [0, 1] }, { ease: 'linear' }));
+    const steps = document.querySelector('[data-steps]');
+    if (steps) scroll(animate('.steps__line', { scaleX: [0, 1] }, { ease: 'linear' }), { target: steps, offset: ['start 85%', 'end 60%'] });
+
+    // the marquee leans with your scroll speed
+    const track = document.querySelector('.marquee__track');
+    if (track) {
+      let lastY = window.scrollY, skew = 0, raf = 0;
+      const settle = () => {
+        raf = 0;
+        skew *= 0.88;
+        track.style.setProperty('--lean', skew.toFixed(2) + 'deg');
+        if (Math.abs(skew) > 0.05) raf = requestAnimationFrame(settle);
+      };
+      window.addEventListener('scroll', () => {
+        const dy = window.scrollY - lastY; lastY = window.scrollY;
+        skew = Math.max(-10, Math.min(10, skew + dy * 0.05));
+        if (!raf) raf = requestAnimationFrame(settle);
+      }, { passive: true });
+    }
+
+    // skill chips pop in one after another
+    const chips = document.querySelectorAll('.skills span');
+    chips.forEach((c) => { c.style.opacity = '0'; });
+    inView('.skills', () => {
+      animate(chips, { opacity: [0, 1], scale: [0.5, 1], y: [16, 0] }, { ...spring(320, 16), delay: stagger(0.035) });
+    }, { margin: '0px 0px -10% 0px' });
+
+    // #4SAMMY glows softly, like a heartbeat
+    const tag = document.querySelector('.sam__tag');
+    if (tag) animate(tag, { textShadow: ['0 0 24px rgba(224,27,36,.25)', '0 0 56px rgba(224,27,36,.7)'] }, { duration: 2.4, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' });
+
+    // springy press on every button and chip; tiles lift on hover
+    press('.btn, .skills span, .chips span, .dots button', (el) => {
+      animate(el, { scale: 0.93 }, spring(700, 22));
+      return () => animate(el, { scale: 1 }, spring(500, 12));
+    });
+    if (finePointer) {
+      hover('.tile, .pledge, .price', (el) => {
+        animate(el, { y: -6 }, spring(300, 20));
+        return () => animate(el, { y: 0 }, spring(240, 16));
+      });
+    }
+  }
 
   document.querySelectorAll('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
 })();

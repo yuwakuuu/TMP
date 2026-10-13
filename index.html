@@ -3,20 +3,50 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>The Marketing Partner — Websites, apps &amp; marketing for local business</title>
-  <meta name="description" content="The Marketing Partner (TMP) helps small local businesses grow online with custom websites, apps, business systems, marketing and lead generation. Websites from $500.">
+  <title>The Marketing Partner (TMP) · Websites, apps, games &amp; marketing</title>
+  <meta name="description" content="The Marketing Partner (TMP) is a team of creators helping small local businesses grow online with custom websites, apps, systems, games, 3D, branding and marketing. Websites from $500.">
   <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://yuwakuuu.github.io/TMP/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="The Marketing Partner">
-  <meta property="og:description" content="Websites, apps and marketing that help small local businesses get found, get chosen and grow.">
-  <meta property="og:image" content="assets/og-image.png">
+  <meta property="og:site_name" content="The Marketing Partner">
+  <meta property="og:title" content="The Marketing Partner (TMP)">
+  <meta property="og:description" content="Websites, apps, games and marketing that help small local businesses get found, get chosen and grow. #4SAMMY">
+  <meta property="og:url" content="https://yuwakuuu.github.io/TMP/">
+  <meta property="og:image" content="https://yuwakuuu.github.io/TMP/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Marketing Partner: a liquid-chrome TMP logo">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "The Marketing Partner",
+    "alternateName": "TMP",
+    "url": "https://yuwakuuu.github.io/TMP/",
+    "logo": "https://yuwakuuu.github.io/TMP/assets/apple-touch-icon.png",
+    "image": "https://yuwakuuu.github.io/TMP/assets/og-image.png",
+    "description": "Websites, apps, systems, games, 3D, branding, marketing and lead generation for small local businesses.",
+    "sameAs": ["https://github.com/yuwakuuu", "https://yuwakuuu.github.io/madebywaku/"],
+    "makesOffer": [
+      { "@type": "Offer", "name": "Website", "priceSpecification": { "@type": "PriceSpecification", "minPrice": 500, "priceCurrency": "USD" } },
+      { "@type": "Offer", "name": "App", "priceSpecification": { "@type": "PriceSpecification", "minPrice": 1000, "priceCurrency": "USD" } },
+      { "@type": "Offer", "name": "System", "priceSpecification": { "@type": "PriceSpecification", "minPrice": 1500, "priceCurrency": "USD" } },
+      { "@type": "Offer", "name": "Marketing and lead generation", "priceSpecification": { "@type": "PriceSpecification", "minPrice": 100, "priceCurrency": "USD" } },
+      { "@type": "Offer", "name": "Maintenance and update membership", "priceSpecification": { "@type": "UnitPriceSpecification", "price": 60, "priceCurrency": "USD", "unitText": "month" } }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="preload" href="vendor/motion/motion.js" as="script">
   <link rel="modulepreload" href="vendor/three/three.module.min.js">
   <link rel="modulepreload" href="js/scenes.js">
   <script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
@@ -75,9 +105,10 @@
       <nav class="nav__links" aria-label="Primary">
         <a href="#work">Work</a>
         <a href="#services">Services</a>
+        <a href="#playground">Play</a>
         <a href="#pricing">Pricing</a>
         <a href="#membership">Membership</a>
-        <a href="#faq">FAQ</a>
+        <a href="#sam" class="nav__sam">#4SAMMY</a>
       </nav>
       <a class="btn btn--sm btn--primary nav__cta" href="#contact">Get started</a>
       <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="sheet">
@@ -87,8 +118,10 @@
     <div class="sheet" id="sheet" hidden>
       <a href="#work">Work</a>
       <a href="#services">Services</a>
+      <a href="#playground">Play</a>
       <a href="#pricing">Pricing</a>
       <a href="#membership">Membership</a>
+      <a href="#sam">#4SAMMY</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
     </div>
@@ -98,9 +131,11 @@
     <!-- Hero: the chrome TMP -->
     <section class="hero" id="top" data-dark>
       <div class="hero__glow" aria-hidden="true"></div>
-      <div class="hero__stage" data-stage>
-        <canvas class="hero__canvas" id="tmp-3d" tabindex="0" role="img" aria-label="A 3D liquid-chrome TMP logo. Drag to spin it, press Enter to make it pulse."></canvas>
-        <p class="hero__fallback chrome" aria-hidden="true">TMP</p>
+      <div class="hero__float">
+        <div class="hero__stage" data-stage>
+          <canvas class="hero__canvas" id="tmp-3d" tabindex="0" role="img" aria-label="A 3D liquid-chrome TMP logo. Drag to spin it, press Enter to make it pulse."></canvas>
+          <p class="hero__fallback chrome" aria-hidden="true">TMP</p>
+        </div>
       </div>
       <div class="wrap hero__copy">
         <p class="eyebrow eyebrow--light hero__in">The Marketing Partner</p>
@@ -228,8 +263,8 @@
       <div class="wrap">
         <header class="section__head reveal">
           <p class="eyebrow">What we do</p>
-          <h2>Everything your business<br class="br-lg"> needs online.</h2>
-          <p class="section__lede">Websites and apps are our specialty. Marketing is how we make sure people actually see them.</p>
+          <h2>A team of creators. <span class="chrome chrome--light">If you can imagine it, we can build it.</span></h2>
+          <p class="section__lede">Websites and apps are our specialty. Marketing makes sure people see them. And when you want something nobody else has, we design, code, animate and edit it ourselves.</p>
         </header>
 
         <div class="bento">
@@ -248,7 +283,7 @@
           <article class="tile tile--dark reveal">
             <div class="tile__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></div>
             <h3>Apps</h3>
-            <p>Web and mobile apps that keep customers coming back: loyalty, ordering, scheduling, member portals and more.</p>
+            <p>Web, iPhone and Android apps that keep customers coming back: loyalty, ordering, scheduling, member portals and more.</p>
           </article>
 
           <article class="tile reveal">
@@ -257,20 +292,65 @@
             <p>Booking, customer management, dashboards and automations that save you hours every week.</p>
           </article>
 
+          <article class="tile tile--wide tile--arcade reveal">
+            <div class="tile__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 8h10a5 5 0 0 1 4.8 6.4l-.9 3a2.3 2.3 0 0 1-3.9.9L15 16H9l-2 2.3a2.3 2.3 0 0 1-3.9-.9l-.9-3A5 5 0 0 1 7 8Z"/><path d="M7.5 11v3M6 12.5h3"/><circle cx="15.5" cy="12" r=".6"/><circle cx="17.5" cy="13.5" r=".6"/></svg></div>
+            <h3>Games &amp; interactive</h3>
+            <p>Browser games, Minecraft plugins, playable promos and interactive experiences that people share. There’s one to try a little further down this page.</p>
+            <a class="link-arrow link-arrow--light" href="#playground">Play the demo</a>
+          </article>
+
           <article class="tile tile--accent reveal">
             <div class="tile__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17.5 9 11.5l4 4 8-8"/><path d="M15 7.5h6v6"/></svg></div>
             <h3>Marketing &amp; lead generation</h3>
             <p>Google Business Profile, local SEO, social media and targeted campaigns that turn searches into customers.</p>
           </article>
 
-          <article class="tile tile--strip reveal">
+          <article class="tile tile--chrome reveal">
+            <div class="tile__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2.5 8.5 4.8v9.4L12 21.5l-8.5-4.8V7.3L12 2.5Z"/><path d="m3.5 7.3 8.5 4.9 8.5-4.9M12 12.2v9.3"/></svg></div>
+            <h3>3D &amp; motion</h3>
+            <p>Real-time 3D, animation and scroll effects, like the chrome logo and balloon on this page.</p>
+          </article>
+
+          <article class="tile reveal">
+            <div class="tile__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.7-.9 1.4-1.9-.3-1 .4-2.1 1.5-2.1H17a4 4 0 0 0 4-4c0-5.5-4-10-9-10Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7" r="1"/><circle cx="15.5" cy="8" r="1"/></svg></div>
+            <h3>Branding &amp; content</h3>
+            <p>Logos, graphics, video editing and audio, so everything you post looks and sounds like you.</p>
+          </article>
+
+          <article class="tile tile--wide tile--care reveal">
             <div class="tile__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><path d="M20.5 3.5V8H16"/></svg></div>
-            <div>
-              <h3>Care &amp; updates</h3>
-              <p>Ongoing updates, new features and real tech support, so your site never falls behind.</p>
-            </div>
+            <h3>Care &amp; updates</h3>
+            <p>Ongoing updates, new features and real tech support, so your site never falls behind.</p>
             <a class="link-arrow" href="#membership">Explore membership</a>
           </article>
+        </div>
+
+        <div class="skills" aria-label="Things we make">
+          <span>Websites</span><span>Landing pages</span><span>Online booking</span><span>Web apps</span><span>iPhone &amp; Android apps</span><span>Dashboards</span><span>Automations</span><span>Browser games</span><span>Minecraft plugins</span><span>3D &amp; WebGL</span><span>Motion design</span><span>Logos</span><span>Graphics</span><span>Video editing</span><span>Audio engineering</span><span>Social media</span><span>Local SEO</span><span>Google Business Profile</span><span>Lead generation</span><span>Tech support</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Playground: a small game -->
+    <section class="playground" id="playground" data-dark>
+      <div class="wrap">
+        <header class="section__head reveal">
+          <p class="eyebrow eyebrow--light">Playground</p>
+          <h2>Yes, we make games too. <span class="chrome">Pop some bubbles.</span></h2>
+          <p class="section__lede section__lede--light">A tiny game, built right into this page. You have 20 seconds. Chrome bubbles are 1 point, red balloons are 5.</p>
+        </header>
+        <div class="game reveal" id="game">
+          <canvas class="game__canvas" aria-label="Bubble Pop game. Tap bubbles to pop them."></canvas>
+          <div class="game__hud" aria-live="polite">
+            <span>Score <b data-score>0</b></span>
+            <span>Time <b data-time>20</b></span>
+            <span>Best <b data-best>0</b></span>
+          </div>
+          <div class="game__overlay" data-overlay>
+            <p class="game__title chrome">Bubble Pop</p>
+            <p class="game__msg" data-msg>Tap as many bubbles as you can.</p>
+            <button class="btn btn--light" type="button" data-start>Play</button>
+          </div>
         </div>
       </div>
     </section>
@@ -282,6 +362,7 @@
           <p class="eyebrow">How it works</p>
           <h2>Simple from start to launch.</h2>
         </header>
+        <div class="steps__line" aria-hidden="true"></div>
         <ol class="steps" data-steps>
           <li class="reveal"><span class="steps__n">01</span><h3>Talk</h3><p>Tell us about your business, your customers and what you want more of.</p></li>
           <li class="reveal"><span class="steps__n">02</span><h3>Design</h3><p>We design around your brand and show you before anything is built.</p></li>
@@ -353,6 +434,7 @@
           </div>
           <a class="btn btn--ghost" href="#contact" data-interest="Marketing &amp; lead generation">Get started</a>
         </article>
+        <p class="custom-note reveal">Games, 3D, branding, video or something nobody has asked for before? <a class="link-arrow" href="#contact" data-interest="Something else">Tell us your idea for a custom quote</a></p>
       </div>
     </section>
 
@@ -394,6 +476,44 @@
             <div><h3>Peace of mind</h3><p>Your site stays healthy, current and working.</p></div>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <!-- In memory of Sammy -->
+    <section class="sam" id="sam" data-dark aria-labelledby="sam-title">
+      <div class="wrap sam__inner">
+        <header class="sam__head reveal">
+          <p class="eyebrow eyebrow--light">Where our name comes from</p>
+          <h2 id="sam-title">Named by a friend. <span class="sam__name">Built in his honor.</span></h2>
+          <p class="sam__lede">The name <strong>The Marketing Partner</strong> came from our close friend, <strong>Sammy Saka Makori II</strong>. We lost Sammy last year. This business carries his name forward, and so does everything it earns.</p>
+        </header>
+
+        <div class="pledges">
+          <article class="pledge reveal">
+            <p class="pledge__amt" data-count="5"><b>5</b>%</p>
+            <h3>of all profits, for the lifetime of this business</h3>
+            <p>goes to Sammy’s GoFundMe.</p>
+            <a class="btn btn--light" href="https://gofund.me/80a9ea02c" target="_blank" rel="noopener">Give to Sammy’s GoFundMe</a>
+          </article>
+          <article class="pledge reveal">
+            <p class="pledge__amt" data-count="5">+<b>5</b>%</p>
+            <h3>of all profits, every year</h3>
+            <p>is donated to charity in Sammy’s honor.</p>
+          </article>
+        </div>
+
+        <div class="sam__movement reveal">
+          <p class="sam__tag" aria-label="Hashtag for Sammy">#4SAMMY</p>
+          <div>
+            <h3><abbr title="Suicide Awareness Movement">SAM</abbr>: Suicide Awareness Movement</h3>
+            <p>SAM is our project in Sammy’s name. Its message is simple: <strong>please check on those around you.</strong> A text, a call or a visit can mean more than you know.</p>
+          </div>
+        </div>
+
+        <aside class="help reveal" aria-label="Get help now">
+          <p class="help__title">If you’re struggling, you’re not alone.</p>
+          <p>In the US, call or text <a href="tel:988"><strong>988</strong></a> to reach the Suicide &amp; Crisis Lifeline, any time, day or night. You can also chat at <a href="https://988lifeline.org" target="_blank" rel="noopener">988lifeline.org</a>. Outside the US, find a helpline near you at <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a>.</p>
+        </aside>
       </div>
     </section>
 
@@ -453,7 +573,10 @@
             <label><input type="checkbox" name="interest" value="App"><span>App</span></label>
             <label><input type="checkbox" name="interest" value="System"><span>System</span></label>
             <label><input type="checkbox" name="interest" value="Marketing &amp; lead generation"><span>Marketing</span></label>
+            <label><input type="checkbox" name="interest" value="Game or interactive"><span>Game</span></label>
+            <label><input type="checkbox" name="interest" value="Branding &amp; content"><span>Branding</span></label>
             <label><input type="checkbox" name="interest" value="Membership"><span>Membership</span></label>
+            <label><input type="checkbox" name="interest" value="Something else"><span>Something else</span></label>
           </fieldset>
           <label class="field"><span>Tell us about your project</span><textarea name="message" rows="4"></textarea></label>
           <button class="btn btn--primary btn--block" type="submit">Send message</button>
@@ -475,10 +598,7 @@
     <div class="wrap">
       <p class="footer__word chrome chrome--light" aria-hidden="true">The Marketing Partner</p>
       <div class="footer__top">
-        <a class="brand" href="#top">
-          <span class="brand__mark chrome chrome--sm chrome--light" aria-hidden="true">TMP</span>
-          <span class="brand__name">The Marketing Partner</span>
-        </a>
+        <p class="footer__tagline">A team of creators helping local businesses grow online. Websites, apps, systems, games and marketing.</p>
         <nav class="footer__cols" aria-label="Footer">
           <div>
             <h4>Services</h4>
@@ -495,6 +615,12 @@
             <a href="https://yuwakuonline.tail28063a.ts.net:8443/" target="_blank" rel="noopener">The TOB Company</a>
           </div>
           <div>
+            <h4>#4SAMMY</h4>
+            <a href="#sam">Our story</a>
+            <a href="https://gofund.me/80a9ea02c" target="_blank" rel="noopener">Sammy’s GoFundMe</a>
+            <a href="tel:988">Call or text 988</a>
+          </div>
+          <div>
             <h4>Company</h4>
             <a href="#pricing">Pricing</a>
             <a href="#membership">Membership</a>
@@ -506,12 +632,14 @@
       </div>
       <div class="footer__bottom">
         <p>© <span data-year>2026</span> The Marketing Partner. All rights reserved.</p>
-        <p>Designed and built by TMP.</p>
+        <p class="footer__sam">#4SAMMY · Please check on those around you.</p>
       </div>
     </div>
   </footer>
 
+  <script src="vendor/motion/motion.js" defer></script>
   <script src="script.js" defer></script>
+  <script src="js/game.js" defer></script>
   <script type="module" src="js/main3d.js"></script>
 </body>
 </html>

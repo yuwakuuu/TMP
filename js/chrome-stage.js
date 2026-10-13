@@ -20,7 +20,9 @@ export function createChromeStage(canvas, {
   reduced = false, lite = false, onPulse = () => {}, onReady = () => {},
   build, pose, initial = {}, fitAspect = 1,
   halo: haloHue = 0.72, haloSize = 6.5, pulseSpin = TAU * 2.4, studio = 'strips',
+  finish = 'chrome',   // 'chrome' (silver metal) or 'balloon' (glossy red latex)
 }) {
+  const balloon = finish === 'balloon';
   // lite = touch / low-power device: lower pixel ratio, no MSAA past 1.5x
   const maxDpr = lite ? 1.5 : 2;
   let dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
@@ -41,7 +43,7 @@ export function createChromeStage(canvas, {
   envScene.traverse((o) => { o.geometry?.dispose(); o.material?.dispose(); });
   pmrem.dispose();
 
-  const { chrome, rim, uniforms, rimUniforms } = chromeMaterials();
+  const { chrome, rim, uniforms, rimUniforms } = chromeMaterials(finish);
 
   const fit = new THREE.Group();    // keeps the object inside the canvas
   const tilt = new THREE.Group();   // pointer-follow tilt
@@ -50,9 +52,9 @@ export function createChromeStage(canvas, {
   scene.add(fit); fit.add(tilt); tilt.add(spin); spin.add(pop);
 
   // coloured rim lights behind the object + a soft key for the clearcoat
-  const l1 = new THREE.DirectionalLight('#a9c8ff', 2.6); l1.position.set(-4, 1.5, -3);
-  const l2 = new THREE.DirectionalLight('#d6ccff', 2.6); l2.position.set(4, -1, -3);
-  const l3 = new THREE.DirectionalLight('#ffffff', 1.1); l3.position.set(1, 4, 5);
+  const l1 = new THREE.DirectionalLight(balloon ? '#ffd0d0' : '#a9c8ff', balloon ? 1.6 : 2.6); l1.position.set(-4, 1.5, -3);
+  const l2 = new THREE.DirectionalLight(balloon ? '#ff9a9a' : '#d6ccff', balloon ? 1.4 : 2.6); l2.position.set(4, -1, -3);
+  const l3 = new THREE.DirectionalLight('#ffffff', balloon ? 2.2 : 1.1); l3.position.set(1, 4, 5);
   scene.add(l1, l2, l3);
 
   const halo = new THREE.Sprite(new THREE.SpriteMaterial({
@@ -69,7 +71,7 @@ export function createChromeStage(canvas, {
     let r = rings.find((x) => !x.active);
     if (!r) {
       const m = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({
-        color: 0xd8e6ff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+        color: balloon ? 0xff6b6b : 0xd8e6ff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
       }));
       scene.add(m);
       r = { mesh: m, active: false, t: 0 };
@@ -244,9 +246,9 @@ export function createChromeStage(canvas, {
     state.pulse *= Math.exp(-dt * 2.6);
     state.glow *= Math.exp(-dt * 3);
     uniforms.uPulse.value = state.pulse;
-    rimUniforms.uIntensity.value = 0.6 + state.glow * 2;
+    rimUniforms.uIntensity.value = (balloon ? 0.35 : 0.6) + state.glow * 2;
     halo.material.opacity = 0.3 + state.glow * 0.5 + (reduced ? 0 : Math.sin(t * 1.3) * 0.04);
-    halo.material.color.setHSL((haloHue + (reduced ? 0 : Math.sin(t * 0.2) * 0.06) + 1) % 1, 0.45, 0.62);
+    halo.material.color.setHSL((haloHue + (reduced ? 0 : Math.sin(t * 0.2) * 0.06) + 1) % 1, balloon ? 0.8 : 0.45, balloon ? 0.55 : 0.62);
 
     for (const r of rings) {
       if (!r.active) continue;
@@ -271,7 +273,7 @@ export function createChromeStage(canvas, {
 
 // ---- materials ---------------------------------------------------------------------------
 
-function chromeMaterials() {
+function chromeMaterials(finish) {
   // Displacement is driven by position only (not normals) so non-indexed geometry never
   // cracks open at its hard edges.
   const uniforms = { uTime: { value: 0 }, uPulse: { value: 0 } };
@@ -280,10 +282,18 @@ function chromeMaterials() {
     transformed.z += w * uPulse * 0.28;
     transformed.xy *= 1.0 + w * uPulse * 0.035;`;
 
-  const chrome = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff, metalness: 1, roughness: 0.06,
-    clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1.6,
-  });
+  const chrome = finish === 'balloon'
+    // inflated latex: saturated red, soft sheen at the edges, a hard glossy coat on top
+    ? new THREE.MeshPhysicalMaterial({
+      color: 0xb80a16, metalness: 0, roughness: 0.3,
+      clearcoat: 1, clearcoatRoughness: 0.05,
+      sheen: 0.35, sheenColor: new THREE.Color('#ff5a5a'), sheenRoughness: 0.5,
+      envMapIntensity: 0.9,
+    })
+    : new THREE.MeshPhysicalMaterial({
+      color: 0xffffff, metalness: 1, roughness: 0.06,
+      clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1.6,
+    });
   chrome.onBeforeCompile = (shader) => {
     shader.uniforms.uTime = uniforms.uTime;
     shader.uniforms.uPulse = uniforms.uPulse;
@@ -294,9 +304,9 @@ function chromeMaterials() {
   // fresnel rim glow, rendered as an additive overlay on the same geometry
   const rimUniforms = {
     ...uniforms,
-    uC1: { value: new THREE.Color('#9fc2ff') },
-    uC2: { value: new THREE.Color('#ffffff') },
-    uC3: { value: new THREE.Color('#c6b5ff') },
+    uC1: { value: new THREE.Color(finish === 'balloon' ? '#ff3b3b' : '#9fc2ff') },
+    uC2: { value: new THREE.Color(finish === 'balloon' ? '#ff8a80' : '#ffffff') },
+    uC3: { value: new THREE.Color(finish === 'balloon' ? '#ffd1d1' : '#c6b5ff') },
     uIntensity: { value: 0.6 },
   };
   const rim = new THREE.ShaderMaterial({

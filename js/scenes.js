@@ -16,7 +16,7 @@ export function initWordmark(canvas, opts = {}) {
   return createChromeStage(canvas, {
     ...opts,
     build: buildWordmark,
-    initial: { rotY: reduced ? -0.25 : -TAU - 0.9, rotX: 0.12, turn: 0, nextFlip: 6 },
+    initial: { rotY: reduced ? -0.25 : -TAU - 0.9, rotX: 0.12, turn: 0, nextFlip: 12 },
     fitAspect: 1.7,
     studio: 'soft',
     halo: 0.62,
@@ -42,10 +42,12 @@ export function initInfinity(canvas, opts = {}) {
   const { reduced = false } = opts;
   return createChromeStage(canvas, {
     ...opts,
-    build: buildInfinity,
+    build: buildBalloonLoop,
+    finish: 'balloon',
+    studio: 'soft',
     initial: { rotY: reduced ? -0.35 : -2.4, rotX: 0.1 },
     fitAspect: 1.15,
-    halo: 0.66,
+    halo: 0.0,
     haloSize: 5.2,
     pose(s, t, dt) {
       inertia(s, dt, reduced ? 0 : lingerSpin(s, 0.22, 0.9));
@@ -85,10 +87,11 @@ function buildWordmark({ lite }) {
   return { geometry: g, source: 'metaballs' };
 }
 
-// A lemniscate swept by a tube whose radius swells and pinches along its length, so the
-// loop looks poured from liquid metal: fat lobes, slim necks and a few beads.
-function buildInfinity({ lite }) {
-  const HALF_WIDTH = 2.35, RADIUS = 0.15, WEAVE = 0.26;
+// A balloon-animal infinity: one long red balloon bent into a lemniscate and twisted into
+// eight plump segments. Each segment is a rounded sausage that pinches to a narrow twist at
+// both ends; twists sit where the strands cross, so the two strands pass each other cleanly.
+function buildBalloonLoop({ lite }) {
+  const HALF_WIDTH = 2.3, RADIUS = 0.135, WEAVE = 0.34, SEGMENTS = 8;
   const pts = [];
   const n = 240;
   for (let i = 0; i < n; i++) {
@@ -98,22 +101,22 @@ function buildInfinity({ lite }) {
     pts.push(new THREE.Vector3(c / d, (1.5 * s * c) / d, WEAVE * s));
   }
   const curve = new THREE.CatmullRomCurve3(pts, true, 'centripetal');
-  const tubular = lite ? 320 : 520, radial = lite ? 28 : 44;
+  const tubular = lite ? 480 : 720, radial = lite ? 28 : 40;
   let g = new THREE.TubeGeometry(curve, tubular, RADIUS, radial, true);
 
-  // radius profile, u in [0, 1): lobes at u = 0 and 0.5, necks where the strands cross
-  const bead = (u, at, w) => Math.exp(-((((u - at + 1.5) % 1) - 0.5) ** 2) / (2 * w * w));
+  // segment profile: flat-ish belly, rounded shoulders, tight twist (u in [0, 1))
   const profile = (u) => {
-    const lobe = 0.5 + 0.5 * Math.cos(u * Math.PI * 4);
-    let f = 0.78 + 0.62 * lobe * lobe;
-    for (const at of [0.1, 0.37, 0.6, 0.86]) f += 0.32 * bead(u, at, 0.018);
-    return f;
+    const x = (u * SEGMENTS) % 1;                       // position inside this segment
+    const e = Math.abs(2 * x - 1);                       // 0 at the belly, 1 at a twist
+    const body = Math.sqrt(Math.max(0, 1 - Math.pow(e, 7)));
+    const belly = 1 + 0.06 * Math.cos(Math.PI * (2 * x - 1)); // a touch fuller mid-segment
+    return Math.max(0.16, body * belly);
   };
   const pos = g.attributes.position;
   const c = new THREE.Vector3(), p = new THREE.Vector3();
   for (let i = 0; i <= tubular; i++) {
-    const u = (i % tubular) / tubular;
-    curve.getPointAt(u, c);
+    const u = (i % tubular) / tubular;                   // twists land on u = k / 8, incl. the crossings at 1/4 and 3/4
+    curve.getPointAt((i % tubular) / tubular, c);
     const f = profile(u);
     for (let j = 0; j <= radial; j++) {
       const k = i * (radial + 1) + j;
@@ -127,5 +130,5 @@ function buildInfinity({ lite }) {
   g.computeVertexNormals();
   g.scale(HALF_WIDTH, HALF_WIDTH, HALF_WIDTH);
   g.computeBoundingSphere();
-  return { geometry: g, source: 'tube' };
+  return { geometry: g, source: 'balloon' };
 }
