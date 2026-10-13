@@ -388,6 +388,14 @@
           <label class="field"><span>Tell us about your project</span><textarea name="message" rows="4"></textarea></label>
           <button class="btn btn--primary btn--block" type="submit">Send message</button>
           <p class="form__note" role="status" aria-live="polite"></p>
+          <div class="ready" id="form-ready" hidden>
+            <p class="ready__title">Your message is ready.</p>
+            <p class="ready__text">Send it to <span class="ready__email" data-email-text></span> and we’ll reply with ideas and a free quote.</p>
+            <div class="ready__actions">
+              <button class="btn btn--sm btn--primary" type="button" id="copy-message">Copy message</button>
+              <a class="link-arrow" id="open-mail" href="#">Open in email app</a>
+            </div>
+          </div>
         </form>
       </div>
     </section>

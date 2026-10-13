@@ -141,8 +141,11 @@
     });
   });
 
-  /* Contact form: validate, then open the visitor's email app ---------------- */
+  /* Contact form: validate, then prepare the message to send ---------------- */
   const note = form.querySelector('.form__note');
+  const ready = document.getElementById('form-ready');
+  const copyBtn = document.getElementById('copy-message');
+  let message = '';
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const data = new FormData(form);
@@ -170,8 +173,24 @@
       data.get('message') || '',
     ].filter((l) => l !== false && l !== null && l !== undefined && l !== 0);
     const subject = `New project inquiry${data.get('business') ? ' — ' + data.get('business') : ''}`;
-    window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
-    note.textContent = 'Opening your email app… Thanks for reaching out!';
+    const body = lines.join('\n');
+    message = `Subject: ${subject}\n\n${body}`;
+    ready.querySelector('[data-email-text]').textContent = form.dataset.email;
+    ready.querySelector('#open-mail').href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    note.textContent = '';
+    ready.hidden = false;
+    ready.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  });
+  copyBtn.addEventListener('click', () => {
+    const done = () => { copyBtn.textContent = 'Copied'; setTimeout(() => { copyBtn.textContent = 'Copy message'; }, 2000); };
+    const fallback = () => {
+      const t = document.createElement('textarea');
+      t.value = message; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); done(); } catch (_) { note.textContent = 'Select and copy your message from the form above.'; }
+      t.remove();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(message).then(done, fallback);
+    else fallback();
   });
   form.querySelectorAll('input').forEach((input) => input.addEventListener('input', () => input.classList.remove('is-invalid')));
 
