@@ -86,7 +86,9 @@
   <!-- Loading screen -->
   <div class="loader" id="loader" aria-hidden="true">
     <div class="loader__inner">
-      <p class="loader__word"><span class="chrome">T</span><span class="chrome">M</span><span class="chrome">P</span></p>
+      <div class="loader__stage" data-stage>
+        <canvas class="loader__canvas" id="loader-3d"></canvas>
+      </div>
       <p class="loader__name">The Marketing Partner</p>
       <div class="loader__bar"><i data-progress></i></div>
       <p class="loader__pct"><span data-pct>0</span>%</p>
@@ -502,7 +504,6 @@
           <blockquote class="eternal__quote">
             <p>“Grief is the price we pay for love.”</p>
           </blockquote>
-          <figcaption class="eternal__note">Forever, for Sammy. He is not gone.</figcaption>
         </figure>
 
         <div class="pledges">

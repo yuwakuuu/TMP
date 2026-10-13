@@ -12,10 +12,10 @@ import balls from './wordmark-balls.js';
 const lingerSpin = (s, slow, fast) => slow + (fast - slow) * Math.abs(Math.sin(s.rotY));
 
 export function initWordmark(canvas, opts = {}) {
-  const { reduced = false } = opts;
+  const { reduced = false, spin = false } = opts;
   return createChromeStage(canvas, {
     ...opts,
-    build: buildWordmark,
+    build: wordmarkGeometry,
     initial: { rotY: reduced ? -0.25 : -TAU - 0.9, rotX: 0.12, turn: 0, nextFlip: 12 },
     fitAspect: 1.7,
     studio: 'soft',
@@ -24,6 +24,12 @@ export function initWordmark(canvas, opts = {}) {
     // Sways gently so the word stays readable, then every few seconds does a full spin.
     // A drag or fling spins it freely; it settles back to face-on afterwards.
     pose(s, t, dt) {
+      if (spin) {
+        // loading screen: a steady showroom turn, slower while it faces you
+        inertia(s, dt, reduced ? 0 : lingerSpin(s, 0.9, 2.6));
+        s.rotX += (0.1 - s.rotX) * (1 - Math.exp(-dt * 1.4));
+        return true;
+      }
       inertia(s, dt, 0);
       if (!reduced) {
         if (Math.abs(s.velY) > 0.6) s.turn = Math.round(s.rotY / TAU);
@@ -82,6 +88,13 @@ export function initEternal(canvas, opts = {}) {
 // "TMP" poured in liquid chrome. Metaballs sit along the centre line of each Shrikhand
 // stroke, sized to its thickness (baked by tools/bake-wordmark.html), and melt together
 // into round, bubbly tubes. Marching cubes turns the field into a mesh once, at load.
+// The loading screen and the hero show the same mesh, so build it once per detail level.
+const wordmarkCache = new Map();
+function wordmarkGeometry({ lite }) {
+  if (!wordmarkCache.has(lite)) wordmarkCache.set(lite, buildWordmark({ lite }));
+  return wordmarkCache.get(lite);
+}
+
 function buildWordmark({ lite }) {
   const res = lite ? 110 : 150;
   const mc = new MarchingCubes(res, new THREE.MeshBasicMaterial(), false, false, lite ? 160000 : 300000);

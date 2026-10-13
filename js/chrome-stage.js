@@ -268,7 +268,15 @@ export function createChromeStage(canvas, {
   }
   wake();
 
-  return { pulse: trigger };
+  // free the GPU context (used for the loading-screen copy once the page is showing)
+  function dispose() {
+    state.visible = false;
+    if (raf) cancelAnimationFrame(raf);
+    renderer.dispose();
+    renderer.forceContextLoss();
+  }
+
+  return { pulse: trigger, dispose };
 }
 
 // ---- materials ---------------------------------------------------------------------------

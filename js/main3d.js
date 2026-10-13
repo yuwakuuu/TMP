@@ -32,9 +32,22 @@ async function boot() {
 
   const splash = () => document.dispatchEvent(new CustomEvent('tmp:splash'));
   const hero = document.getElementById('tmp-3d');
-  if (hero) {
-    scenes.initWordmark(hero, { reduced, lite, onPulse: splash, onReady: () => ready('wordmark') });
+  const startHero = () => { if (hero) scenes.initWordmark(hero, { reduced, lite, onPulse: splash }); };
+
+  // First visit: the loading screen spins its own copy of the logo, then hands over to the
+  // hero and frees its GPU context once the page is showing.
+  const loaderCanvas = document.getElementById('loader-3d');
+  const quick = document.documentElement.classList.contains('quick-load');
+  if (loaderCanvas && !quick) {
+    const loaderLogo = scenes.initWordmark(loaderCanvas, {
+      reduced, lite, spin: true,
+      onReady: () => { ready('wordmark'); startHero(); },
+    });
+    const release = () => setTimeout(() => loaderLogo.dispose(), 1500);
+    if (document.documentElement.classList.contains('loaded')) release();
+    else window.addEventListener('tmp:loaded', release, { once: true });
   } else {
+    startHero();
     ready('wordmark');
   }
 

@@ -20,7 +20,11 @@
     const complete = (name) => { if (steps[name]) { target += steps[name]; steps[name] = 0; } };
     (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => complete('fonts'));
     if (document.readyState === 'complete') complete('page'); else window.addEventListener('load', () => complete('page'));
-    window.addEventListener('tmp:3d', (e) => { if (e.detail !== 'infinity') complete('logo'); });
+    let logoAt = 0;
+    window.addEventListener('tmp:3d', (e) => {
+      if (e.detail === 'wordmark') logoAt = performance.now();
+      complete('logo');
+    });
     const finish = () => {
       if (done) return;
       done = true;
@@ -38,7 +42,9 @@
       if (target >= 0.99) shown += (1 - shown) * 0.25;
       bar.style.transform = `scaleX(${shown.toFixed(3)})`;
       pct.textContent = Math.round(shown * 100);
-      if ((target >= 0.99 && shown > 0.985 && elapsed > minTime) || elapsed > 4500) {
+      // once the 3D logo appears, let it spin for a moment before the page is revealed
+      const logoShown = quick || !logoAt || performance.now() - logoAt > 1300;
+      if ((target >= 0.99 && shown > 0.985 && elapsed > minTime && logoShown) || elapsed > 6500) {
         bar.style.transform = 'scaleX(1)';
         pct.textContent = '100';
         setTimeout(finish, quick ? 0 : 260);
