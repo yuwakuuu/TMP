@@ -1,5 +1,5 @@
-// Boots the two chrome scenes. The hero wordmark starts right away (the loading screen
-// waits for it); the infinity loop starts when the membership section comes near.
+// Boots the 3D scenes. The hero wordmark starts right away (the loading screen waits for
+// it); the balloon and chrome infinity loops start when their sections come near.
 // Without WebGL both fall back to CSS chrome lettering.
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lite = window.matchMedia('(pointer: coarse), (max-width: 700px)').matches || (navigator.hardwareConcurrency || 8) <= 4;
@@ -38,15 +38,19 @@ async function boot() {
     ready('wordmark');
   }
 
-  const loop = document.getElementById('infinity-3d');
-  if (loop) {
+  // scenes further down start only as they come near
+  const later = (id, init) => {
+    const el = document.getElementById(id);
+    if (!el) return;
     const io = new IntersectionObserver(([en]) => {
       if (!en.isIntersecting) return;
       io.disconnect();
-      scenes.initInfinity(loop, { reduced, lite, onPulse: splash });
+      init(el, { reduced, lite, onPulse: splash });
     }, { rootMargin: '600px 0px' });
-    io.observe(loop);
-  }
+    io.observe(el);
+  };
+  later('infinity-3d', scenes.initInfinity);
+  later('eternal-3d', scenes.initEternal);
 }
 
 boot();

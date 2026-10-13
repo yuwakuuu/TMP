@@ -58,6 +58,25 @@ export function initInfinity(canvas, opts = {}) {
   });
 }
 
+// Sammy's section: the same weave in liquid chrome, turning slowly and calmly.
+export function initEternal(canvas, opts = {}) {
+  const { reduced = false } = opts;
+  return createChromeStage(canvas, {
+    ...opts,
+    build: buildChromeLoop,
+    initial: { rotY: reduced ? -0.35 : -2.4, rotX: 0.1 },
+    fitAspect: 1.3,
+    halo: 0.62,
+    haloSize: 5.2,
+    pose(s, t, dt) {
+      inertia(s, dt, reduced ? 0 : lingerSpin(s, 0.16, 0.6));
+      const bob = reduced ? 0.1 : 0.1 + Math.sin(t * 0.5) * 0.06;
+      s.rotX += (bob - s.rotX) * (1 - Math.exp(-dt * 1.4));
+      return Math.abs(s.rotX - bob) < 0.002;
+    },
+  });
+}
+
 // ---- geometry ---------------------------------------------------------------------------
 
 // "TMP" poured in liquid chrome. Metaballs sit along the centre line of each Shrikhand
@@ -131,4 +150,50 @@ function buildBalloonLoop({ lite }) {
   g.scale(HALF_WIDTH, HALF_WIDTH, HALF_WIDTH);
   g.computeBoundingSphere();
   return { geometry: g, source: 'balloon' };
+}
+
+// A lemniscate swept by a tube whose radius swells and pinches along its length, so the
+// loop looks poured from liquid metal: fat lobes, slim necks and a few beads. Used in
+// Sammy's section, for eternal life.
+function buildChromeLoop({ lite }) {
+  const HALF_WIDTH = 1.85, RADIUS = 0.15, WEAVE = 0.26;
+  const pts = [];
+  const n = 240;
+  for (let i = 0; i < n; i++) {
+    const t = (i / n) * Math.PI * 2;
+    const s = Math.sin(t), c = Math.cos(t);
+    const d = 1 + s * s;
+    pts.push(new THREE.Vector3(c / d, (1.5 * s * c) / d, WEAVE * s));
+  }
+  const curve = new THREE.CatmullRomCurve3(pts, true, 'centripetal');
+  const tubular = lite ? 320 : 520, radial = lite ? 28 : 44;
+  let g = new THREE.TubeGeometry(curve, tubular, RADIUS, radial, true);
+
+  // radius profile, u in [0, 1): lobes at u = 0 and 0.5, necks where the strands cross
+  const bead = (u, at, w) => Math.exp(-((((u - at + 1.5) % 1) - 0.5) ** 2) / (2 * w * w));
+  const profile = (u) => {
+    const lobe = 0.5 + 0.5 * Math.cos(u * Math.PI * 4);
+    let f = 0.78 + 0.62 * lobe * lobe;
+    for (const at of [0.1, 0.37, 0.6, 0.86]) f += 0.32 * bead(u, at, 0.018);
+    return f;
+  };
+  const pos = g.attributes.position;
+  const c = new THREE.Vector3(), p = new THREE.Vector3();
+  for (let i = 0; i <= tubular; i++) {
+    const u = (i % tubular) / tubular;
+    curve.getPointAt(u, c);
+    const f = profile(u);
+    for (let j = 0; j <= radial; j++) {
+      const k = i * (radial + 1) + j;
+      p.fromBufferAttribute(pos, k).sub(c).multiplyScalar(f).add(c);
+      pos.setXYZ(k, p.x, p.y, p.z);
+    }
+  }
+  g.deleteAttribute('normal');
+  g.deleteAttribute('uv');
+  g = mergeVertices(g, 1e-5);
+  g.computeVertexNormals();
+  g.scale(HALF_WIDTH, HALF_WIDTH, HALF_WIDTH);
+  g.computeBoundingSphere();
+  return { geometry: g, source: 'tube' };
 }

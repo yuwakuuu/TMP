@@ -698,6 +698,14 @@ a:hover .link-arrow::after, .link-arrow:hover::after { transform: translateX(3px
 .sam__name { color: #ff6b6b; }
 .sam__lede { margin-top: 20px; font-size: clamp(19px, 2vw, 22px); line-height: 1.5; color: var(--dark-ink-2); max-width: 680px; }
 .sam__lede strong { color: var(--dark-ink); font-weight: 600; }
+.eternal { margin: 0; display: grid; justify-items: center; text-align: center; gap: 6px; }
+.eternal__stage { width: min(560px, 100%); }
+.eternal__quote { margin: 0; }
+.eternal__quote p {
+  font-family: "Shrikhand", Georgia, serif; font-size: clamp(28px, 4.4vw, 48px); line-height: 1.2;
+  max-width: 18ch; color: #f5f5f7; text-wrap: balance;
+}
+.eternal__note { margin-top: 10px; font-size: 15px; color: var(--dark-ink-2); letter-spacing: .01em; }
 .pledges { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .pledge {
   display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 36px;
