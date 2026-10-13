@@ -4,8 +4,8 @@ import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { createChromeStage, inertia, TAU } from './chrome-stage.js';
 import balls from './wordmark-balls.js';
 
-// Two chrome objects share one look: the inflated "TMP" wordmark in the hero and the
-// bubbly infinity loop in the membership section. Both spin on their own, drag with
+// Two chrome objects share one look: the liquid "TMP" wordmark (hero and loading screen)
+// and the infinity loop in Sammy's section. Both spin on their own, drag with
 // inertia, tilt toward the pointer and pulse on tap / Enter.
 
 // Resting spin, rad/s: slow while face-on so it reads, quicker through the edge-on part.
@@ -13,55 +13,43 @@ const lingerSpin = (s, slow, fast) => slow + (fast - slow) * Math.abs(Math.sin(s
 
 export function initWordmark(canvas, opts = {}) {
   const { reduced = false, spin = false } = opts;
-  return createChromeStage(canvas, {
+  // A steady showroom turn for the loading screen, slower while the word faces you.
+  const spinPose = (s, t, dt) => {
+    inertia(s, dt, reduced ? 0 : lingerSpin(s, 0.9, 2.6));
+    s.rotX += (0.1 - s.rotX) * (1 - Math.exp(-dt * 1.4));
+    return true;
+  };
+  // Hero: sways gently so the word stays readable, then every few seconds does a full
+  // spin. A drag or fling spins it freely; it settles back to face-on afterwards.
+  const heroPose = (s, t, dt) => {
+    inertia(s, dt, 0);
+    if (!reduced) {
+      if (Math.abs(s.velY) > 0.6) s.turn = Math.round(s.rotY / TAU);
+      else if (t > s.nextFlip) { s.turn += 1; s.nextFlip = t + 9; }
+      const target = s.turn * TAU + Math.sin(t * 0.55) * 0.42;
+      s.rotY += (target - s.rotY) * (1 - Math.exp(-dt * 1.5));
+    }
+    const bob = reduced ? 0.12 : 0.12 + Math.sin(t * 0.7) * 0.08;
+    s.rotX += (bob - s.rotX) * (1 - Math.exp(-dt * 1.4));
+    return Math.abs(s.rotX - bob) < 0.002;
+  };
+  const stage = createChromeStage(canvas, {
     ...opts,
-    build: wordmarkGeometry,
+    build: buildWordmark,
     initial: { rotY: reduced ? -0.25 : -TAU - 0.9, rotX: 0.12, turn: 0, nextFlip: 12 },
     fitAspect: 1.7,
     studio: 'soft',
     halo: 0.62,
     haloSize: 6,
-    // Sways gently so the word stays readable, then every few seconds does a full spin.
-    // A drag or fling spins it freely; it settles back to face-on afterwards.
-    pose(s, t, dt) {
-      if (spin) {
-        // loading screen: a steady showroom turn, slower while it faces you
-        inertia(s, dt, reduced ? 0 : lingerSpin(s, 0.9, 2.6));
-        s.rotX += (0.1 - s.rotX) * (1 - Math.exp(-dt * 1.4));
-        return true;
-      }
-      inertia(s, dt, 0);
-      if (!reduced) {
-        if (Math.abs(s.velY) > 0.6) s.turn = Math.round(s.rotY / TAU);
-        else if (t > s.nextFlip) { s.turn += 1; s.nextFlip = t + 9; }
-        const target = s.turn * TAU + Math.sin(t * 0.55) * 0.42;
-        s.rotY += (target - s.rotY) * (1 - Math.exp(-dt * 1.5));
-      }
-      const bob = reduced ? 0.12 : 0.12 + Math.sin(t * 0.7) * 0.08;
-      s.rotX += (bob - s.rotX) * (1 - Math.exp(-dt * 1.4));
-      return Math.abs(s.rotX - bob) < 0.002;
-    },
+    pose: spin ? spinPose : heroPose,
   });
-}
-
-export function initInfinity(canvas, opts = {}) {
-  const { reduced = false } = opts;
-  return createChromeStage(canvas, {
-    ...opts,
-    build: buildBalloonLoop,
-    finish: 'balloon',
-    studio: 'soft',
-    initial: { rotY: reduced ? -0.35 : -2.4, rotX: 0.1 },
-    fitAspect: 1.15,
-    halo: 0.0,
-    haloSize: 5.2,
-    pose(s, t, dt) {
-      inertia(s, dt, reduced ? 0 : lingerSpin(s, 0.22, 0.9));
-      const bob = reduced ? 0.1 : 0.1 + Math.sin(t * 0.6) * 0.06;
-      s.rotX += (bob - s.rotX) * (1 - Math.exp(-dt * 1.4));
-      return Math.abs(s.rotX - bob) < 0.002;
-    },
+  // after the loading screen: keep spinning to the next whole turn, then sway as the hero
+  stage.toHero = () => stage.setPose(heroPose, (s, t) => {
+    s.velY = 0;
+    s.turn = Math.ceil(s.rotY / TAU);   // finish the current turn forwards, never rewind
+    s.nextFlip = t + 9;
   });
+  return stage;
 }
 
 // Sammy's section: the same weave in liquid chrome, turning slowly and calmly.
@@ -88,13 +76,6 @@ export function initEternal(canvas, opts = {}) {
 // "TMP" poured in liquid chrome. Metaballs sit along the centre line of each Shrikhand
 // stroke, sized to its thickness (baked by tools/bake-wordmark.html), and melt together
 // into round, bubbly tubes. Marching cubes turns the field into a mesh once, at load.
-// The loading screen and the hero show the same mesh, so build it once per detail level.
-const wordmarkCache = new Map();
-function wordmarkGeometry({ lite }) {
-  if (!wordmarkCache.has(lite)) wordmarkCache.set(lite, buildWordmark({ lite }));
-  return wordmarkCache.get(lite);
-}
-
 function buildWordmark({ lite }) {
   const res = lite ? 110 : 150;
   const mc = new MarchingCubes(res, new THREE.MeshBasicMaterial(), false, false, lite ? 160000 : 300000);
@@ -117,52 +98,6 @@ function buildWordmark({ lite }) {
   g.scale(6.2 / w, 6.2 / w, 6.2 / w);
   g.computeBoundingSphere();
   return { geometry: g, source: 'metaballs' };
-}
-
-// A balloon-animal infinity: one long red balloon bent into a lemniscate and twisted into
-// eight plump segments. Each segment is a rounded sausage that pinches to a narrow twist at
-// both ends; twists sit where the strands cross, so the two strands pass each other cleanly.
-function buildBalloonLoop({ lite }) {
-  const HALF_WIDTH = 2.3, RADIUS = 0.135, WEAVE = 0.34, SEGMENTS = 8;
-  const pts = [];
-  const n = 240;
-  for (let i = 0; i < n; i++) {
-    const t = (i / n) * Math.PI * 2;
-    const s = Math.sin(t), c = Math.cos(t);
-    const d = 1 + s * s;
-    pts.push(new THREE.Vector3(c / d, (1.5 * s * c) / d, WEAVE * s));
-  }
-  const curve = new THREE.CatmullRomCurve3(pts, true, 'centripetal');
-  const tubular = lite ? 480 : 720, radial = lite ? 28 : 40;
-  let g = new THREE.TubeGeometry(curve, tubular, RADIUS, radial, true);
-
-  // segment profile: flat-ish belly, rounded shoulders, tight twist (u in [0, 1))
-  const profile = (u) => {
-    const x = (u * SEGMENTS) % 1;                       // position inside this segment
-    const e = Math.abs(2 * x - 1);                       // 0 at the belly, 1 at a twist
-    const body = Math.sqrt(Math.max(0, 1 - Math.pow(e, 7)));
-    const belly = 1 + 0.06 * Math.cos(Math.PI * (2 * x - 1)); // a touch fuller mid-segment
-    return Math.max(0.16, body * belly);
-  };
-  const pos = g.attributes.position;
-  const c = new THREE.Vector3(), p = new THREE.Vector3();
-  for (let i = 0; i <= tubular; i++) {
-    const u = (i % tubular) / tubular;                   // twists land on u = k / 8, incl. the crossings at 1/4 and 3/4
-    curve.getPointAt((i % tubular) / tubular, c);
-    const f = profile(u);
-    for (let j = 0; j <= radial; j++) {
-      const k = i * (radial + 1) + j;
-      p.fromBufferAttribute(pos, k).sub(c).multiplyScalar(f).add(c);
-      pos.setXYZ(k, p.x, p.y, p.z);
-    }
-  }
-  g.deleteAttribute('normal');
-  g.deleteAttribute('uv');
-  g = mergeVertices(g, 1e-5);
-  g.computeVertexNormals();
-  g.scale(HALF_WIDTH, HALF_WIDTH, HALF_WIDTH);
-  g.computeBoundingSphere();
-  return { geometry: g, source: 'balloon' };
 }
 
 // A lemniscate swept by a tube whose radius swells and pinches along its length, so the

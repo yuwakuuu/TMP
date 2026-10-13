@@ -3,18 +3,27 @@
 Marketing site for The Marketing Partner. It is plain HTML, CSS and JavaScript with no build step.
 
 - `index.html`: page content
-- `styles.css`: design, including the liquid-chrome lettering and scroll-driven animations
-- `script.js`: loading screen, navigation, scroll effects, project showcase, card tilt, price count-up and contact form
-- `js/main3d.js`: starts the 3D scenes (falls back to CSS lettering without WebGL)
-- `js/scenes.js`: the chrome TMP wordmark (metaballs) and the bubbly infinity loop
+- `styles.css`: design, including the liquid-chrome lettering
+- `script.js`: loading screen, navigation, chrome-lettering sizing, scroll and Motion effects, showcase, card tilt, price count-up and contact form
+- `js/game.js`: Bubble Pop, the mini-game in the Playground section
+- `js/main3d.js`: starts the 3D scenes; the loading-screen logo hands its renderer to the hero (falls back to CSS lettering without WebGL)
+- `js/scenes.js`: the chrome TMP wordmark (metaballs) and the chrome infinity in Sammy's section
 - `js/chrome-stage.js`: shared renderer, chrome material, lighting and drag/tap controls
 - `js/wordmark-balls.js`: pre-baked shape data for the 3D TMP (regenerate with `tools/bake-wordmark.html`)
-- `js/game.js`: Bubble Pop, the playable mini-game in the Playground section
-- `vendor/three/`: three.js 0.169.0 (MIT), self-hosted so the site needs no CDN
-- `vendor/motion/`: Motion 12.23.24 (MIT): spring reveals, the hero entrance, scroll-linked scenes and press/hover springs
+- `dist/`: the minified files the page actually loads (generated, see below)
+- `assets/work/`: screenshots of example projects, in full and half size
 - `404.html`, `robots.txt`, `sitemap.xml`, `site.webmanifest`: launch files
-- `assets/work/`: screenshots of example projects
 - Fonts: Shrikhand (chrome lettering) and Inter, both SIL Open Font License, loaded from Google Fonts
+
+## Building
+
+The page loads minified files from `dist/`. After editing `styles.css`, `script.js` or
+anything in `js/`, rebuild and commit `dist/` too:
+
+    npm install
+    npm run build
+
+This bundles three.js 0.169.0 and Motion 12.23.24 (both MIT) with only the parts the site uses.
 
 ## Things to update
 

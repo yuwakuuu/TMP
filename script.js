@@ -14,7 +14,7 @@
     const pct = loader.querySelector('[data-pct]');
     const quick = doc.classList.contains('quick-load') || reduceMotion;
     const started = performance.now();
-    const minTime = quick ? 350 : 1900;
+    const minTime = quick ? 300 : 1200;
     let target = 0.08, shown = 0, done = false;
     const steps = { fonts: 0.3, page: 0.3, logo: 0.4 };
     const complete = (name) => { if (steps[name]) { target += steps[name]; steps[name] = 0; } };
@@ -43,7 +43,7 @@
       bar.style.transform = `scaleX(${shown.toFixed(3)})`;
       pct.textContent = Math.round(shown * 100);
       // once the 3D logo appears, let it spin for a moment before the page is revealed
-      const logoShown = quick || !logoAt || performance.now() - logoAt > 1300;
+      const logoShown = quick || !logoAt || performance.now() - logoAt > 900;
       if ((target >= 0.99 && shown > 0.985 && elapsed > minTime && logoShown) || elapsed > 6500) {
         bar.style.transform = 'scaleX(1)';
         pct.textContent = '100';
@@ -143,9 +143,9 @@
     reveals.forEach((el) => { el.style.opacity = '0'; el.style.transform = 'translateY(44px)'; });
     M.inView('.reveal', (el) => {
       const i = +(el.style.getPropertyValue('--i') || 0);
-      M.animate(el, { opacity: [0, 1], y: [44, 0], scale: [0.97, 1], filter: ['blur(6px)', 'blur(0px)'] },
-        { ...spring(110, 19), opacity: { duration: 0.6, delay: i * 0.08 }, filter: { duration: 0.6, delay: i * 0.08 }, delay: i * 0.08 })
-        .then(() => { el.style.transform = ''; el.style.filter = ''; });
+      M.animate(el, { opacity: [0, 1], y: [44, 0], scale: [0.97, 1] },
+        { ...spring(110, 19), opacity: { duration: 0.6, delay: i * 0.08 }, delay: i * 0.08 })
+        .then(() => { el.style.transform = ''; });
     }, { margin: '0px 0px -12% 0px' });
   } else if ('IntersectionObserver' in window && !reduceMotion) {
     const io = new IntersectionObserver((entries) => {
@@ -344,8 +344,7 @@
         const step = (now) => {
           const p = Math.min(1, (now - t0) / dur);
           const eased = 1 - Math.pow(1 - p, 4);
-          const unit = end >= 1000 ? 10 : end >= 100 ? 5 : 1;
-          out.textContent = fmt(Math.round(end * eased / unit) * unit);
+          out.textContent = fmt(Math.round(end * eased));
           if (p < 1) requestAnimationFrame(step); else out.textContent = fmt(end);
         };
         requestAnimationFrame(step);
@@ -384,9 +383,9 @@
     const intro = () => {
       animate(stage, { opacity: [0, 1], scale: [0.6, 1], y: [40, 0] }, { ...spring(55, 11), opacity: { duration: 0.8 } });
       heroIns.forEach((el) => { el.style.opacity = '1'; el.style.transform = 'none'; });
-      animate(heroIns.filter((el) => el !== heroTitle), { opacity: [0, 1], y: [30, 0], filter: ['blur(8px)', 'blur(0px)'] },
+      animate(heroIns.filter((el) => el !== heroTitle), { opacity: [0, 1], y: [30, 0] },
         { ...spring(120, 18), delay: stagger(0.12, { startDelay: 0.35 }) });
-      animate(heroWords, { opacity: [0, 1], y: [50, 0], rotateX: [-70, 0], filter: ['blur(10px)', 'blur(0px)'] },
+      animate(heroWords, { opacity: [0, 1], y: [50, 0], rotateX: [-70, 0] },
         { ...spring(130, 16), delay: stagger(0.08, { startDelay: 0.2 }) });
       if (heroChrome) animate(heroChrome, { opacity: [0, 1], scale: [0.4, 1], y: [30, 0] }, { ...spring(170, 9), delay: 0.5, opacity: { duration: 0.4, delay: 0.5 } });
     };

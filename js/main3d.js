@@ -1,5 +1,5 @@
 // Boots the 3D scenes. The hero wordmark starts right away (the loading screen waits for
-// it); the balloon and chrome infinity loops start when their sections come near.
+// it); the chrome infinity in Sammy's section starts when it comes near.
 // Without WebGL both fall back to CSS chrome lettering.
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lite = window.matchMedia('(pointer: coarse), (max-width: 700px)').matches || (navigator.hardwareConcurrency || 8) <= 4;
@@ -32,22 +32,27 @@ async function boot() {
 
   const splash = () => document.dispatchEvent(new CustomEvent('tmp:splash'));
   const hero = document.getElementById('tmp-3d');
-  const startHero = () => { if (hero) scenes.initWordmark(hero, { reduced, lite, onPulse: splash }); };
-
-  // First visit: the loading screen spins its own copy of the logo, then hands over to the
-  // hero and frees its GPU context once the page is showing.
   const loaderCanvas = document.getElementById('loader-3d');
   const quick = document.documentElement.classList.contains('quick-load');
-  if (loaderCanvas && !quick) {
-    const loaderLogo = scenes.initWordmark(loaderCanvas, {
-      reduced, lite, spin: true,
-      onReady: () => { ready('wordmark'); startHero(); },
-    });
-    const release = () => setTimeout(() => loaderLogo.dispose(), 1500);
-    if (document.documentElement.classList.contains('loaded')) release();
-    else window.addEventListener('tmp:loaded', release, { once: true });
+
+  if (hero && loaderCanvas && !quick) {
+    // First visit: one renderer. The logo spins on the loading screen, then the same canvas
+    // (and its GPU context) moves into the hero, so nothing is built or compiled twice.
+    const logo = scenes.initWordmark(loaderCanvas, { reduced, lite, spin: true, onPulse: splash, onReady: () => ready('wordmark') });
+    const handOff = () => {
+      for (const a of ['class', 'tabindex', 'role', 'aria-label']) {
+        const v = hero.getAttribute(a);
+        if (v !== null) loaderCanvas.setAttribute(a, v);
+      }
+      hero.replaceWith(loaderCanvas);
+      loaderCanvas.id = 'tmp-3d';
+      loaderCanvas.closest('[data-stage]')?.classList.add('is-ready');
+      logo.toHero();
+    };
+    if (document.documentElement.classList.contains('loaded')) handOff();
+    else window.addEventListener('tmp:loaded', handOff, { once: true });
   } else {
-    startHero();
+    if (hero) scenes.initWordmark(hero, { reduced, lite, onPulse: splash });
     ready('wordmark');
   }
 
@@ -62,7 +67,6 @@ async function boot() {
     }, { rootMargin: '600px 0px' });
     io.observe(el);
   };
-  later('infinity-3d', scenes.initInfinity);
   later('eternal-3d', scenes.initEternal);
 }
 

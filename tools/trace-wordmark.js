@@ -1,7 +1,7 @@
 // Bakes the centre-line metaballs for the 3D "TMP" wordmark into js/wordmark-balls.js.
 // Open tools/bake-wordmark.html through a local web server; the page prints the module
 // source, which is saved as js/wordmark-balls.js. Re-run only if the font or tuning changes.
-import { Font } from '../vendor/three/addons/loaders/FontLoader.js';
+import { Font } from '../node_modules/three/examples/jsm/loaders/FontLoader.js';
 import shrikhand from './shrikhand.js';
 
 export function traceWordmark() {
