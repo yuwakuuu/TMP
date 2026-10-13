@@ -238,7 +238,7 @@ a:hover .link-arrow::after, .link-arrow:hover::after { transform: translateX(3px
 }
 .hero__title { perspective: 900px; }
 .hero__title .word { display: inline-block; transform-origin: 50% 100%; }
-.hero__title .chrome { display: inline-block; letter-spacing: 0; font-weight: 400; padding: 0 .06em .08em; }
+.hero__title .chrome { display: inline-block; letter-spacing: .03em; font-weight: 400; padding: 0 .06em .08em; }
 .hero__lede {
   max-width: 620px; margin: 22px auto 0;
   font-size: clamp(19px, 2.3vw, 23px); line-height: 1.4; color: var(--dark-ink-2); letter-spacing: -.02em;
@@ -744,23 +744,18 @@ a:hover .link-arrow::after, .link-arrow:hover::after { transform: translateX(3px
 .defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 .chrome {
   font-family: "Shrikhand", "Cooper Black", "Arial Rounded MT Bold", Georgia, serif;
-  font-weight: 400; letter-spacing: .005em;
-  background-image: linear-gradient(180deg, #ffffff 0%, #eef2f8 16%, #a7afbd 34%, #3a3f49 49%, #c4ccd8 57%, #ffffff 68%, #9aa3b1 84%, #e9edf3 100%);
-  background-size: 100% 100%;
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  -webkit-text-fill-color: transparent;
-  filter: url(#liquid) drop-shadow(0 .05em .07em rgba(0, 0, 0, .45));
+  font-weight: 400; letter-spacing: .035em;
+  color: #fff; -webkit-text-fill-color: #fff;
+  filter: url(#chrome-l);
 }
-.chrome--sm { filter: url(#liquid-sm) drop-shadow(0 .04em .05em rgba(0, 0, 0, .45)); }
-/* on light backgrounds the chrome needs deeper shadows to read as metal */
-.chrome--light {
-  background-image: linear-gradient(180deg, #fbfcfe 0%, #d9dee6 20%, #8a93a2 40%, #2b3038 52%, #9ba4b3 62%, #f1f4f8 74%, #8e97a6 90%, #cdd3dc 100%);
-  filter: url(#liquid) drop-shadow(0 .05em .06em rgba(20, 30, 50, .3));
-}
-h2 .chrome { display: inline-block; font-weight: 400; letter-spacing: 0; padding: 0 .05em .1em; }
+/* the bubble's roundness is set in pixels, so smaller lettering uses a finer filter */
+.chrome--md { filter: url(#chrome-m); }
+.chrome--sm { filter: url(#chrome-s); letter-spacing: .02em; }
+h2 .chrome { display: inline-block; font-weight: 400; letter-spacing: .03em; padding: 0 .06em .14em; }
 /* the lighting blur is in pixels, so smaller lettering uses the finer filter */
 @media (max-width: 700px) {
-  h2 .chrome, .hero__title .chrome, .price__amt.chrome, .footer__word { filter: url(#liquid-sm) drop-shadow(0 .04em .05em rgba(0, 0, 0, .35)); }
+  h2 .chrome, .hero__title .chrome, .price__amt.chrome, .footer__word, .membership__amt, .game__title { filter: url(#chrome-m); }
+  .marquee .chrome { filter: url(#chrome-s); }
 }
 
 /* Loading screen ------------------------------------------------------------------ */

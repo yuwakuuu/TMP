@@ -61,26 +61,109 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <!-- Liquid-chrome lighting for the bubble lettering (used by .chrome text) -->
+  <!-- Liquid-chrome bubble lettering (used by .chrome text). One recipe at three pixel
+       scales: the letters are swollen and rounded, lit as a dome, mapped through chrome
+       reflection bands, then given three specular highlights and a soft drop shadow. -->
   <svg class="defs" aria-hidden="true" focusable="false">
-    <filter id="liquid" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
-      <feSpecularLighting in="blur" surfaceScale="8" specularConstant="1.5" specularExponent="34" lighting-color="#fff" result="spec"><feDistantLight azimuth="235" elevation="48"/></feSpecularLighting>
-      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
-      <feDiffuseLighting in="blur" surfaceScale="6" diffuseConstant="1" lighting-color="#fff" result="diff"><feDistantLight azimuth="235" elevation="60"/></feDiffuseLighting>
-      <feComposite in="diff" in2="SourceAlpha" operator="in" result="diffIn"/>
-      <feBlend in="SourceGraphic" in2="diffIn" mode="multiply" result="shaded"/>
-      <feComposite in="specIn" in2="shaded" operator="arithmetic" k2="1" k3="1"/>
-    </filter>
-    <filter id="liquid-sm" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="2.2" result="blur"/>
-      <feSpecularLighting in="blur" surfaceScale="4" specularConstant="1.4" specularExponent="30" lighting-color="#fff" result="spec"><feDistantLight azimuth="235" elevation="50"/></feSpecularLighting>
-      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
-      <feDiffuseLighting in="blur" surfaceScale="3" diffuseConstant="1" lighting-color="#fff" result="diff"><feDistantLight azimuth="235" elevation="60"/></feDiffuseLighting>
-      <feComposite in="diff" in2="SourceAlpha" operator="in" result="diffIn"/>
-      <feBlend in="SourceGraphic" in2="diffIn" mode="multiply" result="shaded"/>
-      <feComposite in="specIn" in2="shaded" operator="arithmetic" k2="1" k3="1"/>
-    </filter>
+    <filter id="chrome-l" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="0.70" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="1.40" result="db"/>
+      <feComponentTransfer in="db" result="fat"><feFuncA type="linear" slope="9" intercept="-3.6"/></feComponentTransfer>
+      <feGaussianBlur in="fat" stdDeviation="5.60" result="h"/>
+      <feDiffuseLighting in="h" surfaceScale="7.00" diffuseConstant="1.05" lighting-color="#fff" result="diff"><feDistantLight azimuth="250" elevation="38"/></feDiffuseLighting>
+      <feComponentTransfer in="diff" result="bands">
+        <feFuncR type="table" tableValues="0.03 0.2 0.9 0.5 0.12 0.6 0.97 1"/>
+        <feFuncG type="table" tableValues="0.03 0.21 0.92 0.52 0.13 0.62 0.98 1"/>
+        <feFuncB type="table" tableValues="0.05 0.26 0.96 0.58 0.17 0.68 1 1"/>
+      </feComponentTransfer>
+      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="1.2" specularExponent="140" lighting-color="#fff" result="s3"><feDistantLight azimuth="270" elevation="70"/></feSpecularLighting>
+      <feComposite in="s1" in2="s2" operator="arithmetic" k2="1" k3="1" result="s12"/>
+      <feComposite in="s12" in2="s3" operator="arithmetic" k2="1" k3="1" result="spec"/>
+      <feComposite in="bands" in2="spec" operator="arithmetic" k2="1" k3="1" result="lit"/>
+      <feGaussianBlur in="lit" stdDeviation="1.10" result="smooth"/>
+      <feComposite in="smooth" in2="fat" operator="in" result="body"/>
+      <feGaussianBlur in="fat" stdDeviation="3.00" result="sb"/>
+      <feOffset in="sb" dy="4.00" result="so"/>
+      <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge>
+     </filter>
+    <filter id="chrome-light" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="0.70" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="1.40" result="db"/>
+      <feComponentTransfer in="db" result="fat"><feFuncA type="linear" slope="9" intercept="-3.6"/></feComponentTransfer>
+      <feGaussianBlur in="fat" stdDeviation="5.60" result="h"/>
+      <feDiffuseLighting in="h" surfaceScale="7.00" diffuseConstant="1.05" lighting-color="#fff" result="diff"><feDistantLight azimuth="250" elevation="38"/></feDiffuseLighting>
+      <feComponentTransfer in="diff" result="bands">
+        <feFuncR type="table" tableValues="0.02 0.12 0.7 0.32 0.06 0.42 0.86 0.97"/>
+        <feFuncG type="table" tableValues="0.02 0.13 0.72 0.34 0.07 0.44 0.88 0.98"/>
+        <feFuncB type="table" tableValues="0.04 0.17 0.78 0.4 0.1 0.5 0.92 1"/>
+      </feComponentTransfer>
+      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="1.2" specularExponent="140" lighting-color="#fff" result="s3"><feDistantLight azimuth="270" elevation="70"/></feSpecularLighting>
+      <feComposite in="s1" in2="s2" operator="arithmetic" k2="1" k3="1" result="s12"/>
+      <feComposite in="s12" in2="s3" operator="arithmetic" k2="1" k3="1" result="spec"/>
+      <feComposite in="bands" in2="spec" operator="arithmetic" k2="1" k3="1" result="lit"/>
+      <feGaussianBlur in="lit" stdDeviation="1.10" result="smooth"/>
+      <feComposite in="smooth" in2="fat" operator="in" result="body"/>
+      <feGaussianBlur in="fat" stdDeviation="3.00" result="sb"/>
+      <feOffset in="sb" dy="4.00" result="so"/>
+      <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
+      <feMorphology in="fat" operator="dilate" radius="1.20" result="rimA"/>
+      <feFlood flood-color="#1c2029" result="rimC"/>
+      <feComposite in="rimC" in2="rimA" operator="in" result="rim"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="rim"/><feMergeNode in="body"/></feMerge>
+     </filter>
+    <filter id="chrome-m" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="0.39" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="0.77" result="db"/>
+      <feComponentTransfer in="db" result="fat"><feFuncA type="linear" slope="9" intercept="-3.6"/></feComponentTransfer>
+      <feGaussianBlur in="fat" stdDeviation="3.08" result="h"/>
+      <feDiffuseLighting in="h" surfaceScale="3.85" diffuseConstant="1.05" lighting-color="#fff" result="diff"><feDistantLight azimuth="250" elevation="38"/></feDiffuseLighting>
+      <feComponentTransfer in="diff" result="bands">
+        <feFuncR type="table" tableValues="0.03 0.2 0.9 0.5 0.12 0.6 0.97 1"/>
+        <feFuncG type="table" tableValues="0.03 0.21 0.92 0.52 0.13 0.62 0.98 1"/>
+        <feFuncB type="table" tableValues="0.05 0.26 0.96 0.58 0.17 0.68 1 1"/>
+      </feComponentTransfer>
+      <feSpecularLighting in="h" surfaceScale="3.85" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="3.85" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="3.85" specularConstant="1.2" specularExponent="140" lighting-color="#fff" result="s3"><feDistantLight azimuth="270" elevation="70"/></feSpecularLighting>
+      <feComposite in="s1" in2="s2" operator="arithmetic" k2="1" k3="1" result="s12"/>
+      <feComposite in="s12" in2="s3" operator="arithmetic" k2="1" k3="1" result="spec"/>
+      <feComposite in="bands" in2="spec" operator="arithmetic" k2="1" k3="1" result="lit"/>
+      <feGaussianBlur in="lit" stdDeviation="0.61" result="smooth"/>
+      <feComposite in="smooth" in2="fat" operator="in" result="body"/>
+      <feGaussianBlur in="fat" stdDeviation="1.65" result="sb"/>
+      <feOffset in="sb" dy="2.20" result="so"/>
+      <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge>
+     </filter>
+    <filter id="chrome-s" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="0.20" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="0.39" result="db"/>
+      <feComponentTransfer in="db" result="fat"><feFuncA type="linear" slope="9" intercept="-3.6"/></feComponentTransfer>
+      <feGaussianBlur in="fat" stdDeviation="1.57" result="h"/>
+      <feDiffuseLighting in="h" surfaceScale="1.96" diffuseConstant="1.05" lighting-color="#fff" result="diff"><feDistantLight azimuth="250" elevation="38"/></feDiffuseLighting>
+      <feComponentTransfer in="diff" result="bands">
+        <feFuncR type="table" tableValues="0.03 0.2 0.9 0.5 0.12 0.6 0.97 1"/>
+        <feFuncG type="table" tableValues="0.03 0.21 0.92 0.52 0.13 0.62 0.98 1"/>
+        <feFuncB type="table" tableValues="0.05 0.26 0.96 0.58 0.17 0.68 1 1"/>
+      </feComponentTransfer>
+      <feSpecularLighting in="h" surfaceScale="1.96" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="1.96" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="1.96" specularConstant="1.2" specularExponent="140" lighting-color="#fff" result="s3"><feDistantLight azimuth="270" elevation="70"/></feSpecularLighting>
+      <feComposite in="s1" in2="s2" operator="arithmetic" k2="1" k3="1" result="s12"/>
+      <feComposite in="s12" in2="s3" operator="arithmetic" k2="1" k3="1" result="spec"/>
+      <feComposite in="bands" in2="spec" operator="arithmetic" k2="1" k3="1" result="lit"/>
+      <feGaussianBlur in="lit" stdDeviation="0.31" result="smooth"/>
+      <feComposite in="smooth" in2="fat" operator="in" result="body"/>
+      <feGaussianBlur in="fat" stdDeviation="0.84" result="sb"/>
+      <feOffset in="sb" dy="1.12" result="so"/>
+      <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge>
+     </filter>
   </svg>
 
   <!-- Loading screen -->
@@ -154,7 +237,7 @@
     <!-- Marquee -->
     <div class="marquee" aria-hidden="true">
       <div class="marquee__track">
-        <div class="marquee__group"><span class="chrome chrome--sm">Websites</span><i>✦</i><span class="chrome chrome--sm">Apps</span><i>✦</i><span class="chrome chrome--sm">Systems</span><i>✦</i><span class="chrome chrome--sm">Marketing</span><i>✦</i><span class="chrome chrome--sm">Lead generation</span><i>✦</i><span class="chrome chrome--sm">Tech support</span><i>✦</i></div>
+        <div class="marquee__group"><span class="chrome chrome--md">Websites</span><i>✦</i><span class="chrome chrome--md">Apps</span><i>✦</i><span class="chrome chrome--md">Systems</span><i>✦</i><span class="chrome chrome--md">Marketing</span><i>✦</i><span class="chrome chrome--md">Lead generation</span><i>✦</i><span class="chrome chrome--md">Tech support</span><i>✦</i></div>
       </div>
     </div>
 

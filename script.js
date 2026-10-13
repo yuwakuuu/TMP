@@ -58,6 +58,41 @@
     window.dispatchEvent(new Event('tmp:loaded'));
   }
 
+  /* Chrome lettering: the bubble filter is measured in pixels, so each size of text gets
+     its own copy scaled from the 96px master (#chrome-l). Re-run when the layout resizes. */
+  const chromeMaster = document.getElementById('chrome-l');
+  if (chromeMaster) {
+    const defs = chromeMaster.parentNode;
+    const made = new Set();
+    const SCALED = { radius: 1, stdDeviation: 1, surfaceScale: 1, dy: 1 };
+    const onLight = (el) => el.classList.contains('chrome--light') || !!el.closest('.footer, .section:not([data-dark]), .showcase-section');
+    // text on light backgrounds uses a deeper, rimmed variant so it doesn't wash out
+    const lightMaster = document.getElementById('chrome-light') || chromeMaster;
+    const filterFor = (px, light) => {
+      const k = Math.max(0.2, Math.round((px / 96) * 20) / 20);   // steps of 0.05
+      const id = (light ? 'chrome-lt-k' : 'chrome-k') + Math.round(k * 100);
+      if (!made.has(id)) {
+        const f = (light ? lightMaster : chromeMaster).cloneNode(true);
+        f.id = id;
+        f.querySelectorAll('*').forEach((node) => {
+          for (const attr of Object.keys(SCALED)) {
+            const v = node.getAttribute(attr);
+            if (v !== null && !isNaN(+v)) node.setAttribute(attr, (+v * k).toFixed(2));
+          }
+        });
+        defs.appendChild(f);
+        made.add(id);
+      }
+      return `url(#${id})`;
+    };
+    const chromeEls = [...document.querySelectorAll('.chrome')];
+    const fitChrome = () => chromeEls.forEach((el) => { el.style.filter = filterFor(parseFloat(getComputedStyle(el).fontSize), onLight(el)); });
+    fitChrome();
+    let resizeTimer = 0;
+    window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(fitChrome, 150); });
+    if (document.fonts) document.fonts.ready.then(fitChrome);
+  }
+
   /* Navigation: border on scroll, mobile sheet, active link ------------------ */
   const nav = document.getElementById('nav');
   const toggle = nav.querySelector('.nav__toggle');
