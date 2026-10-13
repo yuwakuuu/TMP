@@ -21,10 +21,14 @@ export function createChromeStage(canvas, {
   build, pose: initialPose, initial = {}, fitAspect = 1,
   halo: haloHue = 0.72, haloSize = 6.5, pulseSpin = TAU * 2.4, studio = 'strips',
 }) {
-  // lite = touch / low-power device: lower pixel ratio, no MSAA past 1.5x
-  const maxDpr = lite ? 1.5 : 2;
-  let dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: dpr < 2, alpha: true, powerPreference: 'high-performance' });
+  // Render at the screen's real sharpness (up to 3x on phones, 2x elsewhere). The canvas
+  // is small, so even 3x is cheap; the adaptive step below only backs off on a GPU that
+  // genuinely can't keep up, and never below 1.5x.
+  const deviceDpr = window.devicePixelRatio || 1;
+  const maxDpr = Math.min(deviceDpr, lite ? 3 : 2);
+  const minDpr = Math.min(deviceDpr, 1.5);
+  let dpr = maxDpr;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(dpr);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -37,7 +41,12 @@ export function createChromeStage(canvas, {
   // ---- studio environment: dark room + softboxes, prefiltered for reflections
   const pmrem = new THREE.PMREMGenerator(renderer);
   const envScene = buildStudio(studio);
-  scene.environment = pmrem.fromScene(envScene, 0.02).texture;
+  // Rendered at 512px per cube face (PMREM's own fromScene is fixed at 256), so the
+  // softbox reflections on the chrome stay crisp instead of smeared.
+  const cubeRT = new THREE.WebGLCubeRenderTarget(512, { type: THREE.HalfFloatType });
+  new THREE.CubeCamera(0.1, 100, cubeRT).update(renderer, envScene);
+  scene.environment = pmrem.fromCubemap(cubeRT.texture).texture;
+  cubeRT.dispose();
   envScene.traverse((o) => { o.geometry?.dispose(); o.material?.dispose(); });
   pmrem.dispose();
 
@@ -189,7 +198,6 @@ export function createChromeStage(canvas, {
   // ---- loop
   const clock = new THREE.Clock();
   let raf = 0;
-  // adaptive resolution: if the GPU can't keep up, step the pixel ratio down toward 1
   let slowFrames = 0, sampled = 0;
   function wake() {
     if (state.visible && !document.hidden && !raf) { clock.getDelta(); raf = requestAnimationFrame(frame); }
@@ -203,11 +211,16 @@ export function createChromeStage(canvas, {
     const t = clock.elapsedTime;
     uniforms.uTime.value = t;
 
-    if (dpr > 1 && !reduced) {
+    // adaptive sharpness: ignore the busy first seconds of page load, then step down only
+    // if most frames miss ~30fps, and step back up once frames are fast again
+    if (!reduced && t > 3 && document.documentElement.classList.contains('loaded')) {
       sampled++;
-      if (raw > 1 / 34) slowFrames++;
-      if (sampled === 90) {
-        if (slowFrames > 45) { dpr = Math.max(1, dpr - 0.5); renderer.setPixelRatio(dpr); resize(); }
+      if (raw > 1 / 30) slowFrames++;
+      if (sampled === 120) {
+        let next = dpr;
+        if (slowFrames > 84) next = Math.max(minDpr, dpr - 0.25);
+        else if (slowFrames < 12) next = Math.min(maxDpr, dpr + 0.25);
+        if (next !== dpr) { dpr = next; renderer.setPixelRatio(dpr); resize(); }
         sampled = 0; slowFrames = 0;
       }
     }

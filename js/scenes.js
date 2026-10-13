@@ -52,6 +52,42 @@ export function initWordmark(canvas, opts = {}) {
   return stage;
 }
 
+// Taubin smoothing over an indexed mesh: each pass pulls every vertex toward the average
+// of its neighbours (λ) and then pushes it back out (μ), smoothing without shrinking.
+function taubin(geometry, passes) {
+  const pos = geometry.attributes.position.array;
+  const idx = geometry.index.array;
+  const count = pos.length / 3;
+  // neighbour lists in CSR form
+  const deg = new Uint32Array(count);
+  for (let i = 0; i < idx.length; i += 3) { deg[idx[i]] += 2; deg[idx[i + 1]] += 2; deg[idx[i + 2]] += 2; }
+  const start = new Uint32Array(count + 1);
+  for (let i = 0; i < count; i++) start[i + 1] = start[i] + deg[i];
+  const nb = new Uint32Array(start[count]);
+  const fill = start.slice(0, count);
+  for (let i = 0; i < idx.length; i += 3) {
+    const a = idx[i], b = idx[i + 1], c = idx[i + 2];
+    nb[fill[a]++] = b; nb[fill[a]++] = c;
+    nb[fill[b]++] = a; nb[fill[b]++] = c;
+    nb[fill[c]++] = a; nb[fill[c]++] = b;
+  }
+  const tmp = new Float32Array(pos.length);
+  const step = (f) => {
+    for (let v = 0; v < count; v++) {
+      let x = 0, y = 0, z = 0;
+      const s0 = start[v], s1 = start[v + 1];
+      for (let k = s0; k < s1; k++) { const o = nb[k] * 3; x += pos[o]; y += pos[o + 1]; z += pos[o + 2]; }
+      const inv = s1 > s0 ? 1 / (s1 - s0) : 0, o = v * 3;
+      tmp[o] = pos[o] + f * (x * inv - pos[o]);
+      tmp[o + 1] = pos[o + 1] + f * (y * inv - pos[o + 1]);
+      tmp[o + 2] = pos[o + 2] + f * (z * inv - pos[o + 2]);
+    }
+    pos.set(tmp);
+  };
+  for (let p = 0; p < passes; p++) { step(0.63); step(-0.67); }
+  geometry.attributes.position.needsUpdate = true;
+}
+
 // Sammy's section: the same weave in liquid chrome, turning slowly and calmly.
 export function initEternal(canvas, opts = {}) {
   const { reduced = false } = opts;
@@ -77,8 +113,9 @@ export function initEternal(canvas, opts = {}) {
 // stroke, sized to its thickness (baked by tools/bake-wordmark.html), and melt together
 // into round, bubbly tubes. Marching cubes turns the field into a mesh once, at load.
 function buildWordmark({ lite }) {
-  const res = lite ? 110 : 150;
-  const mc = new MarchingCubes(res, new THREE.MeshBasicMaterial(), false, false, lite ? 160000 : 300000);
+  // grid resolution sets how smooth the chrome surface is (build cost grows with res³)
+  const res = lite ? 170 : 220;
+  const mc = new MarchingCubes(res, new THREE.MeshBasicMaterial(), false, false, lite ? 220000 : 360000);
   mc.isolation = 80;
   const SUB = 16;
   for (let i = 0; i < balls.length; i += 3) {
@@ -88,10 +125,14 @@ function buildWordmark({ lite }) {
   mc.update();
 
   const n = mc.count;
-  const g = new THREE.BufferGeometry();
+  let g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(mc.positionArray.slice(0, n * 3), 3));
-  g.setAttribute('normal', new THREE.BufferAttribute(mc.normalArray.slice(0, n * 3), 3));
   mc.geometry.dispose();
+  // Weld the triangle soup, then relax it (Taubin smoothing: shrink, then inflate back) so
+  // the grid's tiny facets disappear and the reflections run in clean, liquid lines.
+  g = mergeVertices(g, 1e-5);
+  taubin(g, lite ? 10 : 12);
+  g.computeVertexNormals();
   g.center();
   g.computeBoundingBox();
   const w = g.boundingBox.max.x - g.boundingBox.min.x;
