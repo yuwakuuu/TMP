@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>The Marketing Partner — Websites, apps &amp; marketing for local business</title>
   <meta name="description" content="The Marketing Partner (TMP) helps small local businesses grow online with custom websites, apps, business systems, marketing and lead generation. Websites from $500.">
-  <meta name="theme-color" content="#fbfbfd">
+  <meta name="theme-color" content="#000000">
   <meta property="og:type" content="website">
   <meta property="og:title" content="The Marketing Partner">
   <meta property="og:description" content="Websites, apps and marketing that help small local businesses get found, get chosen and grow.">
@@ -15,18 +15,61 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script>document.documentElement.classList.add('js')</script>
+  <link rel="modulepreload" href="vendor/three/three.module.min.js">
+  <link rel="modulepreload" href="js/scenes.js">
+  <script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try { if (sessionStorage.getItem('tmp-loaded')) d.classList.add('quick-load'); } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
+  <!-- Liquid-chrome lighting for the bubble lettering (used by .chrome text) -->
+  <svg class="defs" aria-hidden="true" focusable="false">
+    <filter id="liquid" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="8" specularConstant="1.5" specularExponent="34" lighting-color="#fff" result="spec"><feDistantLight azimuth="235" elevation="48"/></feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+      <feDiffuseLighting in="blur" surfaceScale="6" diffuseConstant="1" lighting-color="#fff" result="diff"><feDistantLight azimuth="235" elevation="60"/></feDiffuseLighting>
+      <feComposite in="diff" in2="SourceAlpha" operator="in" result="diffIn"/>
+      <feBlend in="SourceGraphic" in2="diffIn" mode="multiply" result="shaded"/>
+      <feComposite in="specIn" in2="shaded" operator="arithmetic" k2="1" k3="1"/>
+    </filter>
+    <filter id="liquid-sm" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.2" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="4" specularConstant="1.4" specularExponent="30" lighting-color="#fff" result="spec"><feDistantLight azimuth="235" elevation="50"/></feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+      <feDiffuseLighting in="blur" surfaceScale="3" diffuseConstant="1" lighting-color="#fff" result="diff"><feDistantLight azimuth="235" elevation="60"/></feDiffuseLighting>
+      <feComposite in="diff" in2="SourceAlpha" operator="in" result="diffIn"/>
+      <feBlend in="SourceGraphic" in2="diffIn" mode="multiply" result="shaded"/>
+      <feComposite in="specIn" in2="shaded" operator="arithmetic" k2="1" k3="1"/>
+    </filter>
+  </svg>
+
+  <!-- Loading screen -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <p class="loader__word"><span class="chrome">T</span><span class="chrome">M</span><span class="chrome">P</span></p>
+      <p class="loader__name">The Marketing Partner</p>
+      <div class="loader__bar"><i data-progress></i></div>
+      <p class="loader__pct"><span data-pct>0</span>%</p>
+    </div>
+  </div>
+
+  <div class="progress" aria-hidden="true"></div>
+
   <!-- Navigation -->
-  <header class="nav" id="nav">
+  <header class="nav is-dark" id="nav">
     <div class="nav__inner">
       <a class="brand" href="#top" aria-label="The Marketing Partner, home">
-        <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="currentColor"/><path d="M9 11.5h14M16 11.5V23" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+        <span class="brand__mark chrome chrome--sm" aria-hidden="true">TMP</span>
         <span class="brand__name">The Marketing Partner</span>
       </a>
       <nav class="nav__links" aria-label="Primary">
@@ -52,38 +95,58 @@
   </header>
 
   <main id="main">
-    <!-- Hero -->
-    <section class="hero" id="top">
-      <div class="wrap hero__copy">
-        <p class="eyebrow reveal">The Marketing Partner</p>
-        <h1 class="hero__title reveal">Your business.<br><span class="grad">Beautifully online.</span></h1>
-        <p class="hero__lede reveal">Websites, apps and marketing that help small local businesses get found, get chosen and grow.</p>
-        <div class="hero__ctas reveal">
-          <a class="btn btn--primary" href="#contact">Start your project</a>
-          <a class="link-arrow" href="#work">See our work</a>
-        </div>
+    <!-- Hero: the chrome TMP -->
+    <section class="hero" id="top" data-dark>
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__stage" data-stage>
+        <canvas class="hero__canvas" id="tmp-3d" tabindex="0" role="img" aria-label="A 3D liquid-chrome TMP logo. Drag to spin it, press Enter to make it pulse."></canvas>
+        <p class="hero__fallback chrome" aria-hidden="true">TMP</p>
       </div>
+      <div class="wrap hero__copy">
+        <p class="eyebrow eyebrow--light hero__in">The Marketing Partner</p>
+        <h1 class="hero__title hero__in">Your business.<br><span class="chrome">Beautifully online.</span></h1>
+        <p class="hero__lede hero__in">Websites, apps and marketing that help small local businesses get found, get chosen and grow.</p>
+        <div class="hero__ctas hero__in">
+          <a class="btn btn--primary magnetic" href="#contact">Start your project</a>
+          <a class="link-arrow link-arrow--light" href="#work">See our work</a>
+        </div>
+        <p class="hero__hint hero__in"><span class="hint-dot" aria-hidden="true"></span>Drag the logo to spin it. Tap it to make a splash.</p>
+      </div>
+    </section>
 
-      <div class="showcase reveal" aria-label="Recent work">
+    <!-- Marquee -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <div class="marquee__group"><span class="chrome chrome--sm">Websites</span><i>✦</i><span class="chrome chrome--sm">Apps</span><i>✦</i><span class="chrome chrome--sm">Systems</span><i>✦</i><span class="chrome chrome--sm">Marketing</span><i>✦</i><span class="chrome chrome--sm">Lead generation</span><i>✦</i><span class="chrome chrome--sm">Tech support</span><i>✦</i></div>
+      </div>
+    </div>
+
+    <!-- Showcase -->
+    <section class="showcase-section" aria-labelledby="showcase-title">
+      <div class="wrap section__head section__head--center reveal">
+        <p class="eyebrow">Recent work</p>
+        <h2 id="showcase-title">Looks great on <span class="chrome chrome--light">every screen.</span></h2>
+      </div>
+      <div class="showcase" aria-label="Recent work">
         <div class="showcase__stage">
         <div class="laptop">
           <div class="laptop__screen">
             <div class="laptop__bar"><i></i><i></i><i></i><span class="laptop__url" data-url>yuwakuuu.github.io/madebywaku</span></div>
             <div class="laptop__view">
-              <img class="is-on" src="assets/work/madebywaku.webp" alt="MadeByWaku website homepage" width="1440" height="900" fetchpriority="high">
-              <img src="assets/work/happypets.webp" alt="Happy Pets Palace website homepage" width="1440" height="900" loading="lazy">
-              <img src="assets/work/tqm.webp" alt="Total Quality Management website homepage" width="1440" height="900" loading="lazy">
-              <img src="assets/work/tob.webp" alt="The TOB Company website homepage" width="1440" height="900" loading="lazy">
+              <img class="is-on" src="assets/work/madebywaku.webp" alt="MadeByWaku website homepage" width="1440" height="900" decoding="async">
+              <img src="assets/work/happypets.webp" alt="Happy Pets Palace website homepage" width="1440" height="900" loading="lazy" decoding="async">
+              <img src="assets/work/tqm.webp" alt="Total Quality Management website homepage" width="1440" height="900" loading="lazy" decoding="async">
+              <img src="assets/work/tob.webp" alt="The TOB Company website homepage" width="1440" height="900" loading="lazy" decoding="async">
             </div>
           </div>
           <div class="laptop__base"></div>
         </div>
         <div class="phone">
           <div class="phone__view">
-            <img class="is-on" src="assets/work/madebywaku-mobile.webp" alt="" width="780" height="1688">
-            <img src="assets/work/happypets-mobile.webp" alt="" width="780" height="1688" loading="lazy">
-            <img src="assets/work/tqm-mobile.webp" alt="" width="780" height="1688" loading="lazy">
-            <img src="assets/work/tob-mobile.webp" alt="" width="780" height="1688" loading="lazy">
+            <img class="is-on" src="assets/work/madebywaku-mobile.webp" alt="" width="780" height="1688" decoding="async">
+            <img src="assets/work/happypets-mobile.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+            <img src="assets/work/tqm-mobile.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+            <img src="assets/work/tob-mobile.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
           </div>
         </div>
         </div>
@@ -100,7 +163,7 @@
     </section>
 
     <!-- Statement -->
-    <section class="statement">
+    <section class="statement" data-dark>
       <div class="wrap">
         <p class="statement__text" data-scrub>Your customers are searching right now. <span>We make sure they find you, trust you and pick up the phone.</span></p>
       </div>
@@ -111,13 +174,13 @@
       <div class="wrap">
         <header class="section__head reveal">
           <p class="eyebrow">Our work</p>
-          <h2>Made for real businesses.</h2>
+          <h2>Made for <span class="chrome chrome--light">real businesses.</span></h2>
           <p class="section__lede">Every site is designed from scratch around the business it serves. Here are a few we’re proud of.</p>
         </header>
 
         <div class="work">
           <!-- Live links: update the href on each card if a site moves to a new address. -->
-          <a class="card-work reveal" href="https://yuwakuuu.github.io/madebywaku/" target="_blank" rel="noopener">
+          <a class="card-work reveal tilt" href="https://yuwakuuu.github.io/madebywaku/" target="_blank" rel="noopener">
             <div class="frame"><div class="frame__bar"><i></i><i></i><i></i></div><img src="assets/work/madebywaku.webp" alt="MadeByWaku homepage with a 3D infinity sculpture" width="1440" height="900" loading="lazy"></div>
             <div class="card-work__body">
               <p class="card-work__kind">Portfolio · Interactive 3D</p>
@@ -127,7 +190,7 @@
             </div>
           </a>
 
-          <a class="card-work reveal" href="https://yuwakuuu.github.io/happypetspalace-redesign/" target="_blank" rel="noopener">
+          <a class="card-work reveal tilt" href="https://yuwakuuu.github.io/happypetspalace-redesign/" target="_blank" rel="noopener">
             <div class="frame"><div class="frame__bar"><i></i><i></i><i></i></div><img src="assets/work/happypets.webp" alt="Happy Pets Palace homepage with happy dogs" width="1440" height="900" loading="lazy"></div>
             <div class="card-work__body">
               <p class="card-work__kind">Pet resort · Redesign</p>
@@ -137,7 +200,7 @@
             </div>
           </a>
 
-          <a class="card-work reveal" href="https://tqm-website.vercel.app/" target="_blank" rel="noopener">
+          <a class="card-work reveal tilt" href="https://tqm-website.vercel.app/" target="_blank" rel="noopener">
             <div class="frame"><div class="frame__bar"><i></i><i></i><i></i></div><img src="assets/work/tqm.webp" alt="Total Quality Management homepage, a polished store floor" width="1440" height="900" loading="lazy"></div>
             <div class="card-work__body">
               <p class="card-work__kind">Commercial cleaning · Lead generation</p>
@@ -147,7 +210,7 @@
             </div>
           </a>
 
-          <a class="card-work reveal" href="https://yuwakuonline.tail28063a.ts.net:8443/" target="_blank" rel="noopener">
+          <a class="card-work reveal tilt" href="https://yuwakuonline.tail28063a.ts.net:8443/" target="_blank" rel="noopener">
             <div class="frame frame--dark"><div class="frame__bar"><i></i><i></i><i></i></div><img src="assets/work/tob.webp" alt="The TOB Company homepage introducing an AI butler" width="1440" height="900" loading="lazy"></div>
             <div class="card-work__body">
               <p class="card-work__kind">Software · Product launch</p>
@@ -219,7 +282,7 @@
           <p class="eyebrow">How it works</p>
           <h2>Simple from start to launch.</h2>
         </header>
-        <ol class="steps">
+        <ol class="steps" data-steps>
           <li class="reveal"><span class="steps__n">01</span><h3>Talk</h3><p>Tell us about your business, your customers and what you want more of.</p></li>
           <li class="reveal"><span class="steps__n">02</span><h3>Design</h3><p>We design around your brand and show you before anything is built.</p></li>
           <li class="reveal"><span class="steps__n">03</span><h3>Build</h3><p>We build it, test it on every screen size and polish the details.</p></li>
@@ -233,7 +296,7 @@
       <div class="wrap">
         <header class="section__head reveal">
           <p class="eyebrow">Pricing</p>
-          <h2>Clear prices. No surprises.</h2>
+          <h2>Clear prices. <span class="chrome chrome--light">No surprises.</span></h2>
           <p class="section__lede">Every project starts with a free conversation and a fixed quote, so you know the cost before we begin.</p>
         </header>
 
@@ -241,7 +304,7 @@
           <article class="price reveal">
             <h3>Website</h3>
             <p class="price__from">Starting at</p>
-            <p class="price__amt"><span>$</span>500</p>
+            <p class="price__amt chrome chrome--light" data-count="500"><span>$</span><b>500</b></p>
             <p class="price__desc">A custom website that makes a great first impression and turns visitors into calls.</p>
             <ul class="ticks">
               <li>Custom, mobile-first design</li>
@@ -255,20 +318,20 @@
             <p class="price__badge">Most popular</p>
             <h3>App</h3>
             <p class="price__from">Starting at</p>
-            <p class="price__amt"><span>$</span>1,000</p>
+            <p class="price__amt chrome chrome--light" data-count="1000"><span>$</span><b>1,000</b></p>
             <p class="price__desc">A web or mobile app that gives your customers a reason to keep coming back.</p>
             <ul class="ticks">
               <li>iPhone, Android and web</li>
               <li>Accounts, ordering or booking</li>
               <li>Designed around your brand</li>
             </ul>
-            <a class="btn btn--primary" href="#contact" data-interest="App">Get a quote</a>
+            <a class="btn btn--primary magnetic" href="#contact" data-interest="App">Get a quote</a>
           </article>
 
           <article class="price reveal">
             <h3>System</h3>
             <p class="price__from">Starting at</p>
-            <p class="price__amt"><span>$</span>1,500</p>
+            <p class="price__amt chrome chrome--light" data-count="1500"><span>$</span><b>1,500</b></p>
             <p class="price__desc">Custom tools that run the back of your business, so you can focus on the front.</p>
             <ul class="ticks">
               <li>Booking and scheduling</li>
@@ -286,7 +349,7 @@
           </div>
           <div class="marketing__price">
             <p class="price__from">Starting at</p>
-            <p class="price__amt price__amt--sm"><span>$</span>100</p>
+            <p class="price__amt price__amt--sm chrome chrome--light" data-count="100"><span>$</span><b>100</b></p>
           </div>
           <a class="btn btn--ghost" href="#contact" data-interest="Marketing &amp; lead generation">Get started</a>
         </article>
@@ -294,19 +357,26 @@
     </section>
 
     <!-- Membership -->
-    <section class="membership" id="membership">
+    <section class="membership" id="membership" data-dark>
       <div class="wrap membership__inner">
         <div class="membership__copy reveal">
           <p class="eyebrow eyebrow--light">TMP Membership · Optional</p>
-          <h2>Always up to date.<br><span class="grad grad--light">Always supported.</span></h2>
+          <h2>Always up to date.<br><span class="chrome">Always supported.</span></h2>
           <p class="membership__lede">Add a membership to any project and never worry about your site again. Ask for changes whenever you need them.</p>
           <div class="membership__price">
-            <span class="membership__amt">$60</span><span class="membership__per">/month</span>
+            <span class="membership__amt chrome">$60</span><span class="membership__per">/month</span>
           </div>
-          <a class="btn btn--light" href="#contact" data-interest="Membership">Add membership</a>
+          <a class="btn btn--light magnetic" href="#contact" data-interest="Membership">Add membership</a>
           <p class="fine">Optional. Cancel anytime.</p>
         </div>
-        <ul class="perks reveal">
+        <div class="infinity" data-stage>
+          <canvas class="infinity__canvas" id="infinity-3d" tabindex="0" role="img" aria-label="A 3D liquid-chrome infinity loop. Drag to spin it, press Enter to make it pulse."></canvas>
+          <p class="infinity__fallback" aria-hidden="true">∞</p>
+          <p class="infinity__caption">Updates and support, on repeat.</p>
+        </div>
+      </div>
+      <div class="wrap">
+        <ul class="perks">
           <li>
             <span class="perks__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h4l10.5-10.5a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg></span>
             <div><h3>Update requests, anytime</h3><p>New photos, prices, menus, hours or pages. Just ask.</p></div>
@@ -364,7 +434,7 @@
       <div class="wrap contact">
         <div class="contact__copy reveal">
           <p class="eyebrow">Get started</p>
-          <h2>Let’s grow your business.</h2>
+          <h2>Let’s grow <span class="chrome chrome--light">your business.</span></h2>
           <p class="section__lede">Tell us a little about what you need. We’ll get back to you with ideas and a free quote.</p>
         </div>
         <!-- Set data-email to the inbox that should receive inquiries. -->
@@ -403,9 +473,10 @@
 
   <footer class="footer">
     <div class="wrap">
+      <p class="footer__word chrome chrome--light" aria-hidden="true">The Marketing Partner</p>
       <div class="footer__top">
         <a class="brand" href="#top">
-          <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="currentColor"/><path d="M9 11.5h14M16 11.5V23" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+          <span class="brand__mark chrome chrome--sm chrome--light" aria-hidden="true">TMP</span>
           <span class="brand__name">The Marketing Partner</span>
         </a>
         <nav class="footer__cols" aria-label="Footer">
@@ -441,5 +512,6 @@
   </footer>
 
   <script src="script.js" defer></script>
+  <script type="module" src="js/main3d.js"></script>
 </body>
 </html>

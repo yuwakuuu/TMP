@@ -3,9 +3,15 @@
 Marketing site for The Marketing Partner. It is plain HTML, CSS and JavaScript with no build step.
 
 - `index.html`: page content
-- `styles.css`: design
-- `script.js`: navigation, scroll animations, project showcase and contact form
+- `styles.css`: design, including the liquid-chrome lettering and scroll-driven animations
+- `script.js`: loading screen, navigation, scroll effects, project showcase, card tilt, price count-up and contact form
+- `js/main3d.js`: starts the 3D scenes (falls back to CSS lettering without WebGL)
+- `js/scenes.js`: the chrome TMP wordmark (metaballs) and the bubbly infinity loop
+- `js/chrome-stage.js`: shared renderer, chrome material, lighting and drag/tap controls
+- `js/wordmark-balls.js`: pre-baked shape data for the 3D TMP (regenerate with `tools/bake-wordmark.html`)
+- `vendor/three/`: three.js 0.169.0 (MIT), self-hosted so the site needs no CDN
 - `assets/work/`: screenshots of example projects
+- Fonts: Shrikhand (chrome lettering) and Inter, both SIL Open Font License, loaded from Google Fonts
 
 ## Things to update
 
