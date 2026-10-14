@@ -10,7 +10,8 @@ import { chromeMaterials, buildStudio, radialTexture } from '../../js/chrome-sta
 import { buildWordmark } from '../../js/scenes.js';
 
 const W = innerWidth, H = innerHeight, portrait = H > W;
-document.documentElement.style.setProperty('--u', Math.min(W, H * 1.4) / 100 + 'px');
+if (portrait) document.documentElement.classList.add('portrait');
+document.documentElement.style.setProperty('--u', Math.min(W, H * 1.4) / 100 * (portrait ? 1.7 : 1) + 'px');
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1);
@@ -35,7 +36,7 @@ const { chrome, rim, uniforms, rimUniforms } = chromeMaterials();
 const fit = new THREE.Group(), spin = new THREE.Group(), pop = new THREE.Group();
 scene.add(fit); fit.add(spin); spin.add(pop);
 fit.scale.setScalar(Math.min(1, (W / H) / 1.7) * (portrait ? 1.08 : 1));
-fit.position.y = portrait ? 0.9 : 0.55;
+fit.position.y = portrait ? 0.35 : 0.55;
 
 const l1 = new THREE.DirectionalLight('#a9c8ff', 2.6); l1.position.set(-4, 1.5, -3);
 const l2 = new THREE.DirectionalLight('#d6ccff', 2.6); l2.position.set(4, -1, -3);
@@ -69,8 +70,8 @@ const nameEl = document.getElementById('name'), neonEl = document.getElementById
 const NAME = 'THE MARKETING PARTNER';
 nameEl.innerHTML = [...NAME].map((c) => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join('');
 const letters = [...nameEl.children];
-nameEl.style.top = (portrait ? 56 : 62) + '%';
-neonEl.style.top = (portrait ? 61 : 68) + '%';
+nameEl.style.top = (portrait ? 55 : 62) + '%';
+neonEl.style.top = (portrait ? 59.5 : 68) + '%';
 
 // easing
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
