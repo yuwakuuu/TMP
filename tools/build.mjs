@@ -1,7 +1,7 @@
 // Builds the minified files the page loads (dist/). Run `npm run build` after editing
 // styles.css, script.js, js/game.js or anything under js/.
 //   dist/styles.min.css  styles.css, minified
-//   dist/app.min.js      Motion + script.js + js/game.js, one classic script
+//   dist/app.min.js      Motion + script.js + js/game.js + js/grass.js, one classic script
 //   dist/3d/*.js         js/main3d.js and the 3D scenes with only the parts of three.js
 //                        they use (loaded on demand, split into chunks)
 import { build, transform } from 'esbuild';
@@ -19,6 +19,7 @@ const app = [
   await read('node_modules/motion/dist/motion.js'),
   await read('script.js'),
   await read('js/game.js'),
+  await read('js/grass.js'),
 ].join(';\n');
 const appMin = await transform(app, { loader: 'js', minify: true, target: 'es2020', legalComments: 'eof' });
 await writeFile(root + 'dist/app.min.js', appMin.code);

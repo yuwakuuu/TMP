@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Copy of The TOB Company site, hosted as a live demo on The Marketing Partner site. -->
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The TOB Company</title>
+  <meta name="description" content="TOB is a personal AI butler that lives on your Windows PC: a voice, a face, six AI brains that cover for each other, and hands that actually use your computer.">
+  <meta name="theme-color" content="#0a0a0c">
+  <meta name="color-scheme" content="dark light">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The TOB Company">
+  <meta property="og:title" content="TOB, your own AI butler">
+  <meta property="og:description" content="A personal AI that lives on your PC. Talk to his hologram, in his real voice.">
+  <meta property="og:url" content="https://yuwakuonline.tail28063a.ts.net:8443/">
+  <meta property="og:image" content="https://yuwakuonline.tail28063a.ts.net:8443/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="apple-mobile-web-app-title" content="TOB">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='40%25' cy='35%25' r='65%25'%3E%3Cstop offset='0' stop-color='%23e6eeff'/%3E%3Cstop offset='.45' stop-color='%237fa8ff'/%3E%3Cstop offset='1' stop-color='%23121a33'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='28' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <div class="boot" id="boot" role="dialog" aria-modal="true" aria-labelledby="boot-title" aria-describedby="boot-sub" hidden>
+    <div class="boot-block">
+      <p class="boot-title" id="boot-title">T O B</p>
+      <p class="boot-sub" id="boot-sub">Personal operating environment · v3.2.0</p>
+      <div class="boot-stage">
+        <ol class="boot-lines" id="boot-lines" aria-live="polite"></ol>
+        <div class="boot-gate" id="boot-gate">
+          <button class="boot-wake" id="boot-wake" type="button">Wake TOB</button>
+          <button class="boot-quiet" id="boot-quiet" type="button">Enter without sound</button>
+          <p class="boot-hint">Best with sound on.</p>
+        </div>
+      </div>
+      <div class="boot-bar" aria-hidden="true"><span id="boot-progress"></span></div>
+    </div>
+    <p class="boot-credit">The TOB Company · madebywaku</p>
+  </div>
+  <script>
+    // TOB-OS's boot screen: once per visit (a reload in the same tab goes straight in), never for reduced motion,
+    // and hidden by default so the page never stays blocked without scripts.
+    (function () {
+      var seen = false;
+      try { seen = sessionStorage.getItem('tob-booted') === '1'; } catch (e) { /* storage blocked */ }
+      if (!seen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.getElementById('boot').hidden = false;
+        document.documentElement.classList.add('booting');
+      }
+    })();
+  </script>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav" id="top">
+    <nav class="nav-inner" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="The TOB Company, back to top">
+        <span class="brand-orb" aria-hidden="true"></span>
+        <span>TOB</span>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#meet">Meet TOB</a></li>
+        <li><a href="#brains">Brains</a></li>
+        <li><a href="#voice">Voice</a></li>
+        <li><a href="#hands">Control</a></li>
+        <li><a href="#studio">Studio</a></li>
+        <li><a href="#finance">Finance</a></li>
+        <li><a href="#phone">Phone</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+      </ul>
+      <a class="nav-cta" href="#demo">Talk to TOB</a>
+      <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false" aria-label="Sound off" data-sound="own">
+        <svg class="icon-on" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+        <svg class="icon-off" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4zm12.6 3 2.7-2.7-1.4-1.4-2.7 2.7-2.7-2.7-1.4 1.4 2.7 2.7-2.7 2.7 1.4 1.4 2.7-2.7 2.7 2.7 1.4-1.4z"/></svg>
+      </button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="sr-only">Menu</span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+    </nav>
+    <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress"></span></div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero dark" aria-labelledby="hero-title">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">The TOB Company presents</p>
+          <h1 id="hero-title" class="hero-title reveal">TOB.</h1>
+          <p class="hero-tagline reveal">Your own AI butler.<br>He lives on your PC.</p>
+          <p class="hero-sub reveal">A personal assistant that runs as its own OS-style app on Windows. He has a voice,
+            a face and six AI brains, and he can actually use your computer.</p>
+          <div class="hero-cta reveal">
+            <a class="btn btn-primary" href="#demo">Talk to TOB</a>
+            <a class="btn btn-link" href="#meet">Meet TOB <span aria-hidden="true">›</span></a>
+          </div>
+        </div>
+        <div class="orb-stage reveal">
+          <div class="orb-glow" aria-hidden="true"></div>
+          <button class="orb-btn" id="orb-btn" type="button" aria-label="Tap TOB's orb" data-sound="own">
+            <span class="orb-tilt">
+              <span class="orb">
+                <span class="orb-light l1"></span>
+                <span class="orb-light l2"></span>
+                <span class="orb-light l3"></span>
+                <span class="orb-shine"></span>
+              </span>
+            </span>
+          </button>
+          <div class="orb-floor" aria-hidden="true"></div>
+          <p class="orb-caption" aria-hidden="true">TOB's face · tap it</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEET -->
+    <section class="section light" id="meet" aria-labelledby="meet-title">
+      <div class="container narrow center">
+        <p class="eyebrow reveal">Meet TOB</p>
+        <h2 id="meet-title" class="display reveal">Not a chatbot in a tab.<br><span class="muted">A whole environment.</span></h2>
+        <p class="lead reveal">TOB is inspired by JARVIS and built for Windows 11. He has an animated core that shows what he's
+          doing, a conversation panel, live hardware readouts, a local voice you can just talk to, and hands that open apps,
+          run your dev servers and drive the screen.</p>
+      </div>
+      <div class="container stats reveal">
+        <div class="stat spot"><span class="stat-num" data-count="6">6</span><span class="stat-label">AI brains that take over from each other</span></div>
+        <div class="stat spot"><span class="stat-num" data-count="1">1</span><span class="stat-label">shared memory across every brain</span></div>
+        <div class="stat spot"><span class="stat-num" data-count="1" data-prefix="~" data-suffix="%">~1%</span><span class="stat-label">CPU when visible and idle</span></div>
+        <div class="stat spot"><span class="stat-num" data-count="0">0</span><span class="stat-label">seconds of your audio sent to the cloud</span></div>
+      </div>
+    </section>
+
+    <!-- DEMO -->
+    <section class="section dark demo" id="demo" aria-labelledby="demo-title">
+      <div class="container narrow center">
+        <p class="eyebrow reveal">Try TOB</p>
+        <h2 id="demo-title" class="display reveal">Talk to him.</h2>
+        <p class="lead reveal">This is TOB's real hologram, ported to your browser, speaking in his real voice. His eyes
+          follow you. Ask him anything about himself, or just tap him.</p>
+      </div>
+      <div class="container">
+        <div class="demo-stage reveal" id="demo-stage">
+          <div class="holo-wrap">
+            <button class="holo-btn" id="holo-btn" type="button" aria-label="Poke TOB's hologram" data-sound="own">
+              <canvas id="holo-canvas" aria-hidden="true"></canvas>
+            </button>
+            <p class="holo-state" aria-live="polite"><span class="sr-only">TOB is </span><span id="holo-state" data-state="online">Online</span></p>
+          </div>
+          <div class="chat">
+            <div class="chat-head">
+              <div>
+                <p class="chat-title">TOB</p>
+                <p class="chat-sub">Demo · runs in your browser</p>
+              </div>
+              <button class="chat-voice" id="chat-voice" type="button" aria-pressed="true" data-sound="own">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+                <span class="label">Voice on</span>
+              </button>
+            </div>
+            <div class="chat-log" id="chat-log" role="log" aria-live="polite" aria-label="Conversation with TOB" tabindex="0"></div>
+            <div class="chat-chips" id="chat-chips" aria-label="Suggestions" data-sound="own">
+              <button type="button">What can you do?</button>
+              <button type="button">Which AI brains do you use?</button>
+              <button type="button">Is my data private?</button>
+              <button type="button">Restart the server</button>
+              <button type="button">Tell me a joke</button>
+            </div>
+            <form class="chat-form" id="chat-form" autocomplete="off" data-sound="own">
+              <label class="sr-only" for="chat-input">Message TOB</label>
+              <input id="chat-input" type="text" placeholder="Ask TOB anything…" maxlength="300" enterkeyhint="send">
+              <button class="chat-mic" id="chat-mic" type="button" aria-pressed="false" aria-label="Talk to TOB">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1a7 7 0 0 0 6-6.9h-2z"/></svg>
+              </button>
+              <button class="chat-send" type="submit" aria-label="Send">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 4l-7 7 1.4 1.4L11 7.8V20h2V7.8l4.6 4.6L19 11z"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+        <p class="demo-note">This demo answers with lines written ahead of time in TOB's own persona. It can't control
+          your computer, and what you type stays between your browser and this site. The mic uses your browser's speech
+          recognition, which some browsers (Chrome, for one) process on their own servers. The real TOB thinks with
+          Claude and his other brains, and acts on your PC.</p>
+      </div>
+    </section>
+
+    <!-- BRAINS -->
+    <section class="section light" id="brains" aria-labelledby="brains-title">
+      <div class="container narrow center">
+        <p class="eyebrow reveal">The ensemble</p>
+        <h2 id="brains-title" class="display reveal">Six brains.<br><span class="muted">One TOB.</span></h2>
+        <p class="lead reveal">Every request goes to Claude first. If a brain runs out of usage, is signed out or goes quiet,
+          the next one picks up the same request straight away, with the conversation so far.</p>
+      </div>
+      <div class="container">
+        <div class="failover reveal" id="failover">
+          <div class="fo-head">
+            <div>
+              <p class="fo-title">Failover, live</p>
+              <p class="fo-sub">Take the answering brain offline and watch the next one pick up.</p>
+            </div>
+            <div class="fo-actions">
+              <button class="pill pill-dark" id="fo-next" type="button" data-sound="own">Take Claude offline</button>
+              <button class="pill pill-ghost" id="fo-reset" type="button" data-sound="own" hidden>Reset</button>
+            </div>
+          </div>
+          <ol class="chain" aria-label="Failover order">
+            <li class="chain-item" data-brain="claude" data-state="answering"><span class="chain-step">1</span><h3>Claude</h3><p>The main brain. Everything goes here first.</p><span class="chain-status">Answering</span></li>
+            <li class="chain-item" data-brain="grok" data-state="standby"><span class="chain-step">2</span><h3>Grok</h3><p>The main backup, and strong at code.</p><span class="chain-status">Standing by</span></li>
+            <li class="chain-item" data-brain="chatgpt" data-state="standby"><span class="chain-step">3</span><h3>ChatGPT</h3><p>Screen control and multi-step tasks. TOB asks before using your plan.</p><span class="chain-status">Standing by</span></li>
+            <li class="chain-item" data-brain="cursor" data-state="standby"><span class="chain-step">4</span><h3>Cursor</h3><p>A backup that's strong at code.</p><span class="chain-status">Standing by</span></li>
+            <li class="chain-item" data-brain="gemini" data-state="off"><span class="chain-step">5</span><h3>Gemini</h3><p>Available with a Gemini API key.</p><span class="chain-status">Off by default</span></li>
+            <li class="chain-item" data-brain="local" data-state="standby"><span class="chain-step">6</span><h3>Local AI</h3><p>Free, unlimited and offline. Always the last line.</p><span class="chain-status">Standing by</span></li>
+          </ol>
+          <p class="fo-log" id="fo-log" aria-live="polite">Claude is answering. Every request goes here first.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card spot reveal">
+            <h3>One memory</h3>
+            <p>Every brain gets TOB's persona, your long-term memories and the recent conversation. A project carries on whichever brain is answering.</p>
+          </article>
+          <article class="card spot reveal">
+            <h3>A team, not a queue</h3>
+            <p>A brain can ask another for a second opinion mid-task. They also teach each other through a shared notebook of lessons that every brain reads.</p>
+          </article>
+          <article class="card spot reveal">
+            <h3>Your order</h3>
+            <p>Set the priority yourself, or just say it: “put Grok first,” “go local first,” “use Opus.” Local-first mode passes up whatever it can't handle well.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- VOICE & FACE -->
+    <section class="section dark" id="voice" aria-labelledby="voice-title">
+      <div class="container split">
+        <div class="split-text">
+          <p class="eyebrow reveal">Voice &amp; face</p>
+          <h2 id="voice-title" class="headline reveal">Say “Hey Tob.”<br>He answers.</h2>
+          <p class="body reveal">Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Space</kbd> anywhere, even in a game, and speak.
+            He replies in a warm, old-butler voice. Say “Tob” while he's talking and he stops mid-sentence to listen.
+            Recognition, speech and the wake word all run locally on your PC.</p>
+          <ul class="ticks reveal">
+            <li><strong>The orb.</strong> Coloured light inside a glass sphere. It swirls while he thinks and swells with his voice.</li>
+            <li><strong>The butler hologram.</strong> Turn on the live wallpaper and he stands on your desktop behind your icons. He blinks, listens and speaks.</li>
+            <li><strong>Pinned chat widget.</strong> A small chat that floats above every window and shrinks to a glowing orb bubble.</li>
+          </ul>
+        </div>
+        <div class="split-visual reveal">
+          <div class="device-card voice-card" id="voice-card">
+            <div class="mini-orb" aria-hidden="true"></div>
+            <div class="wave" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="bubble you" aria-hidden="true">Hey Tob, start the server.</div>
+            <div class="bubble tob" aria-hidden="true">Starting the server now.</div>
+            <div class="mic-pill" aria-hidden="true"><span class="dot"></span>MIC LIVE</div>
+            <button class="hear-btn" id="hear-tob" type="button" data-sound="own" hidden>
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+              <span class="label">Hear TOB's real voice</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HANDS -->
+    <section class="section tinted" id="hands" aria-labelledby="hands-title">
+      <div class="container split reverse">
+        <div class="split-text">
+          <p class="eyebrow reveal">Computer control</p>
+          <h2 id="hands-title" class="headline reveal">Your laptop is<br>his body.</h2>
+          <p class="body reveal">TOB doesn't just talk about doing things. He launches apps and projects, manages windows,
+            files and processes, sets volume and brightness, and can see and drive the screen with the mouse and keyboard.</p>
+          <p class="body subtle reveal">While he's controlling the screen, a banner stays on top. Shove the mouse into the
+            top-left corner, or press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>X</kbd>, and he stops instantly.</p>
+        </div>
+        <div class="split-visual reveal">
+          <div class="hands-panel">
+            <div class="ability-grid" role="group" aria-label="Try one of TOB's actions">
+              <button class="ability spot" type="button" data-act="volume" aria-pressed="true"><span class="ab-icon" aria-hidden="true">◐</span>Volume &amp; media</button>
+              <button class="ability spot" type="button" data-act="window" aria-pressed="false"><span class="ab-icon" aria-hidden="true">▣</span>Windows</button>
+              <button class="ability spot" type="button" data-act="files" aria-pressed="false"><span class="ab-icon" aria-hidden="true">▤</span>Files</button>
+              <button class="ability spot" type="button" data-act="apps" aria-pressed="false"><span class="ab-icon" aria-hidden="true">↗</span>Apps &amp; projects</button>
+              <button class="ability spot" type="button" data-act="screen" aria-pressed="false"><span class="ab-icon" aria-hidden="true">⌖</span>The screen</button>
+              <button class="ability spot" type="button" data-act="system" aria-pressed="false"><span class="ab-icon" aria-hidden="true">⏻</span>Lock &amp; power</button>
+            </div>
+            <div class="action-console" aria-live="polite">
+              <div class="console-bar"><span></span><span></span><span></span><em>Actions · example</em></div>
+              <div class="ac-body" id="ac-body">
+                <p class="ac-you"></p>
+                <p class="ac-run"></p>
+                <p class="ac-tob"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MINECRAFT -->
+    <section class="section dark" id="server" aria-labelledby="server-title">
+      <div class="container split">
+        <div class="split-text">
+          <p class="eyebrow reveal">His main job</p>
+          <h2 id="server-title" class="headline reveal">A Minecraft dev server that never gets lost.</h2>
+          <p class="body reveal">TOB runs the KingdomRP dev server. He always knows whether it's up and who's online. He
+            finds it by its port whoever started it, sends console commands over RCON, and stops it gracefully so the world
+            saves. Quit TOB and the server keeps running. When he comes back, he reconnects to it.</p>
+        </div>
+        <div class="split-visual reveal">
+          <div class="device-card console" role="img" aria-label="Example server console: the server is running, two players are online, and a restart saves the world first">
+            <div class="console-bar"><span></span><span></span><span></span><em>Server · KingdomRP dev server</em></div>
+            <pre><code><span class="c-dim">&gt;</span> is the server up?
+<span class="c-ok">●</span> Running · uptime 3h 12m
+<span class="c-dim">&gt;</span> who's online?
+  2 players online
+<span class="c-dim">&gt;</span> restart the server
+  RCON stop · world saved
+<span class="c-ok">●</span> Back online</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDIO & BROWSER -->
+    <section class="section light" id="studio" aria-labelledby="studio-title">
+      <div class="container narrow center">
+        <p class="eyebrow reveal">Studio &amp; browser</p>
+        <h2 id="studio-title" class="display reveal">Built to build.</h2>
+      </div>
+      <div class="container grid-2">
+        <article class="card big spot reveal">
+          <div class="card-art art-studio" aria-hidden="true">
+            <span>Claude Code</span><span>Grok Build</span><span>Cursor</span><span>Aider</span><span>OpenCode</span><span>Codex</span><span>Gemini CLI</span><span>Cline</span>
+          </div>
+          <h3>Coding agents in Studio</h3>
+          <p>TOB starts coding agents on a project in a Studio terminal, where you watch and steer them. Aider runs free and offline on the local coding model.</p>
+        </article>
+        <article class="card big spot reveal">
+          <div class="card-art art-browser" aria-hidden="true">
+            <div class="b-bar"><span class="b-tab on"></span><span class="b-tab"></span><span class="b-url"></span></div>
+            <div class="b-video"><span class="b-play"></span></div>
+          </div>
+          <h3>A built-in browser</h3>
+          <p>Tabs, an address bar that also searches, full-screen video and logins that persist. TOB can drive it too: “play lofi on YouTube,” “what's this page about?”</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- MEMORY -->
+    <section class="section tinted" id="memory" aria-labelledby="memory-title">
+      <div class="container split reverse">
+        <div class="split-text">
+          <p class="eyebrow reveal">Memory</p>
+          <h2 id="memory-title" class="headline reveal">He remembers you.<br><span class="muted">And how you work.</span></h2>
+          <p class="body reveal">Tell TOB what to remember and every brain knows it. He also notices patterns that repeat,
+            like your morning routines, what usually comes next and how you like answers, so he can anticipate instead of assume.</p>
+          <p class="body subtle reveal">Everything he's learned is listed in Memory, where you can forget any item or switch learning off.
+            The habit log never leaves the laptop.</p>
+        </div>
+        <div class="split-visual reveal">
+          <div class="device-card memory-card">
+            <p class="m-label">Learned · example</p>
+            <ul id="memory-list">
+              <li><span>Mornings: usually open Studio</span><button type="button" class="forget" aria-label="Forget: Mornings: usually open Studio">Forget</button></li>
+              <li><span>Prefers short answers</span><button type="button" class="forget" aria-label="Forget: Prefers short answers">Forget</button></li>
+              <li><span>Minecraft name saved</span><button type="button" class="forget" aria-label="Forget: Minecraft name saved">Forget</button></li>
+            </ul>
+            <p class="m-empty" id="memory-empty" hidden>Forgotten. Nothing he learned is beyond your reach. <button type="button" class="m-undo" id="memory-undo">Undo</button></p>
+            <div class="suggest">Your usual morning: open Studio? <span class="suggest-x" aria-hidden="true">×</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINANCE -->
+    <section class="section dark" id="finance" aria-labelledby="finance-title">
+      <div class="container narrow center">
+        <p class="eyebrow reveal">TOB Finance</p>
+        <h2 id="finance-title" class="display reveal">Research the market.<br><span class="muted">Practice with paper.</span></h2>
+        <p class="lead reveal">Research briefs with SEC fundamentals, interactive charts, a strategy lab for backtests and a
+          plain-English glossary. Trades go into a paper account. No real money ever moves.</p>
+      </div>
+      <div class="container">
+        <div class="chart-card reveal" id="chart-card">
+          <div class="chart-head">
+            <span class="chip">PAPER</span>
+            <span class="chart-title">Paper account</span>
+            <span class="chart-value" id="chart-value" aria-live="polite">$113,200</span>
+            <span class="chart-note">Illustration · simulated money · drag to explore</span>
+          </div>
+          <div class="chart-plot">
+            <svg id="chart-svg" viewBox="0 0 600 180" preserveAspectRatio="none" role="img" aria-label="Illustrative paper account value, rising from $100,000 to $113,200 over twelve weeks">
+              <defs>
+                <linearGradient id="fill" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#7fa8ff" stop-opacity=".35"/>
+                  <stop offset="1" stop-color="#7fa8ff" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path class="chart-area" d="M0,150 L50,140 L100,146 L150,120 L200,126 L250,104 L300,110 L350,86 L400,92 L450,66 L500,72 L550,48 L600,40 L600,180 L0,180 Z" fill="url(#fill)"/>
+              <path class="chart-line" d="M0,150 L50,140 L100,146 L150,120 L200,126 L250,104 L300,110 L350,86 L400,92 L450,66 L500,72 L550,48 L600,40" fill="none" stroke="#7fa8ff" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <span class="chart-cursor" id="chart-cursor" aria-hidden="true"><i></i></span>
+          </div>
+          <p class="chart-label" id="chart-label" aria-hidden="true">Week 12</p>
+        </div>
+        <div class="grid-4">
+          <div class="mini spot reveal"><h3>Research briefs</h3><p>Fundamentals, risk and both sides of the case.</p></div>
+          <div class="mini spot reveal"><h3>Strategy Lab</h3><p>Backtests, comparisons and paper trading.</p></div>
+          <div class="mini spot reveal"><h3>AI Trader</h3><p>The local AI trades the paper account within risk limits, and logs why.</p></div>
+          <div class="mini spot reveal"><h3>Kill switch</h3><p>One tap refuses every order. Risk limits always apply.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHONE -->
+    <section class="section light" id="phone" aria-labelledby="phone-title">
+      <div class="container split">
+        <div class="split-text">
+          <p class="eyebrow reveal">TOB on your phone</p>
+          <h2 id="phone-title" class="headline reveal">Your PC.<br>In your pocket.</h2>
+          <p class="body reveal">The phone app is a remote control over Tailscale, a private network between your own devices,
+            so nothing is opened to the internet. Chat with TOB, watch his actions live, approve or deny, hear replies in his
+            own voice, and use the laptop's screen with your phone as the trackpad and keyboard.</p>
+          <p class="body subtle reveal">Pair once by scanning a QR code. One app can control every PC running TOB.</p>
+        </div>
+        <div class="split-visual reveal">
+          <div class="phone" role="img" aria-label="Phone app showing TOB's orb, server and laptop status, and an approval">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="phone-screen" aria-hidden="true">
+              <div class="mini-orb small"></div>
+              <p class="p-name">TOB</p>
+              <div class="p-card"><span>Server</span><b>Online</b></div>
+              <div class="p-card"><span>Laptop</span><b>CPU 4%</b></div>
+              <div class="p-ask">Run this PowerShell command?</div>
+              <div class="p-actions"><span>Allow</span><span>Deny</span></div>
+              <div class="p-tabs"><i class="on"></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIVACY -->
+    <section class="section tinted" id="privacy" aria-labelledby="privacy-title">
+      <div class="container narrow center">
+        <p class="eyebrow reveal">Safety &amp; privacy</p>
+        <h2 id="privacy-title" class="display reveal">Powerful.<br><span class="muted">With guard rails.</span></h2>
+      </div>
+      <div class="container grid-3">
+        <article class="card spot reveal"><h3>Speech stays home</h3><p>Synthesis, recognition and the wake word run locally. Wake-word clips are checked and discarded, never stored.</p></article>
+        <article class="card spot reveal"><h3>No permanent deletes</h3><p>Deleting goes to the Recycle Bin. System folders and TOB's own secrets are off-limits.</p></article>
+        <article class="card spot reveal"><h3>Always asks</h3><p>PowerShell commands and shutdown or restart show an approval card every time, with the exact command.</p></article>
+        <article class="card spot reveal"><h3>Locked to TOB's tools</h3><p>Each brain's own shell and file tools are switched off. TOB's checked, approved actions are the only way any brain can act.</p></article>
+        <article class="card spot reveal"><h3>Honest by design</h3><p>TOB never claims to have done something he didn't do.</p></article>
+        <article class="card spot reveal"><h3>Light on your PC</h3><p>About 0.04% CPU while hidden in the tray and around 1% when visible and idle. The orb renders on the GPU.</p></article>
+      </div>
+    </section>
+
+    <!-- EASTER EGG -->
+    <section class="section egg" id="egg" aria-labelledby="egg-title">
+      <div class="container narrow center">
+        <p class="eyebrow reveal">One more thing</p>
+        <h2 id="egg-title" class="headline reveal">There's a hidden guest.</h2>
+        <p class="body reveal">Somewhere in Settings there's a switch that has TOB take on the personality and voice of a certain
+          Las Vegas tycoon, complete with a green screen glow and a vintage broadcast crackle.
+          <button class="egg-btn" id="egg-who" type="button" aria-expanded="false" aria-controls="egg-reveal">Who?</button></p>
+        <div class="egg-reveal" id="egg-reveal" hidden>
+          <p>Mr. House, from <em>Fallout: New Vegas</em>. “The house always wins.”</p>
+          <button class="egg-btn summon" id="summon-house" type="button" data-sound="own">Let him take over the demo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="section dark closing" aria-labelledby="close-title">
+      <div class="container narrow center">
+        <div class="mini-orb large reveal" aria-hidden="true"></div>
+        <h2 id="close-title" class="display reveal">At your service.</h2>
+        <p class="lead reveal">TOB. A personal AI that lives on your PC and works for you.</p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="#demo">Talk to TOB</a>
+          <a class="btn btn-link" href="#top">Back to top <span aria-hidden="true">↑</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="brand-orb big" aria-hidden="true"></span>
+          <div>
+            <p class="f-name">The TOB Company</p>
+            <p class="f-credit">is <span class="waku">madebywaku</span>.</p>
+          </div>
+        </div>
+        <nav class="footer-cols" aria-label="Footer">
+          <div>
+            <p class="f-h">Explore</p>
+            <ul>
+              <li><a href="#meet">Meet TOB</a></li>
+              <li><a href="#brains">Brains</a></li>
+              <li><a href="#hands">Computer control</a></li>
+              <li><a href="#finance">TOB Finance</a></li>
+              <li><a href="#privacy">Safety &amp; privacy</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="f-h">Try it</p>
+            <ul>
+              <li><a href="#demo">Talk to TOB</a></li>
+              <li><button type="button" class="f-link" id="f-house" data-sound="own">Summon Mr. House</button></li>
+              <li><button type="button" class="f-link" id="f-replay">Replay the boot</button></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span id="year">2026</span> The TOB Company. Designed and built by madebywaku.</p>
+        <p class="footer-note">TOB is a personal project for Windows 11. Claude, Grok, ChatGPT, Gemini, Cursor and Fallout are trademarks of their respective owners.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -93,6 +93,70 @@
     if (document.fonts) document.fonts.ready.then(fitChrome);
   }
 
+  /* Live demo: the TOB site loads only when asked, so it costs nothing until then */
+  document.querySelectorAll('[data-live-start]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const frame = btn.parentElement.querySelector('iframe');
+      frame.src = frame.dataset.src;
+      frame.hidden = false;
+      btn.classList.add('is-gone');
+      setTimeout(() => btn.remove(), 500);
+      frame.focus({ preventScroll: true });
+    });
+  });
+
+  /* Neon sign: split into letter tubes, switch on with a stutter, then buzz now and then */
+  const neon = document.querySelector('[data-neon]');
+  if (neon) {
+    const text = neon.textContent;
+    neon.textContent = '';
+    const sr = document.createElement('span');
+    sr.className = 'sr'; sr.textContent = text;
+    const tubes = document.createElement('span');
+    tubes.setAttribute('aria-hidden', 'true');
+    const letters = [];
+    for (const ch of text) {
+      const l = document.createElement('span');
+      l.className = 'nl'; l.textContent = ch;
+      if (ch.trim()) letters.push(l);
+      tubes.appendChild(l);
+    }
+    neon.append(sr, tubes);
+    if (!reduceMotion) {
+      const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+      const flicker = async (target, pattern) => {
+        for (let i = 0; i < pattern.length; i++) {
+          target.classList.toggle('is-off', i % 2 === 0);
+          await wait(pattern[i]);
+        }
+        target.classList.remove('is-off');
+      };
+      let heroVisible = true;
+      new IntersectionObserver(([en]) => { heroVisible = en.isIntersecting; }).observe(neon);
+      // one tired tube that acts up more than the rest, like a real diner sign
+      const tired = letters[Math.min(9, letters.length - 1)];
+      const buzz = async () => {
+        if (heroVisible && !document.hidden) {
+          const pick = Math.random() < 0.45 ? tired : letters[(Math.random() * letters.length) | 0];
+          const n = 2 + ((Math.random() * 4) | 0);
+          const pattern = [];
+          for (let i = 0; i < n * 2; i++) pattern.push(30 + Math.random() * (i % 2 ? 90 : 140));
+          if (Math.random() < 0.12) await flicker(neon, [70, 60, 50, 140]);   // the whole sign dips
+          else await flicker(pick, pattern);
+        }
+        setTimeout(buzz, 2200 + Math.random() * 4200);
+      };
+      neon.classList.add('is-off');
+      const switchOn = async () => {
+        await wait(700);
+        await flicker(neon, [90, 60, 40, 220, 60, 90]);
+        letters.forEach((l, i) => { if (i % 4 === 1) flicker(l, [50, 80, 40, 120]); });
+        setTimeout(buzz, 2500);
+      };
+      if (doc.classList.contains('loaded')) switchOn(); else window.addEventListener('tmp:loaded', switchOn, { once: true });
+    }
+  }
+
   /* Navigation: border on scroll, mobile sheet, active link ------------------ */
   const nav = document.getElementById('nav');
   const toggle = nav.querySelector('.nav__toggle');
@@ -163,7 +227,7 @@
     { name: 'MadeByWaku', url: 'yuwakuuu.github.io/madebywaku' },
     { name: 'Happy Pets Palace', url: 'yuwakuuu.github.io/happypetspalace-redesign' },
     { name: 'Total Quality Management', url: 'tqm-website.vercel.app' },
-    { name: 'The TOB Company', url: 'yuwakuonline.tail28063a.ts.net' },
+    { name: 'The TOB Company', url: 'thetobcompany · live demo' },
   ];
   const lapImgs = document.querySelectorAll('.laptop__view img');
   const phoneImgs = document.querySelectorAll('.phone__view img');
@@ -378,7 +442,6 @@
     }
     const heroIns = [...document.querySelectorAll('.hero__in')];
     const heroWords = [...document.querySelectorAll('.hero__title .word')];
-    const heroChrome = document.querySelector('.hero__title .chrome');
     const stage = document.querySelector('.hero__stage');
     const intro = () => {
       animate(stage, { opacity: [0, 1], scale: [0.6, 1], y: [40, 0] }, { ...spring(55, 11), opacity: { duration: 0.8 } });
@@ -387,7 +450,6 @@
         { ...spring(120, 18), delay: stagger(0.12, { startDelay: 0.35 }) });
       animate(heroWords, { opacity: [0, 1], y: [50, 0], rotateX: [-70, 0] },
         { ...spring(130, 16), delay: stagger(0.08, { startDelay: 0.2 }) });
-      if (heroChrome) animate(heroChrome, { opacity: [0, 1], scale: [0.4, 1], y: [30, 0] }, { ...spring(170, 9), delay: 0.5, opacity: { duration: 0.4, delay: 0.5 } });
     };
     if (doc.classList.contains('loaded')) intro(); else window.addEventListener('tmp:loaded', intro, { once: true });
 

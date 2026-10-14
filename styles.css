@@ -764,6 +764,61 @@ h2 .chrome { display: inline-block; font-weight: 400; letter-spacing: .03em; pad
   .marquee .chrome { filter: url(#chrome-s); }
 }
 
+/* Live demo ---------------------------------------------------------------------------- */
+.live { margin-top: 32px; padding: clamp(20px, 3vw, 32px); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+.live__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 32px; flex-wrap: wrap; margin-bottom: 22px; }
+.live__head h3 { font-size: clamp(24px, 3vw, 32px); letter-spacing: -.03em; margin: 2px 0 8px; }
+.live__head p:not(.eyebrow) { color: var(--ink-2); max-width: 560px; }
+.live__frame { margin: 0; border-radius: 14px; }
+.frame__bar .live__url { margin-left: 10px; font-size: 12px; color: #a1a1a6; letter-spacing: 0; }
+.live__view { position: relative; aspect-ratio: 16 / 10; max-width: 100%; background: #05060a; }
+@media (max-width: 700px) { .live__view { aspect-ratio: 9 / 14; } }
+.live__iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #05060a; }
+.live__start {
+  position: absolute; inset: 0; padding: 0; border: 0; cursor: pointer; background: #05060a; color: #fff;
+  transition: opacity .45s var(--ease);
+}
+.live__start img { width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: .55; transition: opacity .3s var(--ease), transform 1.2s var(--ease-out); }
+.live__start:hover img { opacity: .7; transform: scale(1.02); }
+.live__start.is-gone { opacity: 0; pointer-events: none; }
+.live__cta {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: inline-flex; align-items: center; gap: 12px; padding: 14px 24px 14px 16px; border-radius: 980px;
+  background: rgba(255, 255, 255, .92); color: var(--ink); font-size: 17px; font-weight: 600; white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+}
+.live__play { width: 32px; height: 32px; border-radius: 50%; background: var(--blue); position: relative; }
+.live__play::after { content: ""; position: absolute; left: 12px; top: 9px; border-left: 12px solid #fff; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+
+/* Grass lettering (drawn by js/grass.js over the real, hidden text) */
+.grass {
+  position: relative; display: inline-block;
+  font-family: "Shrikhand", "Cooper Black", Georgia, serif; font-weight: 400; letter-spacing: 0;
+  font-size: 1.15em; line-height: 1; padding: .05em .04em .12em;
+  color: #3a8f22;
+}
+.js .grass { color: transparent; }
+.grass__canvas { position: absolute; pointer-events: auto; touch-action: pan-y; }
+
+/* Neon diner sign --------------------------------------------------------------------
+   Each letter is a glass tube: lit, it glows hot pink; off, you still see the dim tube.
+   script.js turns the sign on and makes a letter buzz now and then. */
+.neon {
+  --tube: #fff1f6; --glow: #ff2d78; --halo: #ff1f6b; --off: #5b2238;
+  display: inline-block; padding: .02em .12em .12em;
+  font-family: "Yellowtail", "Brush Script MT", cursive; font-weight: 400;
+  font-size: 1.2em; line-height: 1; letter-spacing: .01em;
+  color: var(--tube);
+  text-shadow: 0 0 .02em #fff, 0 0 .06em #ffd3e3, 0 0 .14em var(--glow), 0 0 .3em var(--glow), 0 0 .55em var(--halo), 0 0 1em var(--halo);
+}
+.neon .nl { transition: color .05s linear, text-shadow .05s linear; }
+.neon .nl.is-off, .neon.is-off .nl {
+  color: var(--off);
+  text-shadow: 0 0 .04em rgba(255, 60, 120, .18);
+}
+.neon .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero__title { padding-bottom: .06em; }
+
 /* Loading screen ------------------------------------------------------------------ */
 
 .loader { display: none; }

@@ -45,9 +45,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- fonts load without blocking the first paint -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&display=swap" rel="stylesheet"></noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="dist/styles.min.css">
   <link rel="modulepreload" href="dist/3d/main3d.js">
   <script>
@@ -226,7 +226,7 @@
       </div>
       <div class="wrap hero__copy">
         <p class="eyebrow eyebrow--light hero__in">The Marketing Partner</p>
-        <h1 class="hero__title hero__in">Your business.<br><span class="chrome">Beautifully online.</span></h1>
+        <h1 class="hero__title hero__in">Your business.<br><span class="neon" data-neon>Beautifully online.</span></h1>
         <p class="hero__lede hero__in">Websites, apps and marketing that help small local businesses get found, get chosen and grow.</p>
         <div class="hero__ctas hero__in">
           <a class="btn btn--primary magnetic" href="#contact">Start your project</a>
@@ -332,7 +332,7 @@
             </div>
           </a>
 
-          <a class="card-work reveal tilt" href="https://yuwakuonline.tail28063a.ts.net:8443/" target="_blank" rel="noopener">
+          <a class="card-work reveal tilt" href="demo/tob/" target="_blank" rel="noopener">
             <div class="frame frame--dark"><div class="frame__bar"><i></i><i></i><i></i></div><img src="assets/work/tob.webp" srcset="assets/work/tob-720.webp 720w, assets/work/tob.webp 1440w" sizes="(max-width: 760px) 92vw, 520px" alt="The TOB Company homepage introducing an AI butler" width="1440" height="900" loading="lazy"></div>
             <div class="card-work__body">
               <p class="card-work__kind">Software · Product launch</p>
@@ -341,6 +341,27 @@
               <span class="link-arrow">Visit site</span>
             </div>
           </a>
+        </div>
+
+        <div class="live reveal" id="tob-live">
+          <div class="live__head">
+            <div>
+              <p class="eyebrow">Live demo</p>
+              <h3>The TOB Company, running right here.</h3>
+              <p>This isn’t a screenshot. It’s the real site we built, live inside this page. Scroll it, click around and meet TOB.</p>
+            </div>
+            <a class="link-arrow" href="demo/tob/" target="_blank" rel="noopener">Open full screen</a>
+          </div>
+          <div class="frame frame--dark live__frame">
+            <div class="frame__bar"><i></i><i></i><i></i><span class="live__url" aria-hidden="true">The TOB Company · live</span></div>
+            <div class="live__view">
+              <iframe class="live__iframe" title="The TOB Company website, live demo" data-src="demo/tob/" allow="autoplay; microphone" hidden></iframe>
+              <button class="live__start" type="button" data-live-start>
+                <img src="assets/work/tob-720.webp" srcset="assets/work/tob-720.webp 720w, assets/work/tob.webp 1440w" sizes="(max-width: 1040px) 92vw, 1000px" alt="" width="1440" height="900" loading="lazy" decoding="async">
+                <span class="live__cta"><span class="live__play" aria-hidden="true"></span>Start live demo</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -650,7 +671,7 @@
       <div class="wrap contact">
         <div class="contact__copy reveal">
           <p class="eyebrow">Get started</p>
-          <h2>Let’s grow <span class="chrome chrome--light">your business.</span></h2>
+          <h2>Let’s <span class="grass" data-grass>grow</span> your business.</h2>
           <p class="section__lede">Tell us a little about what you need. We’ll get back to you with ideas and a free quote.</p>
         </div>
         <!-- Set data-email to the inbox that should receive inquiries. -->
@@ -708,7 +729,7 @@
             <a href="https://yuwakuuu.github.io/madebywaku/" target="_blank" rel="noopener">MadeByWaku</a>
             <a href="https://yuwakuuu.github.io/happypetspalace-redesign/" target="_blank" rel="noopener">Happy Pets Palace</a>
             <a href="https://tqm-website.vercel.app/" target="_blank" rel="noopener">TQM</a>
-            <a href="https://yuwakuonline.tail28063a.ts.net:8443/" target="_blank" rel="noopener">The TOB Company</a>
+            <a href="demo/tob/" target="_blank" rel="noopener">The TOB Company</a>
           </div>
           <div>
             <h3 class="footer__h">#4SAMMY</h3>
