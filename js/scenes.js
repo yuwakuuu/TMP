@@ -148,3 +148,6 @@ function buildChromeLoop({ lite }) {
   g.computeBoundingSphere();
   return { geometry: g, source: 'tube' };
 }
+
+// shared with tools/reveal (the logo reveal video renderer)
+export { buildWordmark };

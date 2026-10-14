@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="/">
+<title>TMP logo reveal (video renderer)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Yellowtail&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  #c { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .txt { position: absolute; left: 0; right: 0; text-align: center; pointer-events: none; }
+  #name { font: 600 calc(var(--u) * 2.1) / 1 Inter, sans-serif; letter-spacing: .42em; color: #e9edf5; text-indent: .42em; }
+  #name span { display: inline-block; opacity: 0; }
+  #neon {
+    font: 400 calc(var(--u) * 6.4) / 1 Yellowtail, cursive; color: #fff1f6;
+    text-shadow: 0 0 .02em #fff, 0 0 .06em #ffd3e3, 0 0 .14em #ff2d78, 0 0 .3em #ff2d78, 0 0 .55em #ff1f6b, 0 0 1em #ff1f6b;
+  }
+  #neon.off { color: #4a1c2e; text-shadow: 0 0 .04em rgba(255,60,120,.15); }
+  #vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.65) 100%); }
+</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/","meshoptimizer/meshopt_decoder.module.js":"./node_modules/meshoptimizer/meshopt_decoder.module.js"}}</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="vignette"></div>
+<p class="txt" id="name"></p>
+<p class="txt" id="neon" class="off">Beautifully online.</p>
+<script type="module" src="tools/reveal/reveal.js"></script>
+</body>
+</html>

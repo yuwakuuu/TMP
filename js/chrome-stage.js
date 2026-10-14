@@ -434,3 +434,6 @@ function radialTexture() {
   tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
 }
+
+// shared with tools/reveal (the logo reveal video renderer)
+export { chromeMaterials, buildStudio, radialTexture };
