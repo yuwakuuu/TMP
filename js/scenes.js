@@ -1,8 +1,9 @@
 import * as THREE from 'three';
-import { MarchingCubes } from 'three/addons/objects/MarchingCubes.js';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { createChromeStage, inertia, TAU } from './chrome-stage.js';
-import balls from './wordmark-balls.js';
+import { MeshoptDecoder } from 'meshoptimizer/meshopt_decoder.module.js';
+
+const WORDMARK_URL = new URL('assets/3d/tmp-wordmark.bin', document.baseURI);
 
 // Two chrome objects share one look: the liquid "TMP" wordmark (hero and loading screen)
 // and the infinity loop in Sammy's section. Both spin on their own, drag with
@@ -52,42 +53,6 @@ export function initWordmark(canvas, opts = {}) {
   return stage;
 }
 
-// Taubin smoothing over an indexed mesh: each pass pulls every vertex toward the average
-// of its neighbours (λ) and then pushes it back out (μ), smoothing without shrinking.
-function taubin(geometry, passes) {
-  const pos = geometry.attributes.position.array;
-  const idx = geometry.index.array;
-  const count = pos.length / 3;
-  // neighbour lists in CSR form
-  const deg = new Uint32Array(count);
-  for (let i = 0; i < idx.length; i += 3) { deg[idx[i]] += 2; deg[idx[i + 1]] += 2; deg[idx[i + 2]] += 2; }
-  const start = new Uint32Array(count + 1);
-  for (let i = 0; i < count; i++) start[i + 1] = start[i] + deg[i];
-  const nb = new Uint32Array(start[count]);
-  const fill = start.slice(0, count);
-  for (let i = 0; i < idx.length; i += 3) {
-    const a = idx[i], b = idx[i + 1], c = idx[i + 2];
-    nb[fill[a]++] = b; nb[fill[a]++] = c;
-    nb[fill[b]++] = a; nb[fill[b]++] = c;
-    nb[fill[c]++] = a; nb[fill[c]++] = b;
-  }
-  const tmp = new Float32Array(pos.length);
-  const step = (f) => {
-    for (let v = 0; v < count; v++) {
-      let x = 0, y = 0, z = 0;
-      const s0 = start[v], s1 = start[v + 1];
-      for (let k = s0; k < s1; k++) { const o = nb[k] * 3; x += pos[o]; y += pos[o + 1]; z += pos[o + 2]; }
-      const inv = s1 > s0 ? 1 / (s1 - s0) : 0, o = v * 3;
-      tmp[o] = pos[o] + f * (x * inv - pos[o]);
-      tmp[o + 1] = pos[o + 1] + f * (y * inv - pos[o + 1]);
-      tmp[o + 2] = pos[o + 2] + f * (z * inv - pos[o + 2]);
-    }
-    pos.set(tmp);
-  };
-  for (let p = 0; p < passes; p++) { step(0.63); step(-0.67); }
-  geometry.attributes.position.needsUpdate = true;
-}
-
 // Sammy's section: the same weave in liquid chrome, turning slowly and calmly.
 export function initEternal(canvas, opts = {}) {
   const { reduced = false } = opts;
@@ -109,36 +74,33 @@ export function initEternal(canvas, opts = {}) {
 
 // ---- geometry ---------------------------------------------------------------------------
 
-// "TMP" poured in liquid chrome. Metaballs sit along the centre line of each Shrikhand
-// stroke, sized to its thickness (baked by tools/bake-wordmark.html), and melt together
-// into round, bubbly tubes. Marching cubes turns the field into a mesh once, at load.
-function buildWordmark({ lite }) {
-  // grid resolution sets how smooth the chrome surface is (build cost grows with res³)
-  const res = lite ? 170 : 220;
-  const mc = new MarchingCubes(res, new THREE.MeshBasicMaterial(), false, false, lite ? 220000 : 360000);
-  mc.isolation = 80;
-  const SUB = 16;
-  for (let i = 0; i < balls.length; i += 3) {
-    const rs = balls[i + 2] * 1.25;                 // fatter than the outline: bubbly
-    mc.addBall(0.5 + balls[i], 0.5 + balls[i + 1], 0.5, (mc.isolation + SUB) * rs * rs * 0.3, SUB);
+// "TMP" poured in liquid chrome. The mesh is baked ahead of time by tools/bake-mesh.mjs
+// (metaballs along the Shrikhand strokes, marching cubes, smoothing, simplification) and
+// shipped meshopt-compressed, so the browser only decodes it: no heavy work on phones.
+async function buildWordmark() {
+  const [res] = await Promise.all([fetch(WORDMARK_URL), MeshoptDecoder.ready]);
+  if (!res.ok) throw new Error('wordmark mesh ' + res.status);
+  const buf = await res.arrayBuffer();
+  const dv = new DataView(buf);
+  const vertexCount = dv.getUint32(0, true), indexCount = dv.getUint32(4, true);
+  const min = [0, 1, 2].map((a) => dv.getFloat32(8 + a * 4, true));
+  const max = [0, 1, 2].map((a) => dv.getFloat32(20 + a * 4, true));
+  const vBytes = dv.getUint32(32, true), iBytes = dv.getUint32(36, true);
+  const vSrc = new Uint8Array(buf, 40, vBytes), iSrc = new Uint8Array(buf, 40 + vBytes, iBytes);
+  const verts = new Uint16Array(vertexCount * 4);
+  MeshoptDecoder.decodeVertexBuffer(new Uint8Array(verts.buffer), vertexCount, 8, vSrc);
+  const index = new Uint32Array(indexCount);
+  MeshoptDecoder.decodeIndexBuffer(new Uint8Array(index.buffer), indexCount, 4, iSrc);
+  const pos = new Float32Array(vertexCount * 3);
+  for (let v = 0; v < vertexCount; v++) {
+    for (let a = 0; a < 3; a++) pos[v * 3 + a] = min[a] + (verts[v * 4 + a] / 65535) * (max[a] - min[a]);
   }
-  mc.update();
-
-  const n = mc.count;
-  let g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(mc.positionArray.slice(0, n * 3), 3));
-  mc.geometry.dispose();
-  // Weld the triangle soup, then relax it (Taubin smoothing: shrink, then inflate back) so
-  // the grid's tiny facets disappear and the reflections run in clean, liquid lines.
-  g = mergeVertices(g, 1e-5);
-  taubin(g, lite ? 10 : 12);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setIndex(new THREE.BufferAttribute(vertexCount > 65535 ? index : new Uint16Array(index), 1));
   g.computeVertexNormals();
-  g.center();
-  g.computeBoundingBox();
-  const w = g.boundingBox.max.x - g.boundingBox.min.x;
-  g.scale(6.2 / w, 6.2 / w, 6.2 / w);
   g.computeBoundingSphere();
-  return { geometry: g, source: 'metaballs' };
+  return { geometry: g, source: 'baked' };
 }
 
 // A lemniscate swept by a tube whose radius swells and pinches along its length, so the

@@ -9,7 +9,7 @@ Marketing site for The Marketing Partner. It is plain HTML, CSS and JavaScript w
 - `js/main3d.js`: starts the 3D scenes; the loading-screen logo hands its renderer to the hero (falls back to CSS lettering without WebGL)
 - `js/scenes.js`: the chrome TMP wordmark (metaballs) and the chrome infinity in Sammy's section
 - `js/chrome-stage.js`: shared renderer, chrome material, lighting and drag/tap controls
-- `js/wordmark-balls.js`: pre-baked shape data for the 3D TMP (regenerate with `tools/bake-wordmark.html`)
+- `assets/3d/tmp-wordmark.bin`: the baked 3D TMP mesh (rebuild with `node tools/bake-mesh.mjs`, from the stroke data in `tools/wordmark-balls.js`)
 - `dist/`: the minified files the page actually loads (generated, see below)
 - `assets/work/`: screenshots of example projects, in full and half size
 - `404.html`, `robots.txt`, `sitemap.xml`, `site.webmanifest`: launch files

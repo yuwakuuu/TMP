@@ -17,7 +17,7 @@ export function inertia(s, dt, baseY = 0) {
 }
 
 export function createChromeStage(canvas, {
-  reduced = false, lite = false, onPulse = () => {}, onReady = () => {},
+  reduced = false, lite = false, onPulse = () => {}, onReady = () => {}, onError = () => {},
   build, pose: initialPose, initial = {}, fitAspect = 1,
   halo: haloHue = 0.72, haloSize = 6.5, pulseSpin = TAU * 2.4, studio = 'strips',
 }) {
@@ -43,10 +43,19 @@ export function createChromeStage(canvas, {
   const envScene = buildStudio(studio);
   // Rendered at 512px per cube face (PMREM's own fromScene is fixed at 256), so the
   // softbox reflections on the chrome stay crisp instead of smeared.
-  const cubeRT = new THREE.WebGLCubeRenderTarget(512, { type: THREE.HalfFloatType });
-  new THREE.CubeCamera(0.1, 100, cubeRT).update(renderer, envScene);
-  scene.environment = pmrem.fromCubemap(cubeRT.texture).texture;
-  cubeRT.dispose();
+  // Falls back to the standard 256px version on GPUs that can't render half-float cubes.
+  try {
+    const gl = renderer.getContext();
+    const halfOK = renderer.capabilities.isWebGL2 && (renderer.extensions.has('EXT_color_buffer_float') || renderer.extensions.has('EXT_color_buffer_half_float'));
+    if (!halfOK) throw new Error('no half-float render targets');
+    const cubeRT = new THREE.WebGLCubeRenderTarget(512, { type: THREE.HalfFloatType });
+    new THREE.CubeCamera(0.1, 100, cubeRT).update(renderer, envScene);
+    if (gl.getError() !== gl.NO_ERROR) throw new Error('cube render failed');
+    scene.environment = pmrem.fromCubemap(cubeRT.texture).texture;
+    cubeRT.dispose();
+  } catch (e) {
+    scene.environment = pmrem.fromScene(envScene, 0.02).texture;
+  }
   envScene.traverse((o) => { o.geometry?.dispose(); o.material?.dispose(); });
   pmrem.dispose();
 
@@ -114,7 +123,15 @@ export function createChromeStage(canvas, {
     canvas.closest('[data-stage]')?.classList.add('is-ready');
     wake();
     onReady();
-  });
+  }).catch(fail);
+
+  // If the geometry can't load or the GPU gives up, show the stage's flat fallback instead.
+  function fail(err) {
+    canvas.closest('[data-stage]')?.classList.add('is-failed');
+    state.visible = false;
+    onError(err);
+  }
+  canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); fail(new Error('WebGL context lost')); });
 
   // ---- input
   let down = null;

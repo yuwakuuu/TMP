@@ -228,7 +228,8 @@ a:hover .link-arrow::after, .link-arrow:hover::after { transform: translateX(3px
   display: none; position: absolute; inset: 0; place-items: center;
   font-size: clamp(110px, 24vw, 260px); line-height: 1;
 }
-.no-webgl .hero__fallback { display: grid; }
+.no-webgl .hero__fallback, .hero__stage.is-failed .hero__fallback { display: grid; }
+.hero__stage.is-failed .hero__canvas { display: none; }
 .no-webgl .hero__canvas, .no-webgl .hero__hint { display: none; }
 
 .hero .eyebrow { font-size: clamp(17px, 2vw, 21px); color: var(--dark-ink-2); }
@@ -888,7 +889,8 @@ h2 .chrome { display: inline-block; font-weight: 400; letter-spacing: .03em; pad
 .infinity__canvas:active { cursor: grabbing; }
 .infinity.is-ready .infinity__canvas { opacity: 1; }
 .infinity__fallback { display: none; position: absolute; inset: 0; place-items: center; font-size: 220px; line-height: 1; color: #d9dee8; }
-.no-webgl .infinity__fallback { display: grid; }
+.no-webgl .infinity__fallback, .infinity.is-failed .infinity__fallback { display: grid; }
+.infinity.is-failed .infinity__canvas { display: none; }
 .no-webgl .infinity__canvas { display: none; }
 
 /* Footer wordmark */

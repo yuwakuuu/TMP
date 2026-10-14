@@ -15,6 +15,16 @@ function webgl() {
   }
 }
 
+// One 3D scene failing (an old GPU, low memory) must never take the others down with it.
+function safely(start, onFail) {
+  try {
+    return start();
+  } catch (err) {
+    onFail(err);
+    return null;
+  }
+}
+
 async function boot() {
   if (!webgl()) {
     document.documentElement.classList.add('no-webgl');
@@ -38,8 +48,11 @@ async function boot() {
   if (hero && loaderCanvas && !quick) {
     // First visit: one renderer. The logo spins on the loading screen, then the same canvas
     // (and its GPU context) moves into the hero, so nothing is built or compiled twice.
-    const logo = scenes.initWordmark(loaderCanvas, { reduced, lite, spin: true, onPulse: splash, onReady: () => ready('wordmark') });
+    let failed = false;
+    const markFailed = () => { failed = true; hero.closest('[data-stage]')?.classList.add('is-failed'); ready('wordmark'); };
+    const logo = safely(() => scenes.initWordmark(loaderCanvas, { reduced, lite, spin: true, onPulse: splash, onReady: () => ready('wordmark'), onError: markFailed }), markFailed);
     const handOff = () => {
+      if (failed || !logo) return;
       for (const a of ['class', 'tabindex', 'role', 'aria-label']) {
         const v = hero.getAttribute(a);
         if (v !== null) loaderCanvas.setAttribute(a, v);
@@ -52,7 +65,8 @@ async function boot() {
     if (document.documentElement.classList.contains('loaded')) handOff();
     else window.addEventListener('tmp:loaded', handOff, { once: true });
   } else {
-    if (hero) scenes.initWordmark(hero, { reduced, lite, onPulse: splash });
+    const markFailed = () => hero?.closest('[data-stage]')?.classList.add('is-failed');
+    if (hero) safely(() => scenes.initWordmark(hero, { reduced, lite, onPulse: splash, onError: markFailed }), markFailed);
     ready('wordmark');
   }
 
@@ -63,7 +77,8 @@ async function boot() {
     const io = new IntersectionObserver(([en]) => {
       if (!en.isIntersecting) return;
       io.disconnect();
-      init(el, { reduced, lite, onPulse: splash });
+      const markFailed = () => el.closest('[data-stage]')?.classList.add('is-failed');
+      safely(() => init(el, { reduced, lite, onPulse: splash, onError: markFailed }), markFailed);
     }, { rootMargin: '600px 0px' });
     io.observe(el);
   };
