@@ -2,7 +2,7 @@
 // styles.css, script.js, js/game.js or anything under js/.
 // Output names carry a content hash and index.html is updated to match.
 //   dist/styles.*.min.css  styles.css, minified
-//   dist/app.*.min.js      Motion + script.js + js/game.js + js/grass.js + js/respect.js + js/ambient.js
+//   dist/app.*.min.js      Motion + script.js + js/game.js + js/grass.js + js/respect.js + js/ambient.js + js/fx.js
 //   dist/3d/*.js         js/main3d.js and the 3D scenes with only the parts of three.js
 //                        they use (loaded on demand, split into chunks)
 import { build, transform } from 'esbuild';
@@ -28,6 +28,7 @@ const app = [
   await read('js/grass.js'),
   await read('js/respect.js'),
   await read('js/ambient.js'),
+  await read('js/fx.js'),
 ].join(';\n');
 const appMin = await transform(app, { loader: 'js', minify: true, target: 'es2020', legalComments: 'eof' });
 const appName = `app.${hash(appMin.code)}.min.js`;

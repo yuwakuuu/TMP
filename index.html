@@ -48,8 +48,8 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="dist/styles.0ab29a5580.min.css">
-  <link rel="modulepreload" href="dist/3d/main3d-LZFSHPN5.js">
+  <link rel="stylesheet" href="dist/styles.2b3bd263f2.min.css">
+  <link rel="modulepreload" href="dist/3d/main3d-XWINUJ4X.js">
   <link rel="preload" href="assets/3d/tmp-wordmark.bin" as="fetch" type="application/octet-stream" crossorigin>
   <script>
     (function () {
@@ -65,71 +65,73 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <!-- Liquid-chrome bubble lettering (used by .chrome text). One recipe at three pixel
-       scales: the letters are swollen and rounded, lit as a dome, mapped through chrome
-       reflection bands, then given three specular highlights and a soft drop shadow. -->
+  <!-- Liquid-chrome bubble lettering (used by .chrome text). The letters are swollen and
+       rounded, lit as a dome from above, and that light is mapped like a polished mirror:
+       bright sky over a crisp horizon, a darker reflection below and a little bounce light
+       at the very bottom. Then three specular highlights and a soft drop shadow.
+       chrome-light is the same for light backgrounds, a shade deeper so it doesn't wash out.
+       script.js scales chrome-l / chrome-light to each text size; -m and -s are fallbacks. -->
   <svg class="defs" aria-hidden="true" focusable="false">
     <filter id="chrome-l" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
-      <feMorphology in="SourceAlpha" operator="dilate" radius="0.70" result="d"/>
-      <feGaussianBlur in="d" stdDeviation="1.40" result="db"/>
+      <feMorphology in="SourceAlpha" operator="dilate" radius="0.7" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="1.4" result="db"/>
       <feComponentTransfer in="db" result="fat"><feFuncA type="linear" slope="9" intercept="-3.6"/></feComponentTransfer>
-      <feGaussianBlur in="fat" stdDeviation="5.60" result="h"/>
-      <feDiffuseLighting in="h" surfaceScale="7.00" diffuseConstant="1.05" lighting-color="#fff" result="diff"><feDistantLight azimuth="250" elevation="38"/></feDiffuseLighting>
+      <feGaussianBlur in="fat" stdDeviation="5.6" result="h"/>
+      <feDiffuseLighting in="h" surfaceScale="7" diffuseConstant="1" lighting-color="#fff" result="diff"><feDistantLight azimuth="270" elevation="30"/></feDiffuseLighting>
       <feComponentTransfer in="diff" result="bands">
-        <feFuncR type="table" tableValues="0.03 0.2 0.9 0.5 0.12 0.6 0.97 1"/>
-        <feFuncG type="table" tableValues="0.03 0.21 0.92 0.52 0.13 0.62 0.98 1"/>
-        <feFuncB type="table" tableValues="0.05 0.26 0.96 0.58 0.17 0.68 1 1"/>
+        <feFuncR type="table" tableValues="0.620 0.550 0.450 0.340 0.260 0.200 0.160 0.140 0.120 0.090 0.850 1.000 0.980 0.950 0.920 0.900 0.880 0.860 0.860 0.900 1.000"/>
+        <feFuncG type="table" tableValues="0.620 0.550 0.450 0.340 0.260 0.200 0.160 0.140 0.120 0.090 0.850 1.000 0.980 0.950 0.920 0.900 0.880 0.860 0.860 0.900 1.000"/>
+        <feFuncB type="table" tableValues="0.647 0.582 0.490 0.388 0.313 0.258 0.220 0.202 0.183 0.156 0.861 1.000 0.981 0.954 0.926 0.907 0.889 0.870 0.870 0.907 1.000"/>
       </feComponentTransfer>
-      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
-      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
-      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="1.2" specularExponent="140" lighting-color="#fff" result="s3"><feDistantLight azimuth="270" elevation="70"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7" specularConstant="1.2" specularExponent="140" lighting-color="#fff" result="s3"><feDistantLight azimuth="270" elevation="70"/></feSpecularLighting>
       <feComposite in="s1" in2="s2" operator="arithmetic" k2="1" k3="1" result="s12"/>
       <feComposite in="s12" in2="s3" operator="arithmetic" k2="1" k3="1" result="spec"/>
       <feComposite in="bands" in2="spec" operator="arithmetic" k2="1" k3="1" result="lit"/>
-      <feGaussianBlur in="lit" stdDeviation="1.10" result="smooth"/>
+      <feGaussianBlur in="lit" stdDeviation="0.8" result="smooth"/>
       <feComposite in="smooth" in2="fat" operator="in" result="body"/>
-      <feGaussianBlur in="fat" stdDeviation="3.00" result="sb"/>
-      <feOffset in="sb" dy="4.00" result="so"/>
-      <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feGaussianBlur in="fat" stdDeviation="3" result="sb"/>
+      <feOffset in="sb" dy="4" result="so"/>
+      <feFlood flood-color="#000" flood-opacity="0.55"/>
+      <feComposite in2="so" operator="in" result="shadow"/>
       <feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge>
-     </filter>
+    </filter>
     <filter id="chrome-light" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
-      <feMorphology in="SourceAlpha" operator="dilate" radius="0.70" result="d"/>
-      <feGaussianBlur in="d" stdDeviation="1.40" result="db"/>
+      <feMorphology in="SourceAlpha" operator="dilate" radius="0.7" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="1.4" result="db"/>
       <feComponentTransfer in="db" result="fat"><feFuncA type="linear" slope="9" intercept="-3.6"/></feComponentTransfer>
-      <feGaussianBlur in="fat" stdDeviation="5.60" result="h"/>
-      <feDiffuseLighting in="h" surfaceScale="7.00" diffuseConstant="1.05" lighting-color="#fff" result="diff"><feDistantLight azimuth="250" elevation="38"/></feDiffuseLighting>
+      <feGaussianBlur in="fat" stdDeviation="5.6" result="h"/>
+      <feDiffuseLighting in="h" surfaceScale="7" diffuseConstant="1" lighting-color="#fff" result="diff"><feDistantLight azimuth="270" elevation="30"/></feDiffuseLighting>
       <feComponentTransfer in="diff" result="bands">
-        <feFuncR type="table" tableValues="0 0.04 0.48 0.12 0.02 0.24 0.82 1"/>
-        <feFuncG type="table" tableValues="0 0.05 0.52 0.14 0.03 0.27 0.86 1"/>
-        <feFuncB type="table" tableValues="0.02 0.08 0.62 0.2 0.05 0.34 0.94 1"/>
+        <feFuncR type="table" tableValues="0.500 0.420 0.320 0.220 0.150 0.110 0.090 0.080 0.070 0.060 0.700 0.860 0.840 0.800 0.770 0.750 0.730 0.720 0.740 0.800 0.920"/>
+        <feFuncG type="table" tableValues="0.500 0.420 0.320 0.220 0.150 0.110 0.090 0.080 0.070 0.060 0.700 0.860 0.840 0.800 0.770 0.750 0.730 0.720 0.740 0.800 0.920"/>
+        <feFuncB type="table" tableValues="0.548 0.476 0.385 0.295 0.232 0.195 0.177 0.168 0.159 0.150 0.729 0.873 0.855 0.819 0.792 0.774 0.756 0.747 0.765 0.819 0.928"/>
       </feComponentTransfer>
-      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="3.4" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
-      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
-      <feSpecularLighting in="h" surfaceScale="7.00" specularConstant="1.8" specularExponent="140" lighting-color="#fff" result="s3"><feDistantLight azimuth="270" elevation="70"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
+      <feSpecularLighting in="h" surfaceScale="7" specularConstant="1.2" specularExponent="140" lighting-color="#fff" result="s3"><feDistantLight azimuth="270" elevation="70"/></feSpecularLighting>
       <feComposite in="s1" in2="s2" operator="arithmetic" k2="1" k3="1" result="s12"/>
       <feComposite in="s12" in2="s3" operator="arithmetic" k2="1" k3="1" result="spec"/>
       <feComposite in="bands" in2="spec" operator="arithmetic" k2="1" k3="1" result="lit"/>
-      <feGaussianBlur in="lit" stdDeviation="1.10" result="smooth"/>
+      <feGaussianBlur in="lit" stdDeviation="0.8" result="smooth"/>
       <feComposite in="smooth" in2="fat" operator="in" result="body"/>
-      <feGaussianBlur in="fat" stdDeviation="3.00" result="sb"/>
-      <feOffset in="sb" dy="4.00" result="so"/>
-      <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.7"/></feComponentTransfer>
-      <feGaussianBlur in="fat" stdDeviation="1.20" result="eb"/>
-      <feOffset in="eb" dy="1.50" result="eo"/>
-      <feComponentTransfer in="eo" result="edge"><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
-      <feMerge><feMergeNode in="shadow"/><feMergeNode in="edge"/><feMergeNode in="body"/></feMerge>
-     </filter>
+      <feGaussianBlur in="fat" stdDeviation="2.4" result="sb"/>
+      <feOffset in="sb" dy="3.5" result="so"/>
+      <feFlood flood-color="#1b2233" flood-opacity="0.42"/>
+      <feComposite in2="so" operator="in" result="shadow"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge>
+    </filter>
     <filter id="chrome-m" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
       <feMorphology in="SourceAlpha" operator="dilate" radius="0.39" result="d"/>
       <feGaussianBlur in="d" stdDeviation="0.77" result="db"/>
       <feComponentTransfer in="db" result="fat"><feFuncA type="linear" slope="9" intercept="-3.6"/></feComponentTransfer>
       <feGaussianBlur in="fat" stdDeviation="3.08" result="h"/>
-      <feDiffuseLighting in="h" surfaceScale="3.85" diffuseConstant="1.05" lighting-color="#fff" result="diff"><feDistantLight azimuth="250" elevation="38"/></feDiffuseLighting>
+      <feDiffuseLighting in="h" surfaceScale="3.85" diffuseConstant="1" lighting-color="#fff" result="diff"><feDistantLight azimuth="270" elevation="30"/></feDiffuseLighting>
       <feComponentTransfer in="diff" result="bands">
-        <feFuncR type="table" tableValues="0.03 0.2 0.9 0.5 0.12 0.6 0.97 1"/>
-        <feFuncG type="table" tableValues="0.03 0.21 0.92 0.52 0.13 0.62 0.98 1"/>
-        <feFuncB type="table" tableValues="0.05 0.26 0.96 0.58 0.17 0.68 1 1"/>
+        <feFuncR type="table" tableValues="0.620 0.550 0.450 0.340 0.260 0.200 0.160 0.140 0.120 0.090 0.850 1.000 0.980 0.950 0.920 0.900 0.880 0.860 0.860 0.900 1.000"/>
+        <feFuncG type="table" tableValues="0.620 0.550 0.450 0.340 0.260 0.200 0.160 0.140 0.120 0.090 0.850 1.000 0.980 0.950 0.920 0.900 0.880 0.860 0.860 0.900 1.000"/>
+        <feFuncB type="table" tableValues="0.647 0.582 0.490 0.388 0.313 0.258 0.220 0.202 0.183 0.156 0.861 1.000 0.981 0.954 0.926 0.907 0.889 0.870 0.870 0.907 1.000"/>
       </feComponentTransfer>
       <feSpecularLighting in="h" surfaceScale="3.85" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
       <feSpecularLighting in="h" surfaceScale="3.85" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
@@ -137,23 +139,24 @@
       <feComposite in="s1" in2="s2" operator="arithmetic" k2="1" k3="1" result="s12"/>
       <feComposite in="s12" in2="s3" operator="arithmetic" k2="1" k3="1" result="spec"/>
       <feComposite in="bands" in2="spec" operator="arithmetic" k2="1" k3="1" result="lit"/>
-      <feGaussianBlur in="lit" stdDeviation="0.61" result="smooth"/>
+      <feGaussianBlur in="lit" stdDeviation="0.44" result="smooth"/>
       <feComposite in="smooth" in2="fat" operator="in" result="body"/>
       <feGaussianBlur in="fat" stdDeviation="1.65" result="sb"/>
-      <feOffset in="sb" dy="2.20" result="so"/>
-      <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feOffset in="sb" dy="2.2" result="so"/>
+      <feFlood flood-color="#000" flood-opacity="0.55"/>
+      <feComposite in2="so" operator="in" result="shadow"/>
       <feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge>
-     </filter>
+    </filter>
     <filter id="chrome-s" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
-      <feMorphology in="SourceAlpha" operator="dilate" radius="0.20" result="d"/>
+      <feMorphology in="SourceAlpha" operator="dilate" radius="0.2" result="d"/>
       <feGaussianBlur in="d" stdDeviation="0.39" result="db"/>
       <feComponentTransfer in="db" result="fat"><feFuncA type="linear" slope="9" intercept="-3.6"/></feComponentTransfer>
       <feGaussianBlur in="fat" stdDeviation="1.57" result="h"/>
-      <feDiffuseLighting in="h" surfaceScale="1.96" diffuseConstant="1.05" lighting-color="#fff" result="diff"><feDistantLight azimuth="250" elevation="38"/></feDiffuseLighting>
+      <feDiffuseLighting in="h" surfaceScale="1.96" diffuseConstant="1" lighting-color="#fff" result="diff"><feDistantLight azimuth="270" elevation="30"/></feDiffuseLighting>
       <feComponentTransfer in="diff" result="bands">
-        <feFuncR type="table" tableValues="0.03 0.2 0.9 0.5 0.12 0.6 0.97 1"/>
-        <feFuncG type="table" tableValues="0.03 0.21 0.92 0.52 0.13 0.62 0.98 1"/>
-        <feFuncB type="table" tableValues="0.05 0.26 0.96 0.58 0.17 0.68 1 1"/>
+        <feFuncR type="table" tableValues="0.620 0.550 0.450 0.340 0.260 0.200 0.160 0.140 0.120 0.090 0.850 1.000 0.980 0.950 0.920 0.900 0.880 0.860 0.860 0.900 1.000"/>
+        <feFuncG type="table" tableValues="0.620 0.550 0.450 0.340 0.260 0.200 0.160 0.140 0.120 0.090 0.850 1.000 0.980 0.950 0.920 0.900 0.880 0.860 0.860 0.900 1.000"/>
+        <feFuncB type="table" tableValues="0.647 0.582 0.490 0.388 0.313 0.258 0.220 0.202 0.183 0.156 0.861 1.000 0.981 0.954 0.926 0.907 0.889 0.870 0.870 0.907 1.000"/>
       </feComponentTransfer>
       <feSpecularLighting in="h" surfaceScale="1.96" specularConstant="2.6" specularExponent="90" lighting-color="#fff" result="s1"><feDistantLight azimuth="235" elevation="58"/></feSpecularLighting>
       <feSpecularLighting in="h" surfaceScale="1.96" specularConstant="0.9" specularExponent="22" lighting-color="#d9e6ff" result="s2"><feDistantLight azimuth="60" elevation="28"/></feSpecularLighting>
@@ -161,31 +164,37 @@
       <feComposite in="s1" in2="s2" operator="arithmetic" k2="1" k3="1" result="s12"/>
       <feComposite in="s12" in2="s3" operator="arithmetic" k2="1" k3="1" result="spec"/>
       <feComposite in="bands" in2="spec" operator="arithmetic" k2="1" k3="1" result="lit"/>
-      <feGaussianBlur in="lit" stdDeviation="0.31" result="smooth"/>
+      <feGaussianBlur in="lit" stdDeviation="0.22" result="smooth"/>
       <feComposite in="smooth" in2="fat" operator="in" result="body"/>
       <feGaussianBlur in="fat" stdDeviation="0.84" result="sb"/>
       <feOffset in="sb" dy="1.12" result="so"/>
-      <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feFlood flood-color="#000" flood-opacity="0.55"/>
+      <feComposite in2="so" operator="in" result="shadow"/>
       <feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge>
-     </filter>
+    </filter>
   </svg>
 
-  <!-- Loading screen: the TMP logo reveal (with its soundtrack) plays once the page is ready -->
+  <!-- Loading screen: stars drift while the page loads, the button fills up and becomes
+       "Enter", then the TMP logo reveal plays with its soundtrack and its logo glides onto
+       the 3D one in the hero -->
   <div class="loader" id="loader" aria-hidden="true">
-    <video class="loader__video" playsinline preload="none" disablepictureinpicture>
-      <source src="assets/video/tmp-reveal.mp4" type="video/mp4">
-    </video>
+    <canvas class="loader__stars" data-stars></canvas>
+    <div class="loader__film" data-film>
+      <video class="loader__video" playsinline preload="none" disablepictureinpicture>
+        <source src="assets/video/tmp-reveal.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="loader__inner">
       <p class="loader__name">The Marketing Partner</p>
-      <div class="loader__bar"><i data-progress></i></div>
-      <p class="loader__pct"><span data-pct>0</span>%</p>
-      <div class="loader__gate" data-gate hidden>
-        <button class="loader__enter" type="button" data-enter="sound">
+      <button class="loader__enter" type="button" data-enter="sound" disabled>
+        <i class="loader__fill" data-progress></i>
+        <span class="loader__label loader__label--wait"><span>Loading <span data-pct>0</span>%</span></span>
+        <span class="loader__label loader__label--go">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg>
           Enter with sound
-        </button>
-        <button class="loader__quiet" type="button" data-enter="quiet">or enter without sound</button>
-      </div>
+        </span>
+      </button>
+      <button class="loader__quiet" type="button" data-enter="quiet" disabled>or enter without sound</button>
     </div>
     <button class="loader__skip" type="button" data-skip hidden>Skip</button>
   </div>
@@ -779,7 +788,7 @@
     </div>
   </footer>
 
-  <script src="dist/app.d1f05ec6cb.min.js" defer></script>
-  <script type="module" src="dist/3d/main3d-LZFSHPN5.js"></script>
+  <script src="dist/app.f220205a28.min.js" defer></script>
+  <script type="module" src="dist/3d/main3d-XWINUJ4X.js"></script>
 </body>
 </html>

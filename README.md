@@ -3,9 +3,10 @@
 Marketing site for The Marketing Partner. It is plain HTML, CSS and JavaScript with no build step.
 
 - `index.html`: page content
-- `styles.css`: design, including the liquid-chrome lettering
-- `script.js`: loading screen (a tap starts the logo reveal video with its sound, then the page opens), navigation, chrome-lettering sizing, scroll and Motion effects, showcase, card tilt, price count-up and contact form
+- `styles.css`: design, including the liquid-chrome lettering (its SVG filters live at the top of `index.html`)
+- `script.js`: loading screen (a tap starts the logo reveal video with its sound; at the end its logo glides onto the hero's 3D one), navigation, chrome-lettering sizing, scroll and Motion effects, showcase, card tilt, price count-up and contact form
 - `js/ambient.js`: the chill background music, played live with Web Audio (no audio file), and the floating sound on/off button
+- `js/fx.js`: the extra motion layer: cursor, hero light field (moves with the music), word-by-word headings, decoding eyebrows, screenshot wipes, tile spotlight, self-drawing icons, dark sections opening out, process comet, rolling links, liquid buttons
 - `js/game.js`: Bubble Pop, the mini-game in the Playground section
 - `js/main3d.js`: starts the 3D scenes (falls back to CSS lettering without WebGL)
 - `js/scenes.js`: the chrome TMP wordmark (metaballs) and the chrome infinity in Sammy's section

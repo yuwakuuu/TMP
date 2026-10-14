@@ -7,24 +7,29 @@
   if (M) doc.classList.add('has-motion');
   const spring = (stiffness = 140, damping = 20, extra = {}) => ({ type: 'spring', stiffness, damping, ...extra });
 
-  /* Loading screen: fonts, page and the reveal video fill the bar. Then a tap starts the
-     TMP logo reveal with its soundtrack (browsers only allow sound after a tap), and the
-     page opens when it ends. Return visits in the same tab and reduced motion skip it. */
+  /* Loading screen: stars drift while fonts, page and the reveal video load, and the
+     button fills up until it becomes "Enter". A tap plays the TMP logo reveal with its
+     soundtrack (browsers only allow sound after a tap). Near the end the screen turns
+     see-through and the video's logo glides onto the 3D logo in the hero, which takes
+     over. Return visits in the same tab and reduced motion skip it. */
   const loader = document.getElementById('loader');
   if (loader) {
-    const bar = loader.querySelector('[data-progress]');
+    const enter = loader.querySelector('[data-enter="sound"]');
+    const quiet = loader.querySelector('[data-enter="quiet"]');
+    const fill = loader.querySelector('[data-progress]');
     const pct = loader.querySelector('[data-pct]');
-    const gate = loader.querySelector('[data-gate]');
     const skip = loader.querySelector('[data-skip]');
+    const film = loader.querySelector('[data-film]');
     const video = loader.querySelector('video');
     const quick = doc.classList.contains('quick-load') || reduceMotion || !video;
     const started = performance.now();
-    const minTime = quick ? 300 : 1200;
-    let target = 0.08, shown = 0, done = false;
+    const minTime = quick ? 300 : 1400;
+    let target = 0.08, shown = 0, opened = false, handing = false;
     const steps = { fonts: 0.3, page: 0.3, video: 0.4 };
     const complete = (name) => { if (steps[name]) { target += steps[name]; steps[name] = 0; } };
     (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => complete('fonts'));
     if (document.readyState === 'complete') complete('page'); else window.addEventListener('load', () => complete('page'));
+    const stopStars = quick ? () => {} : starfield(loader.querySelector('[data-stars]'));
     if (quick) complete('video');
     else {
       window.TMP_GATE = true;
@@ -34,49 +39,99 @@
       ['canplaythrough', 'error'].forEach((ev) => video.addEventListener(ev, () => complete('video'), { once: true }));
       setTimeout(() => complete('video'), 4000);
     }
-    const finish = () => {
-      if (done) return;
-      done = true;
+    // the page appears (underneath the loading screen while it hands off)
+    const open = () => {
+      if (opened) return;
+      opened = true;
       doc.classList.add('loaded');
       window.dispatchEvent(new Event('tmp:loaded'));
       try { sessionStorage.setItem('tmp-loaded', '1'); } catch (e) { /* private mode */ }
-      setTimeout(() => { if (video) video.pause(); loader.remove(); }, 1400);
     };
+    const cleanup = () => { if (video) video.pause(); stopStars(); loader.remove(); };
+
+    // where the logo sits in the video frame (720 x 1280 px), and in the hero's 3D canvas
+    const filmLogo = () => {
+      const r = video.getBoundingClientRect();
+      const k = Math.min(r.width / 720, r.height / 1280);
+      const ox = r.left + (r.width - 720 * k) / 2, oy = r.top + (r.height - 1280 * k) / 2;
+      return { x: ox + 365 * k, y: oy + 540 * k, w: 606 * k };
+    };
+    const heroLogo = () => {
+      const c = document.getElementById('tmp-3d');
+      if (!c || doc.classList.contains('no-webgl') || c.closest('.is-failed') || window.scrollY > 40) return null;
+      const r = c.getBoundingClientRect();
+      if (!r.width || r.bottom < 0) return null;
+      // the mesh is 6.2 units wide, seen by a 32° camera from 8.2 units away
+      const fit = Math.min(1, r.width / r.height / 1.7);
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.height * 1.36 * fit };
+    };
+
+    const handoff = (fast) => {
+      if (handing) return;
+      handing = true;
+      skip.hidden = true;
+      const from = filmLogo();
+      const to = fast ? null : heroLogo();
+      doc.classList.add('from-film');
+      loader.classList.add('is-handoff');
+      open();
+      const ease = 'cubic-bezier(.7, 0, .2, 1)';
+      if (to) {
+        film.style.transformOrigin = `${from.x}px ${from.y}px`;
+        film.animate([{ transform: 'none' }, { transform: `translate(${to.x - from.x}px, ${to.y - from.y}px) scale(${to.w / from.w})` }],
+          { duration: 1500, easing: ease, fill: 'forwards' });
+        film.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, delay: 850, easing: 'ease-in', fill: 'forwards' });
+      } else {
+        film.animate([{ opacity: 1, transform: 'none', filter: 'blur(0)' }, { opacity: 0, transform: 'scale(1.08)', filter: 'blur(12px)' }],
+          { duration: 900, easing: ease, fill: 'forwards' });
+      }
+      if (fast) {
+        const v0 = video.volume, t0 = performance.now();
+        const fade = () => {
+          const p = Math.min(1, (performance.now() - t0) / 700);
+          video.volume = v0 * (1 - p);
+          if (p < 1) requestAnimationFrame(fade);
+        };
+        fade();
+      }
+      setTimeout(cleanup, fast ? 1000 : 2600);
+    };
+
     const play = (withSound) => {
+      enter.disabled = quiet.disabled = true;
       loader.classList.add('is-playing');
       window.dispatchEvent(new CustomEvent('tmp:sound', { detail: withSound }));
       video.muted = !withSound;
-      video.addEventListener('ended', finish, { once: true });
-      video.addEventListener('error', finish, { once: true });
-      // the soundtrack's last chord rings out; open the page as it fades
-      video.addEventListener('timeupdate', () => { if (video.duration && video.currentTime > video.duration - 0.6) finish(); });
+      video.addEventListener('error', () => handoff(true), { once: true });
+      video.addEventListener('ended', () => handoff(true), { once: true });
+      // the last frame holds from about 6 s; glide over while the final chord rings out
+      video.addEventListener('timeupdate', () => { if (video.duration && video.currentTime > video.duration - 1.75) handoff(false); });
       const p = video.play();
-      if (p) p.catch(() => { video.muted = true; video.play().catch(finish); });
-      setTimeout(() => { skip.hidden = false; }, 1200);
+      if (p) p.catch(() => { video.muted = true; video.play().catch(() => handoff(true)); });
+      setTimeout(() => { if (!handing) skip.hidden = false; }, 1400);
     };
-    gate.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-enter]');
-      if (btn) play(btn.dataset.enter === 'sound');
-    });
-    skip.addEventListener('click', finish);
-    const openGate = () => {
+    enter.addEventListener('click', () => play(true));
+    quiet.addEventListener('click', () => play(false));
+    skip.addEventListener('click', () => handoff(true));
+
+    const ready = () => {
       loader.classList.add('is-ready');
-      gate.hidden = false;
-      gate.querySelector('[data-enter]').focus({ preventScroll: true });
+      enter.disabled = quiet.disabled = false;
+      enter.focus({ preventScroll: true });
     };
     const tick = () => {
-      if (done) return;
+      if (opened) return;
       const elapsed = performance.now() - started;
       // creep toward the next milestone so the bar never stalls
       const ceiling = Math.min(0.97, target + 0.12);
       shown += (Math.min(ceiling, Math.max(target, shown + 0.0015)) - shown) * 0.12;
       if (target >= 0.99) shown += (1 - shown) * 0.25;
-      bar.style.transform = `scaleX(${shown.toFixed(3)})`;
+      fill.style.transform = `scaleX(${shown.toFixed(3)})`;
       pct.textContent = Math.round(shown * 100);
       if ((target >= 0.99 && shown > 0.985 && elapsed > minTime) || elapsed > 6500) {
-        bar.style.transform = 'scaleX(1)';
+        fill.style.transform = 'scaleX(1)';
         pct.textContent = '100';
-        setTimeout(quick ? finish : openGate, quick ? 0 : 260);
+        if (quick) { open(); setTimeout(cleanup, 900); } else setTimeout(ready, 220);
         return;
       }
       requestAnimationFrame(tick);
@@ -85,6 +140,42 @@
   } else {
     doc.classList.add('loaded');
     window.dispatchEvent(new Event('tmp:loaded'));
+  }
+
+  // Slow stars behind the loading screen, like the ones in the reveal video. Returns stop().
+  function starfield(canvas) {
+    const ctx = canvas && canvas.getContext('2d');
+    if (!ctx) return () => {};
+    let w = 0, h = 0, raf = 0, last = performance.now();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const stars = Array.from({ length: 160 }, () => ({
+      a: Math.random() * Math.PI * 2, d: Math.random(), z: 0.2 + Math.random() * 0.8, tw: Math.random() * 6.28,
+    }));
+    const size = () => {
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    size();
+    window.addEventListener('resize', size);
+    const draw = (now) => {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      ctx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h * 0.46, R = Math.hypot(w, h) * 0.6;
+      for (const s of stars) {
+        // drift slowly outward, as if gliding toward the logo
+        s.d += dt * 0.018 * s.z * (0.4 + s.d);
+        if (s.d > 1) { s.d = 0.02; s.a = Math.random() * Math.PI * 2; }
+        s.tw += dt * (1 + s.z * 2);
+        const x = cx + Math.cos(s.a) * s.d * R, y = cy + Math.sin(s.a) * s.d * R;
+        const alpha = Math.min(1, s.d * 4) * (0.35 + 0.4 * Math.sin(s.tw) ** 2) * s.z;
+        ctx.fillStyle = `rgba(214, 224, 255, ${alpha.toFixed(3)})`;
+        ctx.beginPath(); ctx.arc(x, y, 0.7 + s.z * 1.1 * s.d, 0, 6.283); ctx.fill();
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    raf = requestAnimationFrame(draw);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', size); };
   }
 
   /* Chrome lettering: the bubble filter is measured in pixels, so each size of text gets
@@ -115,7 +206,13 @@
       return `url(#${id})`;
     };
     const chromeEls = [...document.querySelectorAll('.chrome')];
-    const fitChrome = () => chromeEls.forEach((el) => { el.style.filter = filterFor(parseFloat(getComputedStyle(el).fontSize), onLight(el)); });
+    // below 26px the bubble filter has too few pixels to work with, so small lettering
+    // gets a crisp painted chrome instead (styles.css, .chrome--flat)
+    const fitChrome = () => chromeEls.forEach((el) => {
+      const px = parseFloat(getComputedStyle(el).fontSize);
+      el.classList.toggle('chrome--flat', px < 26);
+      el.style.filter = px < 26 ? '' : filterFor(px, onLight(el));
+    });
     fitChrome();
     let resizeTimer = 0;
     window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(fitChrome, 150); });
@@ -177,7 +274,7 @@
       };
       neon.classList.add('is-off');
       const switchOn = async () => {
-        await wait(700);
+        await wait(doc.classList.contains('from-film') ? 1500 : 700);
         await flicker(neon, [90, 60, 40, 220, 60, 90]);
         letters.forEach((l, i) => { if (i % 4 === 1) flicker(l, [50, 80, 40, 120]); });
         setTimeout(buzz, 2500);
@@ -473,12 +570,22 @@
     const heroWords = [...document.querySelectorAll('.hero__title .word')];
     const stage = document.querySelector('.hero__stage');
     const intro = () => {
-      animate(stage, { opacity: [0, 1], scale: [0.6, 1], y: [40, 0] }, { ...spring(55, 11), opacity: { duration: 0.8 } });
+      // after the video the logo is already in place (the video's one lands on it), so it
+      // only fades up underneath; the words follow once it has landed
+      const film = doc.classList.contains('from-film');
+      const wait = film ? 0.95 : 0;
+      if (film) animate(stage, { opacity: [0, 1] }, { duration: 0.7, delay: 0.8, ease: 'easeOut' });
+      else animate(stage, { opacity: [0, 1], scale: [0.6, 1], y: [40, 0] }, { ...spring(55, 11), opacity: { duration: 0.8 } });
       heroIns.forEach((el) => { el.style.opacity = '1'; el.style.transform = 'none'; });
-      animate(heroIns.filter((el) => el !== heroTitle), { opacity: [0, 1], y: [30, 0] },
-        { ...spring(120, 18), delay: stagger(0.12, { startDelay: 0.35 }) });
+      animate(heroIns.filter((el) => el !== heroTitle), { opacity: [0, 1], y: [30, 0], filter: ['blur(10px)', 'blur(0px)'] },
+        { ...spring(120, 18), filter: { duration: 0.7 }, delay: stagger(0.12, { startDelay: 0.35 + wait }) });
       animate(heroWords, { opacity: [0, 1], y: [50, 0], rotateX: [-70, 0] },
-        { ...spring(130, 16), delay: stagger(0.08, { startDelay: 0.2 }) });
+        { ...spring(130, 16), delay: stagger(0.08, { startDelay: 0.2 + wait }) });
+      // the video's own "Beautifully online." is still fading out; the neon waits its turn
+      const neonEl = heroTitle && heroTitle.querySelector('.neon');
+      if (film && neonEl) { neonEl.style.opacity = '0'; animate(neonEl, { opacity: [0, 1] }, { duration: 0.4, delay: 1.35 }); }
+      const navEl = document.getElementById('nav');
+      if (navEl) animate(navEl, { opacity: [0, 1], y: [-24, 0] }, { ...spring(140, 20), delay: 0.25 + wait });
     };
     if (doc.classList.contains('loaded')) intro(); else window.addEventListener('tmp:loaded', intro, { once: true });
 

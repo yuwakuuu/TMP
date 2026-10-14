@@ -23,7 +23,7 @@
   ];
   const MELODY = [72, 74, 76, 79, 81, 84]; // C major pentatonic, over every chord
 
-  let ctx = null, master, bus, verb, lfo, noise, crackle = null;
+  let ctx = null, master, bus, verb, lfo, noise, meter, crackle = null;
   let on = false, timer = 0, next = 0, beat = 0;
 
   function build() {
@@ -34,6 +34,10 @@
     const comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -18; comp.ratio.value = 3; comp.attack.value = 0.02; comp.release.value = 0.3;
     master.connect(comp).connect(ctx.destination);
+    // the page's visuals can follow the music (see TMP_AUDIO below)
+    meter = ctx.createAnalyser();
+    meter.fftSize = 512;
+    comp.connect(meter);
     // everything rolls off above ~3.6 kHz for that warm, slightly worn sound
     const tone = ctx.createBiquadFilter();
     tone.type = 'lowpass'; tone.frequency.value = 3600; tone.Q.value = 0.4;
@@ -193,7 +197,12 @@
       keys(m, t + (Math.random() < 0.5 ? 0 : half), 0.5 + Math.random() * 0.3, 3.2);
     }
     if (!groove) return;
-    if (b === 0 || (b === 2 && Math.random() < 0.7)) kick(t + (b === 2 ? half : 0));
+    if (b === 0 || (b === 2 && Math.random() < 0.7)) {
+      const at = t + (b === 2 ? half : 0);
+      kick(at);
+      // tell the page when the kick lands, so things can pulse in time
+      setTimeout(() => window.dispatchEvent(new CustomEvent('tmp:beat', { detail: b === 0 ? 1 : 0.6 })), Math.max(0, (at - ctx.currentTime) * 1000));
+    }
     if (b === 1 || b === 3) snare(t + 0.012);
     hat(t, 0.8 + Math.random() * 0.4);
     if (Math.random() < 0.85) hat(t + half, 0.5 + Math.random() * 0.4);
@@ -243,6 +252,18 @@
     btn.setAttribute('aria-label', on ? 'Turn music off' : 'Turn music on');
     label.textContent = on ? 'Sound on' : 'Sound off';
   }
+
+  // loudness right now, 0 to about 1 (0 while the music is off)
+  const wave = new Uint8Array(512);
+  window.TMP_AUDIO = {
+    level() {
+      if (!on || !meter || ctx.state !== 'running') return 0;
+      meter.getByteTimeDomainData(wave);
+      let sum = 0;
+      for (let i = 0; i < wave.length; i += 4) { const v = (wave[i] - 128) / 128; sum += v * v; }
+      return Math.min(1, Math.sqrt(sum / (wave.length / 4)) * 6);
+    },
+  };
 
   btn.addEventListener('click', () => {
     if (on) { stop(); save('off'); } else { start(1.2); save('on'); }

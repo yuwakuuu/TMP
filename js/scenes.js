@@ -13,7 +13,7 @@ const WORDMARK_URL = new URL('assets/3d/tmp-wordmark.bin', document.baseURI);
 const lingerSpin = (s, slow, fast) => slow + (fast - slow) * Math.abs(Math.sin(s.rotY));
 
 export function initWordmark(canvas, opts = {}) {
-  const { reduced = false, spin = false } = opts;
+  const { reduced = false, spin = false, hold = false } = opts;
   // A steady showroom turn for the loading screen, slower while the word faces you.
   const spinPose = (s, t, dt) => {
     inertia(s, dt, reduced ? 0 : lingerSpin(s, 0.9, 2.6));
@@ -34,20 +34,28 @@ export function initWordmark(canvas, opts = {}) {
     s.rotX += (bob - s.rotX) * (1 - Math.exp(-dt * 1.4));
     return Math.abs(s.rotX - bob) < 0.002;
   };
+  // Behind the intro video: face-on and still, so the video's logo can land on it.
+  const holdPose = (s, t, dt) => {
+    inertia(s, dt, 0);
+    s.rotY += (0 - s.rotY) * (1 - Math.exp(-dt * 3));
+    s.rotX += (0.12 - s.rotX) * (1 - Math.exp(-dt * 3));
+    return Math.abs(s.rotY) < 0.002 && Math.abs(s.rotX - 0.12) < 0.002;
+  };
   const stage = createChromeStage(canvas, {
     ...opts,
     build: buildWordmark,
-    initial: { rotY: reduced ? -0.25 : -TAU - 0.9, rotX: 0.12, turn: 0, nextFlip: 12 },
+    initial: hold ? { rotY: 0, rotX: 0.12, turn: 0, nextFlip: 12 } : { rotY: reduced ? -0.25 : -TAU - 0.9, rotX: 0.12, turn: 0, nextFlip: 12 },
     fitAspect: 1.7,
     studio: 'soft',
     halo: 0.62,
     haloSize: 6,
-    pose: spin ? spinPose : heroPose,
+    pose: hold ? holdPose : spin ? spinPose : heroPose,
   });
-  // after the loading screen: keep spinning to the next whole turn, then sway as the hero
+  // after the intro: finish any turn forwards, then sway as the hero
   stage.toHero = () => stage.setPose(heroPose, (s, t) => {
     s.velY = 0;
-    s.turn = Math.ceil(s.rotY / TAU);   // finish the current turn forwards, never rewind
+    // finish the current turn forwards, never rewind (a hair past face-on isn't a turn)
+    s.turn = Math.ceil(s.rotY / TAU - 0.02);
     s.nextFlip = t + 9;
   });
   return stage;

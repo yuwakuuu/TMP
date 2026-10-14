@@ -42,9 +42,17 @@ async function boot() {
 
   const splash = () => document.dispatchEvent(new CustomEvent('tmp:splash'));
   const hero = document.getElementById('tmp-3d');
-  // the hero logo builds behind the intro video, so it is ready when the page opens
+  // The hero logo builds behind the intro video, so it is ready when the page opens. While
+  // the video plays it holds still and face-on; once the video's logo has landed on it, it
+  // starts to sway.
+  const hold = !!window.TMP_GATE;
   const markFailed = () => hero?.closest('[data-stage]')?.classList.add('is-failed');
-  if (hero) safely(() => scenes.initWordmark(hero, { reduced, lite, onPulse: splash, onError: markFailed }), markFailed);
+  const logo = hero ? safely(() => scenes.initWordmark(hero, { reduced, lite, hold, onPulse: splash, onError: markFailed }), markFailed) : null;
+  if (logo && hold) {
+    const release = () => setTimeout(() => logo.toHero(), 1800);
+    if (document.documentElement.classList.contains('loaded')) release();
+    else window.addEventListener('tmp:loaded', release, { once: true });
+  }
   ready('wordmark');
 
   // scenes further down start only as they come near
