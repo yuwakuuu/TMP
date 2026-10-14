@@ -1,0 +1,18 @@
+/* Hologram-only view of the TOB site, embedded as a live demo on The Marketing Partner's
+   site. Everything except the "Talk to TOB" stage is hidden, and the stage fills the frame. */
+html.holo-only, html.holo-only body { height: 100%; background: #050507; }
+html.holo-only body { overflow: hidden; }
+html.holo-only main { height: 100%; }
+html.holo-only body > *:not(main),
+html.holo-only main > *:not(#demo),
+html.holo-only #demo > .container:first-child,
+html.holo-only .demo-note { display: none !important; }
+html.holo-only #demo { padding: 12px; border: 0; height: 100%; }
+html.holo-only #demo > .container { max-width: none; padding: 0; height: 100%; }
+html.holo-only .demo-stage { margin: 0; height: 100%; gap: 12px; }
+html.holo-only .holo-wrap, html.holo-only .chat { min-height: 0; max-height: none; height: 100%; }
+html.holo-only .reveal { opacity: 1 !important; transform: none !important; }
+@media (max-width: 900px) {
+  html.holo-only .demo-stage { grid-template-rows: minmax(0, 40fr) minmax(0, 60fr); }
+  html.holo-only .holo-wrap, html.holo-only .chat { height: auto; }
+}
