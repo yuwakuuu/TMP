@@ -7,31 +7,62 @@
   if (M) doc.classList.add('has-motion');
   const spring = (stiffness = 140, damping = 20, extra = {}) => ({ type: 'spring', stiffness, damping, ...extra });
 
-  /* Loading screen: fonts, page and the 3D logo each fill part of the bar ------- */
+  /* Loading screen: fonts, page and the reveal video fill the bar. Then a tap starts the
+     TMP logo reveal with its soundtrack (browsers only allow sound after a tap), and the
+     page opens when it ends. Return visits in the same tab and reduced motion skip it. */
   const loader = document.getElementById('loader');
   if (loader) {
     const bar = loader.querySelector('[data-progress]');
     const pct = loader.querySelector('[data-pct]');
-    const quick = doc.classList.contains('quick-load') || reduceMotion;
+    const gate = loader.querySelector('[data-gate]');
+    const skip = loader.querySelector('[data-skip]');
+    const video = loader.querySelector('video');
+    const quick = doc.classList.contains('quick-load') || reduceMotion || !video;
     const started = performance.now();
     const minTime = quick ? 300 : 1200;
     let target = 0.08, shown = 0, done = false;
-    const steps = { fonts: 0.3, page: 0.3, logo: 0.4 };
+    const steps = { fonts: 0.3, page: 0.3, video: 0.4 };
     const complete = (name) => { if (steps[name]) { target += steps[name]; steps[name] = 0; } };
     (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => complete('fonts'));
     if (document.readyState === 'complete') complete('page'); else window.addEventListener('load', () => complete('page'));
-    let logoAt = 0;
-    window.addEventListener('tmp:3d', (e) => {
-      if (e.detail === 'wordmark') logoAt = performance.now();
-      complete('logo');
-    });
+    if (quick) complete('video');
+    else {
+      window.TMP_GATE = true;
+      video.preload = 'auto';
+      video.load();
+      // phones may not buffer until play, so don't wait on the video forever
+      ['canplaythrough', 'error'].forEach((ev) => video.addEventListener(ev, () => complete('video'), { once: true }));
+      setTimeout(() => complete('video'), 4000);
+    }
     const finish = () => {
       if (done) return;
       done = true;
       doc.classList.add('loaded');
       window.dispatchEvent(new Event('tmp:loaded'));
       try { sessionStorage.setItem('tmp-loaded', '1'); } catch (e) { /* private mode */ }
-      setTimeout(() => loader.remove(), 1400);
+      setTimeout(() => { if (video) video.pause(); loader.remove(); }, 1400);
+    };
+    const play = (withSound) => {
+      loader.classList.add('is-playing');
+      window.dispatchEvent(new CustomEvent('tmp:sound', { detail: withSound }));
+      video.muted = !withSound;
+      video.addEventListener('ended', finish, { once: true });
+      video.addEventListener('error', finish, { once: true });
+      // the soundtrack's last chord rings out; open the page as it fades
+      video.addEventListener('timeupdate', () => { if (video.duration && video.currentTime > video.duration - 0.6) finish(); });
+      const p = video.play();
+      if (p) p.catch(() => { video.muted = true; video.play().catch(finish); });
+      setTimeout(() => { skip.hidden = false; }, 1200);
+    };
+    gate.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-enter]');
+      if (btn) play(btn.dataset.enter === 'sound');
+    });
+    skip.addEventListener('click', finish);
+    const openGate = () => {
+      loader.classList.add('is-ready');
+      gate.hidden = false;
+      gate.querySelector('[data-enter]').focus({ preventScroll: true });
     };
     const tick = () => {
       if (done) return;
@@ -42,12 +73,10 @@
       if (target >= 0.99) shown += (1 - shown) * 0.25;
       bar.style.transform = `scaleX(${shown.toFixed(3)})`;
       pct.textContent = Math.round(shown * 100);
-      // once the 3D logo appears, let it spin for a moment before the page is revealed
-      const logoShown = quick || !logoAt || performance.now() - logoAt > 900;
-      if ((target >= 0.99 && shown > 0.985 && elapsed > minTime && logoShown) || elapsed > 6500) {
+      if ((target >= 0.99 && shown > 0.985 && elapsed > minTime) || elapsed > 6500) {
         bar.style.transform = 'scaleX(1)';
         pct.textContent = '100';
-        setTimeout(finish, quick ? 0 : 260);
+        setTimeout(quick ? finish : openGate, quick ? 0 : 260);
         return;
       }
       requestAnimationFrame(tick);

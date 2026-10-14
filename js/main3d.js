@@ -1,5 +1,5 @@
-// Boots the 3D scenes. The hero wordmark starts right away (the loading screen waits for
-// it); the chrome infinity in Sammy's section starts when it comes near.
+// Boots the 3D scenes. The hero wordmark starts right away; the chrome infinity in
+// Sammy's section starts when it comes near.
 // Without WebGL both fall back to CSS chrome lettering.
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lite = window.matchMedia('(pointer: coarse), (max-width: 700px)').matches || (navigator.hardwareConcurrency || 8) <= 4;
@@ -42,33 +42,10 @@ async function boot() {
 
   const splash = () => document.dispatchEvent(new CustomEvent('tmp:splash'));
   const hero = document.getElementById('tmp-3d');
-  const loaderCanvas = document.getElementById('loader-3d');
-  const quick = document.documentElement.classList.contains('quick-load');
-
-  if (hero && loaderCanvas && !quick) {
-    // First visit: one renderer. The logo spins on the loading screen, then the same canvas
-    // (and its GPU context) moves into the hero, so nothing is built or compiled twice.
-    let failed = false;
-    const markFailed = () => { failed = true; hero.closest('[data-stage]')?.classList.add('is-failed'); ready('wordmark'); };
-    const logo = safely(() => scenes.initWordmark(loaderCanvas, { reduced, lite, spin: true, onPulse: splash, onReady: () => ready('wordmark'), onError: markFailed }), markFailed);
-    const handOff = () => {
-      if (failed || !logo) return;
-      for (const a of ['class', 'tabindex', 'role', 'aria-label']) {
-        const v = hero.getAttribute(a);
-        if (v !== null) loaderCanvas.setAttribute(a, v);
-      }
-      hero.replaceWith(loaderCanvas);
-      loaderCanvas.id = 'tmp-3d';
-      loaderCanvas.closest('[data-stage]')?.classList.add('is-ready');
-      logo.toHero();
-    };
-    if (document.documentElement.classList.contains('loaded')) handOff();
-    else window.addEventListener('tmp:loaded', handOff, { once: true });
-  } else {
-    const markFailed = () => hero?.closest('[data-stage]')?.classList.add('is-failed');
-    if (hero) safely(() => scenes.initWordmark(hero, { reduced, lite, onPulse: splash, onError: markFailed }), markFailed);
-    ready('wordmark');
-  }
+  // the hero logo builds behind the intro video, so it is ready when the page opens
+  const markFailed = () => hero?.closest('[data-stage]')?.classList.add('is-failed');
+  if (hero) safely(() => scenes.initWordmark(hero, { reduced, lite, onPulse: splash, onError: markFailed }), markFailed);
+  ready('wordmark');
 
   // scenes further down start only as they come near
   const later = (id, init) => {
