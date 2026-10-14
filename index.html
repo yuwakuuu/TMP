@@ -114,10 +114,7 @@
       <feGaussianBlur in="fat" stdDeviation="3.00" result="sb"/>
       <feOffset in="sb" dy="4.00" result="so"/>
       <feComponentTransfer in="so" result="shadow"><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
-      <feMorphology in="fat" operator="dilate" radius="1.20" result="rimA"/>
-      <feFlood flood-color="#1c2029" result="rimC"/>
-      <feComposite in="rimC" in2="rimA" operator="in" result="rim"/>
-      <feMerge><feMergeNode in="shadow"/><feMergeNode in="rim"/><feMergeNode in="body"/></feMerge>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge>
      </filter>
     <filter id="chrome-m" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
       <feMorphology in="SourceAlpha" operator="dilate" radius="0.39" result="d"/>
