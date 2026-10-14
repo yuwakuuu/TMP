@@ -23,7 +23,7 @@
     if (total === null) return;
     label.innerHTML = total === 0
       ? 'Be the first to leave Sammy a flower.'
-      : `<b>${fmt(total)}</b> ${total === 1 ? 'flower' : 'flowers'} left for Sammy. He is still so missed.`;
+      : `<b>${fmt(total)}</b> ${total === 1 ? 'flower' : 'flowers'} left for Sammy. You are still missed.`;
   }
 
   function flower(size = 34) {
