@@ -178,6 +178,26 @@
     return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', size); };
   }
 
+  /* Marquee: enough copies of the words to cover the widest screen, sliding by exactly
+     one copy per loop, so the band never runs out or visibly restarts. (Runs before the
+     chrome lettering below, so the copies get their filters too.) */
+  const track = document.querySelector('.marquee__track');
+  if (track) {
+    const first = track.querySelector('.marquee__group');
+    const fill = () => {
+      const w = first.getBoundingClientRect().width;
+      if (!w) return;
+      const need = Math.ceil(window.innerWidth / w) + 1;
+      while (track.children.length < need) track.appendChild(first.cloneNode(true));
+      track.style.setProperty('--shift', w + 'px');
+      track.style.animationDuration = (w / 70).toFixed(1) + 's';   // ~70px a second at any width
+    };
+    fill();
+    if (document.fonts) document.fonts.ready.then(fill);
+    let marqueeTimer = 0;
+    window.addEventListener('resize', () => { clearTimeout(marqueeTimer); marqueeTimer = setTimeout(fill, 150); });
+  }
+
   /* Chrome lettering: the bubble filter is measured in pixels, so each size of text gets
      its own copy scaled from the 96px master (#chrome-l). Re-run when the layout resizes. */
   const chromeMaster = document.getElementById('chrome-l');
