@@ -7,6 +7,7 @@ Marketing site for The Marketing Partner. It is plain HTML, CSS and JavaScript w
 - `script.js`: loading screen (a tap starts the logo reveal video with its sound; at the end its logo glides onto the hero's 3D one), navigation, chrome-lettering sizing, scroll and Motion effects, showcase, card tilt, price count-up and contact form
 - `js/ambient.js`: the chill background music, played live with Web Audio (no audio file), and the floating sound on/off button
 - `js/fx.js`: the extra motion layer: cursor, hero light field (moves with the music), word-by-word headings, decoding eyebrows, screenshot wipes, tile spotlight, self-drawing icons, dark sections opening out, process comet, rolling links, liquid buttons
+- `js/film.js`: the brand film player in the Film section (poster first, 720p or 1080p picked on play, the background music pauses while it plays, "Watch again" / "Start your project" at the end) and the hero's "Watch the film" link
 - `js/game.js`: Bubble Pop, the mini-game in the Playground section
 - `js/main3d.js`: starts the 3D scenes (falls back to CSS lettering without WebGL)
 - `js/scenes.js`: the chrome TMP wordmark (metaballs) and the chrome infinity in Sammy's section
@@ -14,6 +15,7 @@ Marketing site for The Marketing Partner. It is plain HTML, CSS and JavaScript w
 - `assets/3d/tmp-wordmark.bin`: the baked 3D TMP mesh (rebuild with `node tools/bake-mesh.mjs`, from the stroke data in `tools/wordmark-balls.js`)
 - `dist/`: the minified files the page actually loads (generated, see below)
 - `assets/video/tmp-reveal.mp4`: the TMP logo reveal with its soundtrack (vertical, 720×1280)
+- `assets/video/tmp-film-1080.mp4`, `tmp-film-720.mp4`: the brand film (2:04, H.264/AAC, fast start), with `tmp-film-poster.webp` (1600 wide) and `tmp-film-poster-800.webp` as its poster
 - `assets/work/`: screenshots of example projects, in full and half size
 - `404.html`, `robots.txt`, `sitemap.xml`, `site.webmanifest`: launch files
 - Fonts: Shrikhand (chrome lettering) and Inter, both SIL Open Font License, loaded from Google Fonts

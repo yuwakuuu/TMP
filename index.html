@@ -33,6 +33,15 @@
     "image": "https://yuwakuuu.github.io/TMP/assets/og-image.png",
     "description": "Websites, apps, systems, games, 3D, branding, marketing and lead generation for small local businesses.",
     "sameAs": ["https://github.com/yuwakuuu", "https://yuwakuuu.github.io/madebywaku/"],
+    "subjectOf": {
+      "@type": "VideoObject",
+      "name": "The TMP film: More Leads, Better Bizz.",
+      "description": "Four small businesses on one city block, before and after The Marketing Partner: websites, apps, systems and marketing at small-business prices.",
+      "thumbnailUrl": "https://yuwakuuu.github.io/TMP/assets/video/tmp-film-poster.webp",
+      "uploadDate": "2026-10-16T12:00:00-07:00",
+      "duration": "PT2M4S",
+      "contentUrl": "https://yuwakuuu.github.io/TMP/assets/video/tmp-film-1080.mp4"
+    },
     "makesOffer": [
       { "@type": "Offer", "name": "Website", "priceSpecification": { "@type": "PriceSpecification", "minPrice": 499, "priceCurrency": "USD" } },
       { "@type": "Offer", "name": "App", "priceSpecification": { "@type": "PriceSpecification", "minPrice": 499, "priceCurrency": "USD" } },
@@ -48,7 +57,7 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="dist/styles.c42cdc8375.min.css">
+  <link rel="stylesheet" href="dist/styles.4f337ffd36.min.css">
   <link rel="modulepreload" href="dist/3d/main3d-XWINUJ4X.js">
   <link rel="preload" href="assets/3d/tmp-wordmark.bin" as="fetch" type="application/octet-stream" crossorigin>
   <script>
@@ -255,6 +264,7 @@
         <div class="hero__ctas hero__in">
           <a class="btn btn--primary magnetic" href="#contact">Start your project</a>
           <a class="link-arrow link-arrow--light" href="#work">See our work</a>
+          <a class="film-link" href="#film" data-film-start><span class="film-link__icon" aria-hidden="true"></span>Watch the film</a>
         </div>
         <p class="hero__hint hero__in"><span class="hint-dot" aria-hidden="true"></span>Drag the logo to spin it. Tap it to make a splash.</p>
       </div>
@@ -266,6 +276,26 @@
         <div class="marquee__group"><span class="chrome chrome--md">Websites</span><i>✦</i><span class="chrome chrome--md">Apps</span><i>✦</i><span class="chrome chrome--md">Systems</span><i>✦</i><span class="chrome chrome--md">Marketing</span><i>✦</i><span class="chrome chrome--md">Lead generation</span><i>✦</i><span class="chrome chrome--md">Tech support</span><i>✦</i></div>
       </div>
     </div>
+
+    <!-- Film: two minutes on one block, before and after TMP (js/film.js) -->
+    <section class="film" id="film" data-dark aria-labelledby="film-title">
+      <div class="wrap section__head section__head--center reveal">
+        <p class="eyebrow eyebrow--light">The film</p>
+        <h2 id="film-title">Watch a block <span class="chrome">come alive.</span></h2>
+        <p class="section__lede section__lede--light">A barbershop, a taco spot, a laundromat and a corner store, before and after TMP. Two minutes. Sound on.</p>
+      </div>
+      <div class="film__player reveal" data-brand-film>
+        <video class="film__video" preload="none" playsinline controls aria-label="The TMP film: four small businesses on one city block, before and after TMP"></video>
+        <a class="film__start" href="assets/video/tmp-film-1080.mp4" aria-label="Play the TMP film, 2 minutes 4 seconds, with sound">
+          <img src="assets/video/tmp-film-poster.webp" srcset="assets/video/tmp-film-poster-800.webp 800w, assets/video/tmp-film-poster.webp 1600w" sizes="(max-width: 1100px) 94vw, 1040px" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <span class="film__cta"><span class="film__play" aria-hidden="true"></span>Play the film <span class="film__time">2:04</span></span>
+        </a>
+        <div class="film__end">
+          <button class="btn btn--light" type="button" data-film-replay>Watch again</button>
+          <a class="btn btn--primary" href="#contact">Start your project</a>
+        </div>
+      </div>
+    </section>
 
     <!-- Showcase -->
     <section class="showcase-section" aria-labelledby="showcase-title">
@@ -788,7 +818,7 @@
     </div>
   </footer>
 
-  <script src="dist/app.374e0b233d.min.js" defer></script>
+  <script src="dist/app.b5b6fa7113.min.js" defer></script>
   <script type="module" src="dist/3d/main3d-XWINUJ4X.js"></script>
 </body>
 </html>
