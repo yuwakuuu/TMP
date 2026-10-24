@@ -155,6 +155,15 @@ html.is-return .lg--loader .lg__b,html.is-return .lg--loader .lg__l,html.is-retu
 
 /* ---------- custom cursor (mouse only; the script adds html.has-cursor on the first mouse move) ---------- */
 html.has-cursor,html.has-cursor *,html.has-cursor *::before,html.has-cursor *::after{cursor:none!important}
+/* the video player's own controls hide the system cursor too (each rule on its own, so one unknown name can't drop the rest) */
+html.has-cursor video:not(:fullscreen)::-webkit-media-controls-panel{cursor:none!important}
+html.has-cursor video:not(:fullscreen)::-webkit-media-controls-play-button{cursor:none!important}
+html.has-cursor video:not(:fullscreen)::-webkit-media-controls-timeline{cursor:none!important}
+html.has-cursor video:not(:fullscreen)::-webkit-media-controls-mute-button{cursor:none!important}
+html.has-cursor video:not(:fullscreen)::-webkit-media-controls-fullscreen-button{cursor:none!important}
+/* a fullscreen video sits above the page, where the custom cursor can't follow, so it keeps the system cursor */
+html.has-cursor :fullscreen,html.has-cursor :fullscreen *{cursor:auto!important}
+html.has-cursor :-webkit-full-screen,html.has-cursor :-webkit-full-screen *{cursor:auto!important}
 .cursor{position:fixed;inset:0;z-index:2147483600;pointer-events:none;opacity:0;transition:opacity .2s;--c-dot:var(--teal);--c-edge:var(--ink);--c-line:rgba(255,255,255,.42);--c-link:var(--paper);--c-fill:rgba(255,255,255,.08);--c-strong:var(--teal);--c-label:var(--ink)}
 .cursor.is-on{opacity:1}
 .cursor.is-day{--c-dot:var(--day-teal);--c-edge:#fff;--c-line:rgba(17,19,22,.38);--c-link:var(--day-ink);--c-fill:rgba(17,19,22,.06);--c-strong:var(--day-teal);--c-label:#fff}
@@ -276,6 +285,31 @@ html.is-entered .hero__offers{animation-delay:.45s}
 .sec-head h2,.case h2,.story h2,.faq h2,.contact h2,.play h2{font-size:var(--step-4);font-weight:840;font-stretch:108%;letter-spacing:-.04em;line-height:.98}
 .sec-lead{font-size:var(--step-1);color:var(--muted);max-width:52ch;line-height:1.5}
 .chip{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:.8125rem;font-weight:650;padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal)}
+
+/* ---------- the film ---------- */
+.hero__film{display:inline-flex;align-items:center;gap:12px;min-height:56px;padding:0 8px 0 4px;color:var(--paper);font-family:var(--font-display);font-weight:700;font-stretch:104%;font-size:1.0625rem;text-decoration:none;border-radius:12px}
+.hero__film-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:color-mix(in srgb,var(--teal) 16%,transparent);border:1px solid color-mix(in srgb,var(--teal) 55%,transparent);transition:transform .3s var(--spring),background-color .25s}
+.hero__film-icon svg{width:18px;height:18px;fill:var(--teal);transition:fill .25s}
+.hero__film:hover .hero__film-icon{transform:scale(1.08);background:var(--teal)}
+.hero__film:hover .hero__film-icon svg{fill:var(--ink)}
+.hero__film-time{font-family:var(--font-num);font-weight:600;color:var(--muted)}
+.film{padding-block:clamp(72px,10vw,140px) clamp(40px,6vw,72px)}
+.film__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px 48px;margin-bottom:clamp(28px,4vw,48px)}
+.film__head h2{font-size:var(--step-4);font-weight:840;font-stretch:108%;letter-spacing:-.04em;line-height:.98}
+.film__head .sec-lead{max-width:34ch}
+.player{position:relative;aspect-ratio:16/9;width:100%;max-width:100%;border-radius:clamp(14px,2vw,28px);overflow:hidden;background:#0b0c0e;border:1px solid var(--line);box-shadow:0 60px 120px -60px rgba(0,0,0,.9)}
+.player__video{position:absolute;inset:0;width:100%;height:100%;display:block;background:#0b0c0e;object-fit:cover}
+.player__start{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:flex-start;gap:clamp(12px,1.6vw,20px);padding:clamp(16px,3vw,40px);border:0;border-radius:inherit;background:linear-gradient(0deg,rgba(17,19,22,.78) 0%,rgba(17,19,22,0) 46%);color:var(--paper);cursor:pointer;text-align:left}
+.player__icon{flex:none;display:grid;place-items:center;width:clamp(56px,7vw,92px);height:clamp(56px,7vw,92px);border-radius:clamp(14px,1.8vw,22px);background:var(--teal);box-shadow:0 18px 40px -16px rgba(45,212,191,.6);transition:transform .35s var(--spring)}
+.player__icon svg{width:44%;height:44%;fill:var(--ink);transform:translateX(6%)}
+.player__start:hover .player__icon{transform:scale(1.07)}
+.player__start:active .player__icon{transform:scale(.97)}
+.player__label{display:flex;align-items:baseline;gap:12px;font-family:var(--font-display);font-weight:760;font-stretch:104%;font-size:clamp(1.1rem,1.9vw,1.6rem);letter-spacing:-.015em;line-height:1.1;padding-bottom:clamp(4px,.6vw,10px)}
+.player__time{font-family:var(--font-num);font-weight:600;font-size:.8em;color:var(--muted)}
+.player__end{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:22px;padding:24px;text-align:center;background:rgba(17,19,22,.74);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.player__end-title{font-family:var(--font-display);font-weight:840;font-stretch:108%;font-size:clamp(1.8rem,4vw,3.2rem);letter-spacing:-.04em;line-height:1}
+.player__end-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.player.is-playing .player__start{display:none}
 
 /* ---------- mission ---------- */
 .mission__grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(40px,6vw,104px);align-items:end}
@@ -674,7 +708,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 </style>
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Marketing Partner","alternateName":"TMP","slogan":"More Leads, Better Bizz.","url":"https://yuwakuuu.github.io/TMP/new/","logo":"https://yuwakuuu.github.io/TMP/new/assets/icon-512.png","image":"https://yuwakuuu.github.io/TMP/new/assets/og.png","description":"Websites, systems, apps, games and marketing that help small local businesses get more leads and more revenue.","founder":{"@type":"Person","name":"Adrian"},"sameAs":["https://github.com/yuwakuuu","https://yuwakuuu.github.io/madebywaku/"],"makesOffer":[{"@type":"Offer","name":"Websites, apps and games","priceSpecification":{"@type":"PriceSpecification","minPrice":499.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Systems (scheduling, online store, invoicing, QuickBooks replacement)","priceSpecification":{"@type":"PriceSpecification","minPrice":299.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Marketing: Google, Facebook and Instagram ads, Google Business Profile","priceSpecification":{"@type":"UnitPriceSpecification","minPrice":129.99,"priceCurrency":"USD","unitText":"month"}},{"@type":"Offer","name":"Website membership","priceSpecification":{"@type":"UnitPriceSpecification","price":79.99,"priceCurrency":"USD","unitText":"month"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Marketing Partner","alternateName":"TMP","slogan":"More Leads, Better Bizz.","url":"https://yuwakuuu.github.io/TMP/new/","logo":"https://yuwakuuu.github.io/TMP/new/assets/icon-512.png","image":"https://yuwakuuu.github.io/TMP/new/assets/og.png","description":"Websites, systems, apps, games and marketing that help small local businesses get more leads and more revenue.","founder":{"@type":"Person","name":"Adrian"},"sameAs":["https://github.com/yuwakuuu","https://yuwakuuu.github.io/madebywaku/"],"subjectOf":{"@type":"VideoObject","name":"The Marketing Partner: our new look and new website","description":"A 30-second reveal of The Marketing Partner (TMP): websites, systems, apps, games and marketing for small local businesses.","thumbnailUrl":"https://yuwakuuu.github.io/TMP/new/assets/video/tmp-reveal-poster.webp","uploadDate":"2026-10-24T14:00:00-07:00","duration":"PT30S","contentUrl":"https://yuwakuuu.github.io/TMP/new/assets/video/tmp-reveal-1080.mp4"},"makesOffer":[{"@type":"Offer","name":"Websites, apps and games","priceSpecification":{"@type":"PriceSpecification","minPrice":499.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Systems (scheduling, online store, invoicing, QuickBooks replacement)","priceSpecification":{"@type":"PriceSpecification","minPrice":299.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Marketing: Google, Facebook and Instagram ads, Google Business Profile","priceSpecification":{"@type":"UnitPriceSpecification","minPrice":129.99,"priceCurrency":"USD","unitText":"month"}},{"@type":"Offer","name":"Website membership","priceSpecification":{"@type":"UnitPriceSpecification","price":79.99,"priceCurrency":"USD","unitText":"month"}}]}</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -788,6 +822,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
     <div class="hero__ctas">
       <a class="btn btn--primary btn--lg btn--magnetic" href="#contact">Start your project</a>
       <a class="btn btn--ghost btn--lg btn--magnetic" href="#work">See our work</a>
+      <a class="hero__film" href="#film"><span class="hero__film-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 5.8v12.4L18.6 12z"/></svg></span>Watch the film <span class="hero__film-time">0:30</span></a>
     </div>
     <ul class="hero__offers">
       <li>Websites from <b>$499.99</b></li>
@@ -809,6 +844,30 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
     </ul>
   </div>
 </div>
+
+<!-- THE FILM -->
+<section class="film" id="film" aria-labelledby="film-title">
+  <div class="wrap">
+    <header class="film__head">
+      <h2 id="film-title" data-reveal="rise">Thirty seconds of TMP<span class="dot">.</span></h2>
+      <p class="sec-lead">Our new look and our new website, start to finish. Turn your sound on.</p>
+    </header>
+    <div class="player" id="player">
+      <video class="player__video" id="film-video" preload="none" playsinline poster="assets/video/tmp-reveal-poster.webp" aria-label="The Marketing Partner reveal film, 30 seconds"></video>
+      <button class="player__start" type="button" id="film-start" data-sfx="none">
+        <span class="player__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 5.8v12.4L18.6 12z"/></svg></span>
+        <span class="player__label">Play the film<span class="player__time">0:30</span></span>
+      </button>
+      <div class="player__end" id="film-end" hidden>
+        <p class="player__end-title">Like what you see<span class="dot">?</span></p>
+        <div class="player__end-actions">
+          <a class="btn btn--primary" href="#contact">Start your project</a>
+          <button class="btn btn--ghost" type="button" id="film-again">Watch again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- MISSION -->
 <section class="mission" id="mission" aria-labelledby="mission-title">
@@ -2682,6 +2741,44 @@ const Contact = (() => {
     const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
     fontsReady.then(() => { build(); kick(); });
   });
+})();
+
+/* ================================================================
+   The film: a poster with a play button. The video file only downloads when
+   someone presses play, and the size it loads depends on the screen.
+   ================================================================ */
+(() => {
+  const box = $('#player'), video = $('#film-video'), start = $('#film-start'), end = $('#film-end'), again = $('#film-again');
+  if (!box || !video) return;
+  const pickSource = () => {
+    // H.264 plays almost everywhere; browsers without it get the WebM copy
+    if (!video.canPlayType('video/mp4; codecs="avc1.640029, mp4a.40.2"')) return 'assets/video/tmp-reveal-1080.webm';
+    const wide = box.clientWidth * (window.devicePixelRatio || 1) >= 1100;
+    return wide ? 'assets/video/tmp-reveal-1080.mp4' : 'assets/video/tmp-reveal-720.mp4';
+  };
+  const play = () => {
+    if (!video.getAttribute('src')) { video.src = pickSource(); }
+    end.hidden = true;
+    box.classList.add('is-playing');
+    video.controls = true;
+    const p = video.play();
+    if (p && p.catch) p.catch(() => { box.classList.remove('is-playing'); video.controls = false; toast('The film could not start. Press play to try again.'); });
+    video.focus({ preventScroll: true });
+  };
+  start.addEventListener('click', () => { SFX.play('click'); play(); });
+  again.addEventListener('click', () => { video.currentTime = 0; play(); });
+  video.addEventListener('ended', () => {
+    video.controls = false;
+    // leave fullscreen so the "what next" card can be seen (Safari and iPhone use their own names for this)
+    try {
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (video.webkitDisplayingFullscreen && video.webkitExitFullscreen) video.webkitExitFullscreen();
+    } catch (e) { /* stay put */ }
+    end.hidden = false;
+    $('a', end).focus({ preventScroll: true });
+  });
+  video.addEventListener('play', () => { end.hidden = true; box.classList.add('is-playing'); video.controls = true; });
 })();
 
 /* ================================================================
