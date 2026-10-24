@@ -153,14 +153,30 @@ html.is-return .lg--loader .lg__b,html.is-return .lg--loader .lg__l,html.is-retu
 @keyframes centerOut{to{opacity:0;transform:translateY(-24px) scale(.97)}}
 @keyframes stripUp{to{transform:scaleY(0)}}
 
-/* ---------- cursor follower (fine pointers only) ---------- */
-.cursor{position:fixed;left:0;top:0;z-index:95;width:0;height:0;pointer-events:none;opacity:0;transition:opacity .3s}
+/* ---------- custom cursor (mouse only; the script adds html.has-cursor on the first mouse move) ---------- */
+html.has-cursor,html.has-cursor *,html.has-cursor *::before,html.has-cursor *::after{cursor:none!important}
+.cursor{position:fixed;inset:0;z-index:2147483600;pointer-events:none;opacity:0;transition:opacity .2s;--c-dot:var(--teal);--c-edge:var(--ink);--c-line:rgba(255,255,255,.42);--c-link:var(--paper);--c-fill:rgba(255,255,255,.08);--c-strong:var(--teal);--c-label:var(--ink)}
 .cursor.is-on{opacity:1}
-.cursor i{position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:var(--teal);transition:width .35s var(--ease-out),height .35s var(--ease-out),left .35s var(--ease-out),top .35s var(--ease-out),transform .2s,background-color .3s}
-.cursor.is-hover i{width:6px;height:28px;left:-3px;top:-14px}
-.cursor.is-down i{transform:scale(.6)}
-.cursor.is-day i{background:var(--day-teal)}
+.cursor.is-day{--c-dot:var(--day-teal);--c-edge:#fff;--c-line:rgba(17,19,22,.38);--c-link:var(--day-ink);--c-fill:rgba(17,19,22,.06);--c-strong:var(--day-teal);--c-label:#fff}
+.cursor__ring,.cursor__dot{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}
+.cursor__dot span{position:absolute;left:0;top:0;width:8px;height:8px;border-radius:2px;background:var(--c-dot);box-shadow:0 0 0 1.5px var(--c-edge);transform:translate(-50%,-50%);transition:width .2s var(--ease-out),height .2s var(--ease-out),border-radius .2s,background-color .2s,opacity .2s,transform .15s var(--ease-out)}
+.cursor__shape{position:absolute;left:0;top:0;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;border:1.5px solid var(--c-line);background:transparent;transform:translate(-50%,-50%);transition:width .35s var(--ease-out),height .35s var(--ease-out),border-radius .35s var(--ease-out),border-color .25s,background-color .25s,transform .2s var(--ease-out),opacity .2s}
+.cursor__label{font-family:var(--font-display);font-weight:760;font-size:.8125rem;line-height:1;color:var(--c-label);opacity:0;transition:opacity .2s;white-space:nowrap}
+.cursor.is-link .cursor__shape{width:50px;height:50px;border-radius:14px;border-color:var(--c-link);background:var(--c-fill);box-shadow:0 0 0 1px color-mix(in srgb,var(--c-edge) 45%,transparent),inset 0 0 0 1px color-mix(in srgb,var(--c-edge) 25%,transparent)}
+.cursor.is-link .cursor__dot span{width:6px;height:6px;background:var(--c-link)}
+.cursor.is-text .cursor__shape{opacity:0;transform:translate(-50%,-50%) scale(.6)}
+.cursor.is-text .cursor__dot span{width:2px;height:22px;border-radius:1px;background:var(--paper);box-shadow:0 0 0 1px var(--ink)}
+.cursor.is-day.is-text .cursor__dot span{background:var(--day-ink)}
+.cursor.is-drag .cursor__shape{width:68px;height:68px;border-radius:50%;border-color:var(--c-strong);background:var(--c-strong)}
+.cursor.is-drag .cursor__label{opacity:1}
+.cursor.is-drag .cursor__dot span{opacity:0}
+.cursor.is-drag .cursor__shape{box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
+.cursor.is-brush .cursor__shape{width:var(--brush,64px);height:var(--brush,64px);border-radius:50%;border-color:rgba(198,247,161,.55);background:rgba(120,214,110,.07)}
+.cursor.is-brush .cursor__dot span{width:5px;height:5px;border-radius:50%;background:#c6f7a1;box-shadow:0 0 0 1px rgba(10,38,16,.6)}
+.cursor.is-down .cursor__shape{transform:translate(-50%,-50%) scale(.84)}
+.cursor.is-down .cursor__dot span{transform:translate(-50%,-50%) scale(.7)}
 @media (pointer:coarse){.cursor{display:none}}
+@media (forced-colors:active){html.has-cursor,html.has-cursor *{cursor:auto!important}.cursor{display:none}}
 
 /* ---------- nav ---------- */
 .nav{position:fixed;inset:0 0 auto;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background-color .35s,box-shadow .35s,backdrop-filter .35s}
@@ -704,7 +720,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
   </div>
 </div>
 
-<div class="cursor" aria-hidden="true"><i></i></div>
+<div class="cursor" id="cursor" aria-hidden="true"><div class="cursor__ring"><span class="cursor__shape"><span class="cursor__label"></span></span></div><div class="cursor__dot"><span></span></div></div>
 
 <header class="nav" id="nav">
   <div class="nav__inner">
@@ -866,7 +882,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
       </div>
       <div class="svc__stage-wrap">
         <div class="svc__stage" id="svc-stage">
-          <canvas class="svc__gl" id="svc-gl" aria-hidden="true"></canvas>
+          <canvas class="svc__gl" id="svc-gl" data-cursor="Spin" aria-hidden="true"></canvas>
           <div class="svc__fallback" aria-hidden="true"><span id="svc-fallback-name">Websites</span></div>
           <div class="svc__hud" aria-hidden="true">
             <span class="svc__now" id="svc-now">Websites</span>
@@ -888,7 +904,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
     </header>
   </div>
   <div class="cf" id="cf" role="region" aria-roledescription="carousel" aria-label="Our work">
-    <div class="cf__stage" id="cf-stage" tabindex="0" aria-label="Project carousel. Use the left and right arrow keys to browse.">
+    <div class="cf__stage" id="cf-stage" tabindex="0" data-cursor="Drag" aria-label="Project carousel. Use the left and right arrow keys to browse.">
       <ol class="cf__track" id="cf-track">
         <li class="cf__card" data-i="0" aria-roledescription="slide" aria-label="1 of 5: Total Quality Management">
           <a class="cf__shot" href="https://yuwakuuu.github.io/TMP/demo/tqm/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
@@ -1757,28 +1773,72 @@ const Loader = (() => {
    Pointer niceties: trailing cursor, hover/click sounds, magnetic buttons
    ================================================================ */
 (() => {
-  if (fine && !reduced) {
-    const cur = $('.cursor');
-    let x = -100, y = -100, cx = -100, cy = -100, raf = 0, on = false;
+  /* Custom cursor. With a mouse, the system cursor is hidden (html.has-cursor) and replaced by
+     a teal square that sits exactly on the pointer, plus an outline that trails behind it and
+     changes shape over things you can click, type in, drag or brush. Touch screens, Windows
+     high-contrast mode and pages without this script keep the normal cursor. */
+  if (fine) {
+    const cur = $('#cursor'), dot = $('.cursor__dot', cur), ring = $('.cursor__ring', cur), label = $('.cursor__label', cur);
+    let x = -100, y = -100, rx = -100, ry = -100, raf = 0, on = false, mode = '';
+    const place = (el, px, py) => { el.style.transform = `translate3d(${px.toFixed(1)}px,${py.toFixed(1)}px,0)`; };
     const loop = () => {
-      cx += (x - cx) * 0.24; cy += (y - cy) * 0.24;
-      cur.style.transform = `translate3d(${cx.toFixed(1)}px,${cy.toFixed(1)}px,0)`;
-      raf = Math.abs(x - cx) + Math.abs(y - cy) > 0.15 ? requestAnimationFrame(loop) : 0;
+      const k = reduced ? 1 : 0.2;
+      rx += (x - rx) * k; ry += (y - ry) * k;
+      place(ring, rx, ry);
+      raf = Math.abs(x - rx) + Math.abs(y - ry) > 0.1 ? requestAnimationFrame(loop) : 0;
+    };
+    const show = () => {
+      if (on) return;
+      on = true; rx = x; ry = y;
+      place(ring, rx, ry);
+      html.classList.add('has-cursor');
+      cur.classList.add('is-on');
     };
     addEventListener('pointermove', (e) => {
       if (e.pointerType !== 'mouse') return;
       x = e.clientX; y = e.clientY;
-      if (!on) { on = true; cx = x; cy = y; cur.classList.add('is-on'); }
+      place(dot, x, y);
+      show();
       if (!raf) raf = requestAnimationFrame(loop);
     }, { passive: true });
-    html.addEventListener('mouseleave', () => { on = false; cur.classList.remove('is-on'); });
-    addEventListener('pointerdown', () => cur.classList.add('is-down'), { passive: true });
+    // a touch on a hybrid laptop hands the screen back to the normal cursor until the mouse moves again
+    addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') { cur.classList.add('is-down'); return; }
+      on = false; cur.classList.remove('is-on'); html.classList.remove('has-cursor');
+    }, { passive: true });
     addEventListener('pointerup', () => cur.classList.remove('is-down'), { passive: true });
-    document.addEventListener('mouseover', (e) => {
-      cur.classList.toggle('is-hover', !!e.target.closest('a, button, label, summary, input, textarea, [data-cursor], [data-grass], .cf__stage, .svc__gl, .game'));
-      cur.classList.toggle('is-day', !!e.target.closest('.sam'));
-    });
+    html.addEventListener('mouseleave', () => { on = false; cur.classList.remove('is-on'); });
+    html.addEventListener('mouseenter', (e) => { x = e.clientX; y = e.clientY; place(dot, x, y); show(); });
+    addEventListener('blur', () => cur.classList.remove('is-down'));
 
+    const TEXT = 'input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=submit]):not([type=button]), textarea, [contenteditable="true"]';
+    const LINK = 'a, button, summary, select, label, input[type=checkbox], input[type=radio], input[type=range], .lg--foot, .game';
+    const setMode = (m, text = '') => {
+      if (m === mode && label.textContent === text) return;
+      mode = m;
+      cur.classList.remove('is-link', 'is-text', 'is-drag', 'is-brush');
+      if (m) cur.classList.add(`is-${m}`);
+      label.textContent = text;
+    };
+    document.addEventListener('mouseover', (e) => {
+      const t = e.target;
+      cur.classList.toggle('is-day', !!t.closest('.sam'));
+      const drag = t.closest('[data-cursor]');
+      if (t.closest(TEXT)) setMode('text');
+      else if (t.closest('[data-grass]')) setMode('brush');
+      else if (drag) {
+        // clicking the card in front opens that site, so say so
+        const card = t.closest('.cf__card');
+        if (card && card.classList.contains('is-active')) setMode('drag', 'Open');
+        else setMode('drag', drag.dataset.cursor);
+      }
+      else if (t.closest(LINK)) setMode('link');
+      else setMode('');
+    });
+    bus.addEventListener('brush-size', (e) => cur.style.setProperty('--brush', `${Math.round(e.detail)}px`));
+
+  }
+  if (fine && !reduced) {
     $$('.btn--magnetic').forEach((b) => {
       b.addEventListener('pointermove', (e) => {
         const r = b.getBoundingClientRect();
@@ -2396,19 +2456,23 @@ const Contact = (() => {
 })();
 
 /* ================================================================
-   "grow" in grass: blades fill the letters, sway in a breeze, part around
-   your pointer and spring back. Tap or click for a gust. The real word stays
-   in the page for layout and screen readers; the grass is a canvas over it.
+   "grow" in grass: thousands of fine blades rooted inside the letters. Each blade is
+   drawn as a darker base and a thinner, lighter tip, so it tapers and catches the light.
+   They sway in a rolling breeze, part around your pointer and spring back; a tap or
+   click sends a gust across the word. The real word stays in the page for layout and
+   screen readers; the grass is a canvas laid over it.
    ================================================================ */
 (() => {
   const words = $$('[data-grass]');
   if (!words.length) return;
-  // [color, width] groups, drawn one batch each; a few blades in brand teal
-  const GROUPS = [['#1d6a2c', 1.15], ['#258038', 1.1], ['#2f9440', 1], ['#3aa647', 1], ['#48b851', .95], ['#5cc75e', .9], ['#78d66e', .85], ['#2dd4bf', .85]];
-  const FREQ = [10, 14, 18, 18, 15, 11, 7, 3];
-  const FREQ_SUM = FREQ.reduce((a, b) => a + b, 0);
-  const pickGroup = () => { let r = Math.random() * FREQ_SUM; for (let i = 0; i < FREQ.length; i++) { r -= FREQ[i]; if (r <= 0) return i; } return 0; };
+  // shades: [base, tip]; darker shades sit low in the letters, sunlit ones near the top
+  const SHADES = [
+    ['#103d1c', '#2f7a2c'], ['#14501f', '#3b8f2f'], ['#1a6224', '#4aa336'], ['#21732a', '#5bb53e'],
+    ['#2a8431', '#73c64c'], ['#36953a', '#8fd45d'], ['#47a744', '#aee374'], ['#5a9e3a', '#c9e48a'],
+  ];
+  const BANDS = 5;   // drawn back to front so nearer tufts overlap the ones behind
   const STRETCH = { '50%': 'ultra-condensed', '62.5%': 'extra-condensed', '75%': 'condensed', '87.5%': 'semi-condensed', '100%': 'normal', '112.5%': 'semi-expanded', '125%': 'expanded', '150%': 'extra-expanded', '200%': 'ultra-expanded' };
+  const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
 
   words.forEach((el) => {
     const text = el.textContent.trim();
@@ -2418,8 +2482,9 @@ const Contact = (() => {
     el.appendChild(canvas);
     const ctx = canvas.getContext('2d');
     if (!ctx) { canvas.remove(); return; }
-    let W = 0, H = 0, pad = 0, dpr = 1, size = 0, baseW = 1, soil = null, blades = [], groups = [], tips = [];
-    let visible = false, raf = 0, last = 0, t = 0, settle = 0, gust = null;
+    let W = 0, H = 0, pad = 0, scale = 1, size = 0, N = 0, soil = null;
+    let X, Y, LEN, LEAN, PH, OFF, VEL, SH, MX, MY, TX, TY, baseW = 0.6, buckets = [];
+    let visible = false, raf = 0, last = 0, t = 0, settle = 0, gust = null, R = 40;
     const P = { x: -1e4, y: -1e4, lx: -1e4, vx: 0, power: 0, inside: false };
 
     function build() {
@@ -2427,17 +2492,20 @@ const Contact = (() => {
       size = parseFloat(cs.fontSize);
       const rect = el.getBoundingClientRect();
       if (!rect.width || !size) return;
-      pad = Math.round(size * 0.3);
+      pad = Math.round(size * 0.22);
       W = Math.ceil(rect.width + pad * 2); H = Math.ceil(rect.height + pad * 2);
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // render above screen resolution so hair-thin blades stay smooth
+      scale = Math.min(2.25, Math.max(1.25, (window.devicePixelRatio || 1) * 1.25));
       canvas.style.left = canvas.style.top = `${-pad}px`;
       canvas.style.width = `${W}px`; canvas.style.height = `${H}px`;
-      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      canvas.width = Math.round(W * scale); canvas.height = Math.round(H * scale);
 
       // the letter shapes, exactly where the hidden word sits
       const mask = document.createElement('canvas');
-      mask.width = W; mask.height = H;
+      const MW = Math.round(W * scale), MH = Math.round(H * scale);
+      mask.width = MW; mask.height = MH;
       const m = mask.getContext('2d');
+      m.scale(MW / W, MH / H);
       const stretch = STRETCH[cs.fontStretch] || 'normal';
       m.font = `${cs.fontStyle} ${cs.fontWeight} ${stretch} ${size}px ${cs.fontFamily}`;
       if ('fontStretch' in m) m.fontStretch = stretch;
@@ -2447,103 +2515,134 @@ const Contact = (() => {
       const asc = met.fontBoundingBoxAscent || size * 0.9, desc = met.fontBoundingBoxDescent || size * 0.25;
       const padL = parseFloat(cs.paddingLeft) || 0, padR = parseFloat(cs.paddingRight) || 0, padT = parseFloat(cs.paddingTop) || 0;
       const lineH = parseFloat(cs.lineHeight) || size;
-      const contentW = rect.width - padL - padR;
-      const sx = met.width > 0 ? clamp(contentW / met.width, 0.8, 1.25) : 1;
+      const sx = met.width > 0 ? clamp((rect.width - padL - padR) / met.width, 0.8, 1.25) : 1;
       const baseline = pad + padT + (lineH - (asc + desc)) / 2 + asc;
       m.save(); m.translate(pad + padL, 0); m.scale(sx, 1); m.fillText(text, 0, baseline); m.restore();
-      const alpha = m.getImageData(0, 0, W, H).data;
+      const alpha = m.getImageData(0, 0, MW, MH).data;
       soil = mask;
+      const kx = MW / W, ky = MH / H;
+      const inside = (x, y) => alpha[(((y * ky) | 0) * MW + ((x * kx) | 0)) * 4 + 3] >= 140;
 
-      // blades grow from points inside the letters
-      blades = [];
-      const step = Math.max(1.5, size / 40);
-      const len = size * 0.16;
-      baseW = Math.max(1, size / 72);
-      for (let y = 0; y < H; y += step) {
-        for (let x = 0; x < W; x += step) {
-          const jx = x + Math.random() * step, jy = y + Math.random() * step;
-          if (jx >= W || jy >= H || alpha[((jy | 0) * W + (jx | 0)) * 4 + 3] < 140) continue;
-          blades.push({ x: jx, y: jy, h: len * (0.5 + Math.random() * 0.75), lean: (Math.random() - 0.5) * 0.5, ph: Math.random() * Math.PI * 2, g: pickGroup(), bend: 0, vel: 0, tip: Math.random() < 0.2 });
-        }
+      // where the letters are, and how tall the word is (for top-to-bottom shading)
+      let inked = 0, top = H, bottom = 0;
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        if (inside(x, y)) { inked++; if (y < top) top = y; if (y > bottom) bottom = y; }
       }
-      groups = GROUPS.map(() => []);
-      blades.forEach((b) => { b.bend = b.lean; groups[b.g].push(b); });
-      tips = blades.filter((b) => b.tip);
+      const cap = window.__GRASS_CAP || (fine ? 6500 : 3600);
+      const spacing = Math.max(size / 92, Math.sqrt(inked / cap));
+      const xs = [], ys = [];
+      for (let y = 0; y < H; y += spacing) for (let x = 0; x < W; x += spacing) {
+        const jx = x + Math.random() * spacing, jy = y + Math.random() * spacing;
+        if (jx >= W || jy >= H || !inside(jx, jy)) continue;
+        xs.push(jx); ys.push(jy);
+      }
+      N = xs.length;
+      X = new Float32Array(xs); Y = new Float32Array(ys);
+      LEN = new Float32Array(N); LEAN = new Float32Array(N); PH = new Float32Array(N);
+      OFF = new Float32Array(N); VEL = new Float32Array(N); SH = new Uint8Array(N);
+      MX = new Float32Array(N); MY = new Float32Array(N); TX = new Float32Array(N); TY = new Float32Array(N);
+      const span = Math.max(1, bottom - top);
+      const baseLen = size * 0.105;
+      baseW = Math.max(0.42, size / 125);
+      for (let i = 0; i < N; i++) {
+        const v = (Y[i] - top) / span;                       // 0 at the top of the word, 1 at the bottom
+        LEN[i] = baseLen * (0.62 + Math.random() * 0.62);
+        LEAN[i] = gauss() * 0.32;
+        PH[i] = Math.random() * Math.PI * 2;
+        SH[i] = clamp(Math.round((1 - v) * 5.2 + gauss() * 1.6 + 0.4), 0, SHADES.length - 1);
+        if (Math.random() < 0.03) SH[i] = SHADES.length - 1;  // a few dry, straw-colored tips
+      }
+      // bucket by depth band and shade so each batch is one path per stroke
+      buckets = [];
+      for (let b = 0; b < BANDS; b++) buckets.push(SHADES.map(() => []));
+      for (let i = 0; i < N; i++) {
+        const band = clamp(Math.floor(((Y[i] - top) / span) * BANDS), 0, BANDS - 1);
+        buckets[band][SH[i]].push(i);
+      }
+      buckets = buckets.map((band) => band.map((list) => Uint32Array.from(list)));
+      R = size * 0.5;
+      bus.dispatchEvent(new CustomEvent('brush-size', { detail: R * 2 }));
       el.classList.add('is-ready');
       draw();
     }
 
     function physics(dt) {
-      const breeze = reduced ? 0 : 1;
-      const R = size * 0.6, R2 = R * R;
+      const R2 = R * R;
       let moving = false;
-      for (let i = 0; i < blades.length; i++) {
-        const b = blades[i];
-        let goal = b.lean + breeze * (Math.sin(t * 1.5 + b.x * 0.04 + b.ph * 0.25) * 0.14 + Math.sin(t * 0.62 + b.x * 0.011) * 0.1);
-        if (P.power > 0.01) {
-          const dx = b.x - P.x, dy = (b.y - b.h * 0.5) - P.y, d2 = dx * dx + dy * dy;
+      const push = P.power > 0.01;
+      for (let i = 0; i < N; i++) {
+        let goal = 0;
+        if (push) {
+          const dx = X[i] - P.x, dy = (Y[i] - LEN[i] * 0.5) - P.y, d2 = dx * dx + dy * dy;
           if (d2 < R2) {
             const k = 1 - Math.sqrt(d2) / R;
-            goal += ((dx >= 0 ? 1 : -1) * k * k * 1.3 + P.vx * k * 0.02) * P.power;
+            goal = ((dx >= 0 ? 1 : -1) * k * k * 1.25 + P.vx * k * 0.018) * P.power;
           }
         }
         if (gust) {
-          const age = t - gust.t0, front = age * W * 1.4;
-          const pos = gust.dir > 0 ? b.x - front + pad : (W - pad - front) - b.x;
-          goal += gust.dir * 1.05 * Math.exp(-(pos * pos) / (2 * (size * 0.35) ** 2)) * Math.exp(-age * 0.8);
+          const age = t - gust.t0, front = age * W * 1.3;
+          const pos = gust.dir > 0 ? X[i] - front + pad : (W - pad - front) - X[i];
+          goal += gust.dir * 0.95 * Math.exp(-(pos * pos) / (2 * (size * 0.38) ** 2)) * Math.exp(-age * 0.85);
         }
-        if (reduced) { b.bend = goal; b.vel = 0; continue; }
-        const a = (goal - b.bend) * 85 - b.vel * 9.5;
-        b.vel += a * dt; b.bend += b.vel * dt;
-        if (Math.abs(b.vel) > 0.02) moving = true;
+        if (goal === 0 && OFF[i] === 0 && VEL[i] === 0) continue;
+        if (reduced) { OFF[i] = goal; continue; }
+        VEL[i] += ((goal - OFF[i]) * 95 - VEL[i] * 10) * dt;
+        OFF[i] += VEL[i] * dt;
+        if (Math.abs(OFF[i]) < 0.0008 && Math.abs(VEL[i]) < 0.004 && goal === 0) { OFF[i] = 0; VEL[i] = 0; }
+        else moving = true;
       }
       if (gust && t - gust.t0 > 2.4) gust = null;
       return moving;
     }
 
     function draw() {
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      // a dark, mossy fill under the blades so the letters read solid
+      // dark, mossy thatch under the blades so the letters read solid and deep
       ctx.globalCompositeOperation = 'source-over';
-      ctx.drawImage(soil, 0, 0);
+      ctx.drawImage(soil, 0, 0, W, H);
       ctx.globalCompositeOperation = 'source-in';
       const g = ctx.createLinearGradient(0, pad, 0, H - pad);
-      g.addColorStop(0, '#2f8a2f'); g.addColorStop(1, '#14471f');
+      g.addColorStop(0, '#1d5a22'); g.addColorStop(1, '#0a2610');
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = 'source-over';
-      ctx.lineCap = 'round';
-      for (let gi = 0; gi < groups.length; gi++) {
-        const list = groups[gi];
-        if (!list.length) continue;
-        ctx.strokeStyle = GROUPS[gi][0];
-        ctx.lineWidth = baseW * GROUPS[gi][1];
-        ctx.beginPath();
-        for (let i = 0; i < list.length; i++) {
-          const b = list[i], s = b.bend;
-          const tx = b.x + Math.sin(s) * b.h, ty = b.y - Math.cos(s) * b.h;
-          ctx.moveTo(b.x, b.y);
-          ctx.quadraticCurveTo(b.x + Math.sin(s * 0.45) * b.h * 0.45, b.y - b.h * 0.55, tx, ty);
+      ctx.lineCap = 'butt';
+      // where every blade's middle and tip are this frame
+      const breeze = reduced ? 0 : 1, tt = t;
+      for (let i = 0; i < N; i++) {
+        const x = X[i], y = Y[i], h = LEN[i] * 0.52;
+        const a = LEAN[i] + OFF[i] + breeze * (Math.sin(tt * 1.7 - x * 0.045 + PH[i] * 0.35) * 0.13 + Math.sin(tt * 0.55 - x * 0.012) * 0.09);
+        const a2 = a * 0.42;
+        const mx = x + Math.sin(a2) * h, my = y - Math.cos(a2) * h;
+        MX[i] = mx; MY[i] = my;
+        TX[i] = mx + Math.sin(a) * h * 0.96; TY[i] = my - Math.cos(a) * h * 0.96;
+      }
+      for (let b = 0; b < BANDS; b++) {
+        const band = buckets[b];
+        for (let s = 0; s < band.length; s++) {
+          const list = band[s];
+          if (!list.length) continue;
+          // the base of each blade: darker and wider
+          ctx.strokeStyle = SHADES[s][0];
+          ctx.lineWidth = baseW * (1.25 - s * 0.03);
+          ctx.beginPath();
+          for (let j = 0; j < list.length; j++) { const i = list[j]; ctx.moveTo(X[i], Y[i]); ctx.lineTo(MX[i], MY[i]); }
+          ctx.stroke();
+          // the tip: thinner and lighter, bending further
+          ctx.strokeStyle = SHADES[s][1];
+          ctx.lineWidth = baseW * (0.7 - s * 0.02);
+          ctx.beginPath();
+          for (let j = 0; j < list.length; j++) { const i = list[j]; ctx.moveTo(MX[i], MY[i]); ctx.lineTo(TX[i], TY[i]); }
+          ctx.stroke();
         }
-        ctx.stroke();
       }
-      ctx.strokeStyle = '#c6f7a1';
-      ctx.lineWidth = baseW * 0.6;
-      ctx.beginPath();
-      for (let i = 0; i < tips.length; i++) {
-        const b = tips[i], s = b.bend;
-        const tx = b.x + Math.sin(s) * b.h, ty = b.y - Math.cos(s) * b.h;
-        ctx.moveTo(b.x + (tx - b.x) * 0.72, b.y + (ty - b.y) * 0.72);
-        ctx.lineTo(tx, ty);
-      }
-      ctx.stroke();
     }
 
     function frame(now) {
       raf = 0;
-      if (!visible || document.hidden || !blades.length) return;
-      if (P.power > 0.01 || gust) settle = 1.2;   // keep it smooth for a moment after you play with it
-      const gap = settle > 0 ? 15 : 33;            // ~60fps while active, ~30fps in the breeze
+      if (!visible || document.hidden || !N) return;
+      if (P.power > 0.01 || gust) settle = 1.2;   // full frame rate while you play with it
+      const gap = settle > 0 ? 15 : 41;            // ~24fps for the idle breeze
       if (now - last >= gap) {
         const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
         last = now; t += dt;
@@ -2560,7 +2659,7 @@ const Contact = (() => {
 
     canvas.addEventListener('pointermove', (e) => {
       const r = canvas.getBoundingClientRect();
-      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const x = (e.clientX - r.left) * (W / r.width), y = (e.clientY - r.top) * (H / r.height);
       const dx = P.lx < -1e3 ? 0 : x - P.lx;
       P.lx = x; P.x = x; P.y = y; P.power = 1; P.inside = true;
       P.vx = clamp(P.vx * 0.5 + dx, -45, 45);
