@@ -216,7 +216,7 @@ html.is-return .lg--loader .lg__b,html.is-return .lg--loader .lg__l,html.is-retu
 @media (prefers-reduced-motion:no-preference){.hero__fallback i{animation:breathe 3.6s ease-in-out infinite alternate;animation-delay:calc(var(--k) * -.12s)}}
 @keyframes breathe{from{transform:scaleY(.86)}to{transform:scaleY(1.04)}}
 .hero__shade{position:absolute;inset:0;z-index:-2;pointer-events:none;background:
-  linear-gradient(90deg,color-mix(in srgb,var(--ink) 90%,transparent) 0%,color-mix(in srgb,var(--ink) 55%,transparent) 36%,transparent 64%),
+  linear-gradient(90deg,color-mix(in srgb,var(--ink) 92%,transparent) 0%,color-mix(in srgb,var(--ink) 66%,transparent) 40%,transparent 72%),
   linear-gradient(0deg,var(--ink) 0%,color-mix(in srgb,var(--ink) 72%,transparent) 12%,transparent 36%),
   linear-gradient(180deg,color-mix(in srgb,var(--ink) 70%,transparent) 0%,transparent 22%)}
 .hero__inner{position:relative;z-index:1;pointer-events:none}
@@ -224,6 +224,8 @@ html.is-return .lg--loader .lg__b,html.is-return .lg--loader .lg__l,html.is-retu
 .hero__title{font-size:var(--step-5);font-weight:880;font-stretch:110%;letter-spacing:-.05em;line-height:.86;margin-bottom:28px}
 .hero__line{display:block;overflow:hidden;padding-bottom:.07em;margin-bottom:-.07em}
 .hero__line > span{display:inline-block}
+/* the teal square stays readable even when a teal bar passes behind it */
+.hero__title .dot{text-shadow:0 0 .05em var(--ink),0 0 .12em color-mix(in srgb,var(--ink) 85%,transparent)}
 html.is-entered .hero__line > span{animation:lineUp 1.05s var(--ease-out) both}
 html.is-entered .hero__line:nth-child(2) > span{animation-delay:.1s}
 html.is-entered .hero__lead,html.is-entered .hero__ctas,html.is-entered .hero__offers{animation:fadeUp .9s var(--ease-out) both}
@@ -2726,10 +2728,15 @@ function initHero({ THREE, RoundedBoxGeometry, RoomEnvironment, EffectComposer, 
   let first = true, degraded = lowPower, perfN = 0, perfSum = 0;
   const kick = runner(hero, (dt) => {
     t += dt;
-    // autopilot when nobody is steering
+    // autopilot when nobody is steering: wander across the right side of the screen,
+    // clear of the headline, whatever the window's shape
     if (t - lastMove > 2.6 || coarse) {
       const s = reduced ? 0 : t;
-      cursorGoal.set(auto.x + Math.sin(s * 0.33) * auto.ax, 0, auto.z + Math.sin(s * 0.47 + 1.3) * auto.az);
+      const sx = small ? 0.55 + Math.sin(s * 0.33) * 0.3 : 0.8 + Math.sin(s * 0.33) * 0.12;
+      const sy = small ? 0.8 + Math.sin(s * 0.47 + 1.3) * 0.08 : 0.58 + Math.sin(s * 0.47 + 1.3) * 0.14;
+      ndc.set(sx * 2 - 1, -(sy * 2 - 1));
+      ray.setFromCamera(ndc, camera);
+      if (ray.ray.intersectPlane(plane, hit)) cursorGoal.copy(hit);
       ampGoal = 0.8;
     }
     cursor.lerp(cursorGoal, 1 - Math.pow(0.0009, dt));
