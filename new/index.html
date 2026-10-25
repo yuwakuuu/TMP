@@ -627,23 +627,43 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 .sam__help a{color:var(--day-teal);font-weight:650}
 
 /* ---------- crew ---------- */
-.crew__head{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.chip--soon{background:color-mix(in srgb,var(--bar-2) 22%,transparent);color:var(--paper)}
-.crew__cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+/* Each finished bio gets a wide card: the bars on the left, the words on the right.
+   While two bios are still to come, the finished one sits on the left and those two stack beside it. */
+.crew__cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .crew__card{position:relative;display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:22px;border:1px solid var(--line);background:var(--ink-2);overflow:hidden}
 .crew__card h3{font-size:1.6rem;font-weight:830;font-stretch:108%;letter-spacing:-.03em;margin-top:8px}
 .crew__card p{color:var(--muted)}
 .crew__role{font-weight:650;color:var(--teal)!important;font-size:.9375rem}
 .crew__face{display:flex;align-items:flex-end;gap:8px;height:140px;padding:20px;border-radius:16px;background:var(--ink)}
-.crew__face i{display:block;flex:1;border-radius:8px;background:var(--bar-1)}
+.crew__face i{display:block;flex:1;border-radius:8px;background:var(--bar-1);transform-origin:50% 100%}
 .crew__face i:nth-child(1){height:38%}
 .crew__face i:nth-child(2){height:64%;background:var(--bar-2)}
 .crew__face i:nth-child(3){height:92%;background:var(--teal)}
+.crew__card--bio{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,clamp(150px,16vw,230px)) minmax(0,1fr);gap:clamp(20px,2.2vw,28px);padding:24px}
+.crew__card--bio .crew__face{height:auto;min-height:260px;padding:clamp(18px,1.8vw,24px)}
+.crew__body{display:flex;flex-direction:column;gap:12px;min-width:0;max-width:66ch}
+.crew__card .crew__body h3{margin-top:0}
+.crew__text{font-size:1rem;line-height:1.62}
+.crew__quote{margin-top:4px;font-family:var(--font-display);font-weight:780;font-stretch:104%;font-size:var(--step-1);line-height:1.3;letter-spacing:-.01em;color:var(--paper)!important;text-wrap:balance}
+.crew__body .tags{margin-top:6px}
+.crew__card--locked .crew__face{flex:1 0 96px;height:auto;min-height:96px}
 .crew__card--locked .crew__face i{background:var(--bar-1)!important}
 .crew__card--locked .crew__face::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.06) 50%,transparent 70%);background-size:250% 100%;animation:shimmer 2.6s linear infinite}
-.crew__card--locked p{display:flex;align-items:center;gap:8px;font-size:.9375rem}
-.crew__card--locked p svg{width:18px;height:18px;flex:none}
+.crew__card--locked .crew__role{margin-top:-4px}
+.crew__soon{display:flex;align-items:center;gap:8px;font-size:.9375rem}
+.crew__soon svg{width:18px;height:18px;flex:none}
 @keyframes shimmer{from{background-position:120% 0}to{background-position:-120% 0}}
+@media (min-width:961px){
+  .crew__cards:has(> .crew__card--locked + .crew__card--locked){grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
+  .crew__cards:has(> .crew__card--locked + .crew__card--locked) > .crew__card--bio{grid-column:1;grid-row:span 2}
+}
+/* on Adrian's card the bars bounce like a level meter (he's an audio engineer) */
+@media (prefers-reduced-motion:no-preference){
+  .crew__card--bio:hover .crew__face i{animation:crewEq .9s ease-in-out infinite alternate}
+  .crew__card--bio:hover .crew__face i:nth-child(2){animation-duration:.72s;animation-delay:-.3s}
+  .crew__card--bio:hover .crew__face i:nth-child(3){animation-duration:1.06s;animation-delay:-.55s}
+}
+@keyframes crewEq{from{transform:scaleY(1)}to{transform:scaleY(.6)}}
 
 /* ---------- FAQ ---------- */
 .faq__grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,104px);align-items:start}
@@ -878,6 +898,8 @@ html.is-locked .tob{display:none}
   .hero__offers{margin-top:28px;flex-direction:column;gap:8px}
   .hero__hint{left:var(--gutter);right:auto}
   .plans,.crew__cards{grid-template-columns:minmax(0,1fr)}
+  .crew__card--bio{grid-template-columns:minmax(0,1fr);gap:16px;padding:22px}
+  .crew__card--bio .crew__face{min-height:0;height:140px}
   .form__row{grid-template-columns:minmax(0,1fr)}
   .built li{grid-template-columns:minmax(0,1fr);gap:4px}
   .save__chart{height:210px;margin-left:40px}
@@ -1507,39 +1529,28 @@ html.is-locked .tob{display:none}
   </div>
 </section>
 
-<!-- CREW: stays "coming soon" until every bio is in (see CONFIG.crewLive in the script) -->
+<!-- CREW: Adrian's bio is in. Aiden's and Joe's cards say "Bio coming soon" until theirs are written:
+     to add one, copy Adrian's card over theirs and change the name, role, words and tags. -->
 <section class="crew" id="crew" aria-labelledby="crew-title">
   <div class="wrap">
-    <header class="sec-head crew__head">
-      <h2 id="crew-title">Meet the crew<span class="dot">.</span></h2>
-      <p class="chip chip--soon" id="crew-soon">Coming soon</p>
+    <header class="sec-head">
+      <h2 id="crew-title" data-reveal="rise">Meet the crew<span class="dot">.</span></h2>
     </header>
     <div class="crew__cards" id="crew-cards">
-      <article class="crew__card crew__card--locked"><span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span><h3>Adrian</h3><p><svg aria-hidden="true"><use href="#i-lock"/></svg>Bio coming soon</p></article>
-      <article class="crew__card crew__card--locked"><span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span><h3>Aiden</h3><p><svg aria-hidden="true"><use href="#i-lock"/></svg>Bio coming soon</p></article>
-      <article class="crew__card crew__card--locked"><span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span><h3>Joe</h3><p><svg aria-hidden="true"><use href="#i-lock"/></svg>Bio coming soon</p></article>
+      <article class="crew__card crew__card--bio">
+        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div class="crew__body">
+          <h3>Adrian</h3>
+          <p class="crew__role">Founder</p>
+          <p class="crew__text">I've been making games since 4th grade. By middle school I was obsessed with programming, and in high school I took AP Computer Science and computer maintenance classes, plus marketing. Along the way I learned audio engineering and got into content creation and social media management.</p>
+          <p class="crew__text">In three years of releasing music on SoundCloud I passed 500,000 plays, and I've performed at concerts with artists like D&nbsp;Savage and Wifisfuneral.</p>
+          <p class="crew__quote">&ldquo;I'm a universal tool for the new age of media.&rdquo;</p>
+          <ul class="tags"><li>Games since 4th grade</li><li>Programming</li><li>Audio engineering</li><li>Content &amp; social</li><li>500K+ SoundCloud plays</li></ul>
+        </div>
+      </article>
+      <article class="crew__card crew__card--locked"><span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span><h3>Aiden</h3><p class="crew__role">Co-owner</p><p class="crew__soon"><svg aria-hidden="true"><use href="#i-lock"/></svg>Bio coming soon</p></article>
+      <article class="crew__card crew__card--locked"><span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span><h3>Joe</h3><p class="crew__role">Co-owner</p><p class="crew__soon"><svg aria-hidden="true"><use href="#i-lock"/></svg>Bio coming soon</p></article>
     </div>
-    <template id="crew-live">
-      <article class="crew__card">
-        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
-        <h3>Adrian</h3>
-        <p class="crew__role">Founder</p>
-        <p>I've been making games since 4th grade. By middle school I was obsessed with programming, and in high school I took AP Computer Science and computer maintenance classes, plus marketing. Along the way I learned audio engineering and got into content creation and social media management.</p>
-        <p>In three years of releasing music on SoundCloud I passed 500,000 plays and performed at concerts with artists like D Savage and Wifisfuneral. Code, sound, video and marketing: I'm a universal tool for the new age of media.</p>
-      </article>
-      <article class="crew__card">
-        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
-        <h3>Aiden</h3>
-        <p class="crew__role">Co-owner</p>
-        <p>Aiden's bio goes here.</p>
-      </article>
-      <article class="crew__card">
-        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
-        <h3>Joe</h3>
-        <p class="crew__role">Co-owner</p>
-        <p>Joe's bio goes here.</p>
-      </article>
-    </template>
   </div>
 </section>
 
@@ -1730,9 +1741,6 @@ html.is-locked .tob{display:none}
 const CONFIG = {
   // Inbox that receives project requests from the contact form. Carried over from the old site.
   contactEmail: 'hello@themarketingpartner.com',
-  // Leave false until Adrian, Aiden and Joe's bios are all written. Then set true and the
-  // "Meet the crew" section shows the bios from the <template id="crew-live"> in the page.
-  crewLive: false,
   // Shared count of flowers left for Sammy (free public counter, the same one the old site used).
   flowerApi: 'https://abacus.jasoncameron.dev',
   flowerCounter: 'yuwakuuu-tmp/sammy-flowers',
@@ -2887,6 +2895,7 @@ const Contact = (() => {
     prices: '<p>Our starting prices:</p><p>Websites, apps and games from $499.99. Systems from $299.99 each. Marketing from $129.99 a month. TMP+ membership $79.99 a month.</p><p>You always get a clear quote before any work begins.</p>',
     sammy: '<p><b>#4SAMMY</b> is why we started. We lost our friend Sammy, and 5% of all our profits go to his family through <a href="https://gofund.me/80a9ea02c" target="_blank" rel="noopener">his GoFundMe</a>. <a href="#sammy">Read his story</a>.</p>',
     story: '<p>TMP is three friends from high school: Adrian, Aiden and Joe. We started in Mesa, Arizona, to honor our friend Sammy, and we help small local businesses get found online, bring in more leads and grow. <a href="#story">Our story</a>.</p>',
+    crew: '<p><b>Adrian</b> is our founder. He has been making games since 4th grade, and he also does programming, audio engineering, content creation and social media. His music passed 500,000 plays on SoundCloud, and he has performed at concerts with artists like D&nbsp;Savage and Wifisfuneral. <b>Aiden</b> and <b>Joe</b> are co-owners, and their bios are coming soon. <a href="#crew">Meet the crew</a>.</p>',
     work: '<p>Right this way. We\'ve built for a cleaning company, a dog boarding palace, a dive shop and more. <a href="#work">See our work</a>.</p>',
     lab: '<p>We build 3D, animation and motion right into websites. You can spin a chrome infinity and stir a liquid shader <a href="#lab">just up the page</a>.</p>',
     film: '<p>Our 30-second film shows off the new look and the new site. <a href="#film">Watch it here</a>, with the sound on.</p>',
@@ -2909,14 +2918,16 @@ const Contact = (() => {
     [/\b(apps?|iphone|android|ios)\b/, 'apps'],
     [/\b(games?|gaming|playable)\b/, 'games'],
     [/\b(redesign|rebuild|already have|existing (site|website)|current (site|website)|update my (site|website))\b/, 'redesign'],
-    [/\b(own|ownership|contract|locked in)\b/, 'own'],
+    [/\bwho owns (tmp|the company|this company|the marketing partner)\b/, 'crew'],
+    [/\b((do|will|would|can|could) i (still |fully )?own|who owns|own (the|my) (site|website|web site|code|domain|content|design|app)|is (it|the (site|website|code)) mine|ownership|contracts?|locked in|lock me in)\b/, 'own'],
     [/\b(are you (an? )?(ai|bot|robot|human|real)|who are you|what are you|who is tob|what is tob|your name)\b/, 'self'],
     [/\b(websites?|site|web ?pages?|landing pages?|web design)\b/, 'websites'],
     [/\b(3d|three d|animation|animate|motion|infinity|chrome|shader)\b/, 'lab'],
     [/\b(film|video|reel|trailer)\b/, 'film'],
     [/\b(your work|portfolio|examples?|clients?|projects?|case stud\w*|show me)\b/, 'work'],
     [/\b(how long|timeline|turnaround|deadline|how many weeks)\b/, 'time'],
-    [/\b(about (you|tmp|the company)|team|founders?|adrian|aiden|joe|story|mesa|arizona|where are you|located|location)\b/, 'story'],
+    [/\b(adrian|aiden|joe|founders?|co-?owners?|crew|your team|the team|tmp team|team behind|who runs|who started)\b/, 'crew'],
+    [/\b(about (you|tmp|the company)|story|mesa|arizona|where are you|located|location)\b/, 'story'],
     [/\b(kinds? of business\w*|industr\w*|restaurants?|salons?|contractors?|plumb\w*|cleaning|pet|studios?)\b/, 'kinds'],
     [/\b(email|contact|phone number|reach you|get in touch)\b/, 'contact'],
     [/^(hi|hello|hey|howdy|yo|hiya|sup|good (morning|afternoon|evening))\b/, 'hello'],
@@ -3828,17 +3839,6 @@ const Contact = (() => {
     }
     setTimeout(() => { busy = false; }, 1100);
   });
-})();
-
-/* ================================================================
-   Crew: stays "coming soon" until CONFIG.crewLive is true
-   ================================================================ */
-(() => {
-  if (!CONFIG.crewLive) return;
-  const tpl = $('#crew-live'), cards = $('#crew-cards'), soon = $('#crew-soon');
-  if (!tpl || !cards) return;
-  cards.replaceChildren(tpl.content.cloneNode(true));
-  if (soon) soon.remove();
 })();
 
 /* little things */
