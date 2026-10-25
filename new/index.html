@@ -23,6 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hubot+Sans:wdth,wght@75..125,200..900&amp;family=Mona+Sans:wdth,wght@75..125,200..900&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tilt+Neon&amp;display=swap&amp;text=TheMarketingPartner%20">
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
 <script>
 /* Safety net: if the page script never takes over, the intro screen still gets out of the way. */
@@ -195,7 +196,13 @@ html.has-cursor :-webkit-full-screen,html.has-cursor :-webkit-full-screen *{curs
 .lockup{height:30px;width:auto;overflow:visible}
 .lk{transform-box:fill-box;transform-origin:50% 100%}
 .lk1{fill:var(--bar-1)} .lk2{fill:var(--bar-2)} .lk3{fill:var(--teal)}
-.nav__name{font-family:var(--font-display);font-weight:650;font-size:.875rem;color:var(--muted);white-space:nowrap;padding-left:14px;border-left:1px solid var(--line-2);line-height:1.2}
+/* "The Marketing Partner" is a neon sign: a white-hot tube with a teal glow that lights up when the site opens
+   and now and then stutters, with one tired letter that flickers on its own. Steady for reduced motion. */
+.nav__name{--glow:45,212,191;font-family:"Tilt Neon",var(--font-display);font-weight:400;font-size:1.125rem;letter-spacing:.02em;color:#e3fdf8;white-space:nowrap;padding-left:16px;border-left:1px solid var(--line-2);line-height:1.2;text-shadow:0 0 1px #fff,0 0 4px rgba(var(--glow),1),0 0 10px rgba(var(--glow),.85),0 0 20px rgba(var(--glow),.6),0 0 38px rgba(var(--glow),.38)}
+.nav__name .neon__l{color:inherit}
+.nav__name.is-dim,.neon__l.is-dim{color:rgba(215,251,245,.6);text-shadow:0 0 2px rgba(var(--glow),.55),0 0 9px rgba(var(--glow),.28)}
+.nav__name.is-off,.neon__l.is-off{color:#34433f;text-shadow:none}
+.nav__name.is-off .neon__l:not(.is-off){color:inherit;text-shadow:none}
 .nav__links{position:relative;display:flex;align-items:center;gap:2px;margin-inline:auto}
 .nav__links a{position:relative;padding:10px 12px;border-radius:9px;text-decoration:none;font-family:var(--font-display);font-weight:650;font-size:.9375rem;color:var(--muted);transition:color .25s}
 .nav__links a:hover,.nav__links a[aria-current="true"]{color:var(--paper)}
@@ -354,6 +361,65 @@ html.is-entered .hero__offers{animation-delay:.45s}
 .no-gl .svc__fallback{display:grid}
 .no-gl .svc__hint{display:none}
 
+/* ---------- what your site can do: a 3D stage plus three small demos ---------- */
+.lab{padding-block:clamp(88px,12vw,168px)}
+.lab__head .chip{margin-bottom:2px}
+.lab__grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:clamp(14px,1.6vw,22px)}
+.lab__stage{position:relative;margin:0;min-height:clamp(480px,64vh,640px);border-radius:28px;border:1px solid var(--line);overflow:hidden;
+  background:radial-gradient(62% 54% at 50% 44%,#2a313b 0%,#1a1e24 52%,var(--ink) 100%)}
+.lab__stage:focus-visible{outline:3px solid var(--teal);outline-offset:4px;border-radius:28px}
+.lab__stage::after{content:"";position:absolute;left:50%;top:44%;width:56%;aspect-ratio:2/1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(45,212,191,.12),transparent);pointer-events:none}
+.lab__gl{position:absolute;inset:0;z-index:1;width:100%;height:100%;display:block;touch-action:pan-y;cursor:grab}
+.lab__fallback{position:absolute;left:12%;top:16%;width:76%;height:62%;display:none}
+.no-gl .lab__fallback,.lab__stage.is-fallback .lab__fallback{display:block}
+.no-gl .lab__finish,.lab__stage.is-fallback .lab__finish{display:none}
+.lab__desc--still{display:none}
+.no-gl .lab__desc--gl,.lab__stage.is-fallback .lab__desc--gl{display:none}
+.no-gl .lab__desc--still,.lab__stage.is-fallback .lab__desc--still{display:block}
+.lab__cap{position:absolute;z-index:2;left:24px;right:24px;bottom:20px;display:grid;gap:4px;pointer-events:none}
+.lab__kind{font-family:var(--font-display);font-weight:760;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+.lab__desc{font-size:.9375rem;line-height:1.45;color:var(--muted);max-width:46ch}
+.lab__finish{position:absolute;z-index:2;top:16px;right:16px;display:flex;gap:4px;padding:4px;border-radius:13px;background:rgba(17,19,22,.72);border:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.lab__chip{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 11px;border:0;border-radius:9px;background:transparent;color:var(--muted);font-family:var(--font-display);font-weight:700;font-size:.8125rem;cursor:pointer;transition:background-color .2s,color .2s}
+.lab__chip::before{content:"";width:11px;height:11px;border-radius:50%;background:var(--sw);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.lab__chip[data-finish=chrome]{--sw:linear-gradient(140deg,#fff 10%,#7d8591 52%,#f2f4f7 88%)}
+.lab__chip[data-finish=gold]{--sw:linear-gradient(140deg,#fff2c2 10%,#b9862e 52%,#ffe39a 88%)}
+.lab__chip[data-finish=teal]{--sw:linear-gradient(140deg,#c8fff6 10%,#0f8f86 52%,#5eead4 88%)}
+.lab__chip:hover{color:var(--paper)}
+.lab__chip.is-on{background:var(--ink-3);color:var(--paper)}
+.lab__tiles{display:grid;grid-template-rows:repeat(3,minmax(0,1fr));gap:clamp(14px,1.6vw,22px)}
+.lab__tile{position:relative;margin:0;min-height:196px;border-radius:24px;border:1px solid var(--line);background:var(--ink-2);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:18px 22px}
+.lab__tile figcaption{position:relative;z-index:2;display:grid;gap:3px}
+.lab__tile .lab__desc{font-size:.875rem}
+/* animation: the logo builds itself on a loop */
+.lab__logo{position:absolute;inset:0 0 64px;display:grid;place-items:center;padding:0;border:0;background:transparent;cursor:pointer;border-radius:24px 24px 0 0}
+.lab__lg{display:block;width:auto;height:clamp(70px,7.4vw,100px);overflow:visible}
+.la-b,.la-d{transform-box:fill-box;transform-origin:50% 100%}
+.la-b1{fill:var(--bar-1)} .la-b2{fill:var(--bar-2)} .la-b3{fill:var(--teal)}
+.la-l{fill:var(--paper);transform-box:fill-box}
+.la-d{fill:var(--teal)}
+.lab__logo.is-play .la-b{animation:barUp .8s var(--spring) both}
+.lab__logo.is-play .la-b2{animation-delay:.15s}
+.lab__logo.is-play .la-b3{animation-delay:.3s}
+.lab__logo.is-play .la-l{animation:letterUp .7s var(--ease-out) .5s both}
+.lab__logo.is-play .la-l2{animation-delay:.58s}
+.lab__logo.is-play .la-l3{animation-delay:.66s}
+.lab__logo.is-play .la-d{animation:dotDrop .8s linear .95s both}
+.lab__logo.is-out .lab__lg{animation:labOut .5s var(--ease-in) both}
+@keyframes labOut{to{transform:translateY(10px) scale(.92);opacity:0}}
+/* motion: letters that move out of your way */
+.lab__word{position:absolute;inset:0 0 64px;display:flex;align-items:center;justify-content:center;margin:0;font-family:var(--font-display);font-weight:880;font-stretch:112%;font-size:clamp(3rem,5.2vw,4.4rem);letter-spacing:-.045em;line-height:1;user-select:none;touch-action:pan-y;cursor:crosshair}
+.lab__word span{display:inline-block;will-change:transform;color:color-mix(in srgb,var(--teal) calc(var(--k,0) * 100%),var(--paper))}
+.lab__word span.dot{color:var(--teal)}
+/* shaders: a liquid gradient you can stir */
+.lab__sh{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:crosshair}
+.lab__tile--shader{background:linear-gradient(135deg,#0d3f3b,#111316 60%)}
+.lab__tile--shader::after{content:"";position:absolute;inset:auto 0 0;height:62%;background:linear-gradient(0deg,rgba(17,19,22,.86),rgba(17,19,22,0));pointer-events:none}
+.lab__tile--shader figcaption{pointer-events:none}
+.lab__tile--shader .lab__desc{color:#c9d2d0}
+.lab__cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;margin-top:clamp(22px,3vw,34px);padding:clamp(18px,2.2vw,26px) clamp(20px,2.6vw,30px);border-radius:22px;border:1px solid var(--line);background:var(--ink-2)}
+.lab__cta p{font-family:var(--font-display);font-weight:760;font-stretch:104%;font-size:var(--step-1);letter-spacing:-.01em}
+
 /* ---------- work carousel ---------- */
 .cf{--cw:min(760px,78vw);position:relative}
 .cf__stage{position:relative;height:calc(var(--cw) * .625 + 30px + 96px);perspective:1700px;perspective-origin:50% 42%;overflow:hidden;touch-action:pan-y;cursor:grab;outline-offset:-4px;user-select:none}
@@ -434,6 +500,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:30px;border-radius:6px;bac
 .plan:hover{border-color:var(--line-2)}
 .plan--hot{background:radial-gradient(260px circle at var(--mx) var(--my),rgba(45,212,191,.12),transparent 70%),linear-gradient(180deg,color-mix(in srgb,var(--teal) 13%,var(--ink-2)),var(--ink-2) 62%);border-color:color-mix(in srgb,var(--teal) 50%,transparent)}
 .plan__name{font-size:1.25rem;font-weight:780;font-stretch:104%;letter-spacing:-.015em;line-height:1.15}
+.plan__plus{color:var(--teal)}
 .plan__price{display:flex;flex-direction:column;gap:4px}
 .plan__from{font-size:.8125rem;font-weight:650;color:var(--muted)}
 .plan__num{font-family:var(--font-display);font-weight:860;font-stretch:76%;font-size:clamp(3rem,4.4vw,4.3rem);line-height:.92;letter-spacing:-.02em;white-space:nowrap}
@@ -517,6 +584,8 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 
 /* ---------- story ---------- */
 .story__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,104px);align-items:start}
+.story__head .chip{margin-bottom:18px}
+.chip--place svg{width:15px;height:15px;fill:currentColor;flex:none}
 .story__big{font-family:var(--font-display);font-weight:760;font-stretch:104%;font-size:var(--step-2);line-height:1.25;letter-spacing:-.015em;margin-bottom:18px}
 .story__copy p + p{color:var(--muted)}
 .story__link{display:inline-block;margin-top:24px;font-weight:700;color:var(--teal);text-decoration-thickness:2px}
@@ -620,6 +689,9 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 .grass{position:relative;display:inline-block;font-weight:900;font-stretch:125%;font-size:1.06em;line-height:.92;letter-spacing:-.025em;padding:.04em .04em .06em;margin:-.04em -.02em -.06em;color:#3f9a2c;cursor:grab;-webkit-tap-highlight-color:transparent}
 .grass.is-ready{color:transparent}
 .grass__canvas{position:absolute;display:block;pointer-events:auto;touch-action:pan-y}
+.grass__fx{position:absolute;display:block;pointer-events:none}
+.grass__hint{margin:14px 0 0;font-size:.8125rem;font-weight:600;color:var(--muted)}
+.grass__hint::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:2px;background:#4aa336;vertical-align:.05em}
 .grass ::selection,.grass::selection{color:transparent}
 
 /* ---------- footer ---------- */
@@ -639,6 +711,117 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 .foot__sam{color:var(--teal)}
 
 /* ---------- toast ---------- */
+/* ---------- TOB, the TMP butler: a hologram in the corner, and a chat panel ---------- */
+.tob{position:fixed;z-index:90;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:flex-end;gap:12px;pointer-events:none}
+.tob > *{pointer-events:auto}
+html.is-locked .tob{display:none}
+.tob__fab{position:relative;width:68px;height:68px;padding:0;border-radius:50%;border:1px solid rgba(45,212,191,.35);background:radial-gradient(circle at 50% 38%,#16211f 0%,#0c0f12 70%);box-shadow:0 18px 40px -14px rgba(0,0,0,.8),0 0 0 6px rgba(17,19,22,.35),0 0 26px -4px rgba(45,212,191,.45);cursor:pointer;overflow:visible;isolation:isolate;transition:transform .35s var(--spring),box-shadow .3s}
+.tob__fab:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 22px 44px -14px rgba(0,0,0,.85),0 0 0 6px rgba(17,19,22,.35),0 0 34px -2px rgba(45,212,191,.6)}
+.tob__fab:active{transform:scale(.96)}
+.tob__fab:focus-visible{outline:3px solid var(--teal);outline-offset:4px;border-radius:50%}
+.tob__fab > span{position:absolute;pointer-events:none}
+.tob__pad{left:50%;bottom:9px;width:40px;height:9px;margin-left:-20px;border-radius:50%;background:radial-gradient(closest-side,rgba(167,255,243,.95),rgba(45,212,191,.55) 45%,rgba(45,212,191,0));filter:blur(.3px)}
+.tob__beam{left:50%;bottom:12px;width:46px;height:44px;margin-left:-23px;background:linear-gradient(0deg,rgba(45,212,191,.42),rgba(45,212,191,0));clip-path:polygon(32% 100%,68% 100%,100% 0,0 0);opacity:.55}
+.tob__holo{left:50%;bottom:13px;width:44px;height:44px;margin-left:-22px;filter:drop-shadow(0 0 3px rgba(94,234,212,.85)) drop-shadow(0 0 9px rgba(45,212,191,.45));opacity:.96;
+  -webkit-mask:linear-gradient(0deg,transparent 0,#000 18%);mask:linear-gradient(0deg,transparent 0,#000 18%)}
+.tob__butler{display:block;width:100%;height:100%;overflow:visible}
+.tob__scan{left:50%;bottom:13px;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:repeating-linear-gradient(0deg,rgba(8,30,27,.3) 0 1px,transparent 1px 3px);mix-blend-mode:multiply;-webkit-mask:radial-gradient(closest-side,#000 70%,transparent);mask:radial-gradient(closest-side,#000 70%,transparent)}
+.tob__tag{right:calc(100% + 12px);top:50%;transform:translate(6px,-50%);white-space:nowrap;padding:7px 12px;border-radius:10px;background:var(--paper);color:var(--ink);font-family:var(--font-display);font-weight:760;font-size:.8125rem;box-shadow:0 12px 26px -10px rgba(0,0,0,.6);opacity:0;transition:opacity .2s,transform .3s var(--ease-out)}
+.tob__fab:hover .tob__tag{opacity:1;transform:translate(0,-50%)}
+.tob.is-open .tob__tag{display:none}
+/* the hologram: butler parts in glowing teal glass */
+.tb-suit{fill:rgba(45,212,191,.26);stroke:#5eead4;stroke-width:1.1}
+.tb-shirt{fill:rgba(220,255,250,.5)}
+.tb-lapel{fill:rgba(45,212,191,.45);stroke:#8ff7ea;stroke-width:.8}
+.tb-tie{fill:#b5fff4}
+.tb-skin{fill:rgba(150,255,238,.28);stroke:#7ff5e6;stroke-width:1}
+.tb-hair{fill:rgba(130,248,230,.8)}
+.tb-line{fill:none;stroke:#e2fffb;stroke-width:1.4;stroke-linecap:round}
+.tb-part{stroke:#1b6f66;stroke-width:1}
+.tb-mono{fill:rgba(255,255,255,.12);stroke:#e2fffb;stroke-width:1.1}
+.tb-chain{fill:none;stroke:#8ff7ea;stroke-width:.7;stroke-dasharray:1.2 1.3}
+@media (prefers-reduced-motion:no-preference){
+  .tob__holo{animation:tobBob 3.4s ease-in-out infinite alternate,tobFlicker 7s steps(1) infinite}
+  .tob__scan{animation:tobScan 1.6s linear infinite}
+  .tob__beam{animation:tobBeam 2.8s ease-in-out infinite alternate}
+}
+@keyframes tobBob{from{transform:translateY(1.5px)}to{transform:translateY(-2px)}}
+@keyframes tobFlicker{0%,100%{opacity:.96}61%{opacity:.6;translate:1px 0}62%{opacity:.96;translate:0 0}64%{opacity:.75}65%{opacity:.96}88%{opacity:.82;translate:-1px 0}89%{opacity:.96;translate:0 0}}
+@keyframes tobScan{to{background-position:0 6px}}
+@keyframes tobBeam{from{opacity:.4}to{opacity:.65}}
+/* the hello bubble */
+.tob__hello{position:relative;display:flex;align-items:flex-start;gap:4px;max-width:min(280px,calc(100vw - 110px));margin:0 4px 0 0;padding:12px 8px 12px 14px;border-radius:16px 16px 6px 16px;background:var(--paper);color:var(--ink);box-shadow:0 18px 38px -14px rgba(0,0,0,.7);transform-origin:100% 100%;animation:tobPop .45s var(--spring) both}
+.tob__hello-open{padding:0;border:0;background:transparent;color:inherit;font:inherit;font-size:.9rem;font-weight:550;line-height:1.35;text-align:left;cursor:pointer}
+.tob__hello-open b{display:block;margin-top:3px;font-family:var(--font-display);font-weight:760;color:#0f766e}
+.tob__hello-x{flex:none;display:grid;place-items:center;width:28px;height:28px;margin:-6px -2px 0 0;padding:0;border:0;border-radius:8px;background:transparent;color:#4a5260;cursor:pointer}
+.tob__hello-x svg,.tob__icon svg,.tob__send svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes tobPop{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}
+/* the panel */
+.tob__panel{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(100px + env(safe-area-inset-bottom,0px));width:min(392px,calc(100vw - 36px));height:min(600px,calc(100svh - 132px));display:flex;flex-direction:column;border-radius:22px;border:1px solid var(--line-2);background:linear-gradient(180deg,#14181d,#101317);box-shadow:0 40px 90px -30px rgba(0,0,0,.9),0 0 0 1px rgba(45,212,191,.06);overflow:hidden;transform-origin:calc(100% - 34px) calc(100% + 60px)}
+.tob__panel:not([hidden]){animation:tobOpen .42s var(--ease-out) both}
+@keyframes tobOpen{from{opacity:0;transform:translateY(14px) scale(.94)}to{opacity:1;transform:none}}
+.tob__head{display:flex;align-items:center;gap:12px;padding:14px 12px 14px 16px;border-bottom:1px solid var(--line);background:radial-gradient(120% 140% at 0% 0%,rgba(45,212,191,.12),transparent 60%)}
+.tob__avatar{position:relative;flex:none;display:grid;place-items:end center;width:44px;height:44px;border-radius:14px;background:radial-gradient(circle at 50% 30%,#1a2624,#0c0f12);border:1px solid rgba(45,212,191,.3);overflow:hidden}
+.tob__butler--sm{width:38px;height:38px;filter:drop-shadow(0 0 3px rgba(94,234,212,.7))}
+.tob__who{flex:1;min-width:0}
+.tob__name{font-family:var(--font-display);font-weight:840;font-stretch:108%;font-size:1.125rem;letter-spacing:-.01em;line-height:1.1}
+.tob__name:focus{outline:none}
+.tob__role{display:flex;align-items:center;gap:7px;margin-top:3px;font-size:.8125rem;color:var(--muted)}
+.tob__role i{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(45,212,191,.18)}
+.tob__icon{flex:none;display:grid;place-items:center;width:38px;height:38px;padding:0;border:0;border-radius:11px;background:transparent;color:var(--muted);cursor:pointer;transition:background-color .2s,color .2s}
+.tob__icon:hover{background:var(--ink-3);color:var(--paper)}
+.tob__log{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:16px 14px 10px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.tob__msg{max-width:88%;padding:10px 13px;border-radius:16px;font-size:.9375rem;line-height:1.45;overflow-wrap:anywhere;animation:tobMsg .32s var(--ease-out) both}
+.tob__msg p + p{margin-top:6px}
+.tob__msg a{color:var(--teal);font-weight:650}
+.tob__msg--bot{align-self:flex-start;background:var(--ink-3);border:1px solid var(--line);border-bottom-left-radius:6px}
+.tob__msg--me{align-self:flex-end;background:var(--teal);color:var(--ink);font-weight:550;border-bottom-right-radius:6px}
+@keyframes tobMsg{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tob__typing{align-self:flex-start;display:flex;align-items:flex-end;gap:3px;height:34px;padding:9px 13px;border-radius:16px;border-bottom-left-radius:6px;background:var(--ink-3);border:1px solid var(--line)}
+.tob__typing i{width:5px;border-radius:2px;background:var(--bar-2);animation:tobBars .9s var(--ease-out) infinite alternate}
+.tob__typing i:nth-child(1){height:7px;background:var(--bar-1)}
+.tob__typing i:nth-child(2){height:11px;animation-delay:.15s}
+.tob__typing i:nth-child(3){height:15px;background:var(--teal);animation-delay:.3s}
+@keyframes tobBars{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+.tob__typing i{transform-origin:50% 100%}
+.tob__chips{display:flex;flex-wrap:wrap;gap:7px;align-self:stretch;animation:tobMsg .32s var(--ease-out) both}
+.tob__chip{min-height:36px;padding:0 13px;border-radius:999px;border:1px solid rgba(45,212,191,.42);background:rgba(45,212,191,.08);color:var(--paper);font-family:var(--font-display);font-weight:650;font-size:.875rem;cursor:pointer;transition:background-color .2s,border-color .2s,transform .2s var(--spring)}
+.tob__chip:hover{background:rgba(45,212,191,.18);border-color:var(--teal)}
+.tob__chip:active{transform:scale(.96)}
+.tob__chip.is-on{background:var(--teal);border-color:var(--teal);color:var(--ink)}
+.tob__chip--go{background:var(--teal);color:var(--ink);border-color:var(--teal)}
+.tob__chip--go:hover{background:#5eead4}
+.tob__chips.is-used{display:none}
+.tob__card{align-self:stretch;padding:14px;border-radius:16px;border:1px solid var(--line-2);background:#0e1114;font-size:.9rem;animation:tobMsg .32s var(--ease-out) both}
+.tob__card h3{font-family:var(--font-display);font-weight:780;font-size:.95rem;margin-bottom:8px}
+.tob__rows{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:5px}
+.tob__rows li{display:flex;justify-content:space-between;gap:12px;color:var(--muted)}
+.tob__rows b{color:var(--paper);font-family:var(--font-num);font-weight:650}
+.tob__total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:9px;border-top:1px dashed var(--line-2);font-family:var(--font-display);font-weight:760}
+.tob__total b{font-family:var(--font-num);font-size:1.15rem;color:var(--teal)}
+.tob__card .tob__fine{margin-top:8px;font-size:.78rem;color:var(--muted)}
+.tob__acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.tob__acts a,.tob__acts button{display:inline-flex;align-items:center;min-height:36px;padding:0 13px;border-radius:10px;border:1px solid var(--line-2);background:var(--ink-3);color:var(--paper);font-family:var(--font-display);font-weight:700;font-size:.85rem;text-decoration:none;cursor:pointer}
+.tob__acts .is-main{background:var(--teal);border-color:var(--teal);color:var(--ink)}
+.tob__mini{align-self:stretch;display:grid;gap:9px;padding:14px;border-radius:16px;border:1px solid var(--line-2);background:#0e1114;animation:tobMsg .32s var(--ease-out) both}
+.tob__mini label{display:grid;gap:4px;font-size:.78rem;font-weight:650;color:var(--muted)}
+.tob__mini input,.tob__mini textarea{width:100%;min-height:40px;padding:8px 11px;border-radius:10px;border:1px solid var(--line-2);background:var(--ink-2);color:var(--paper);font:inherit;font-size:.9375rem}
+.tob__mini textarea{min-height:64px;resize:vertical}
+.tob__mini input:focus,.tob__mini textarea:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:transparent}
+.tob__mini .tob__err{min-height:1em;font-size:.8rem;color:var(--bad)}
+.tob__mini button{justify-self:start}
+.tob__form{display:flex;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:#0f1215}
+.tob__form input{flex:1;min-width:0;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line-2);background:var(--ink-2);color:var(--paper);font:inherit;font-size:1rem}
+.tob__form input:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:transparent}
+.tob__send{flex:none;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:12px;background:var(--teal);color:var(--ink);cursor:pointer}
+@media (max-width:560px){
+  .tob{right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  .tob__fab{width:60px;height:60px}
+  .tob__panel{inset:auto 0 0 0;width:100%;height:min(88svh,680px);border-radius:22px 22px 0 0;border-bottom:0;transform-origin:50% 100%}
+  .tob.is-open .tob__fab{display:none}
+}
+@media (prefers-reduced-motion:reduce){.tob__panel:not([hidden]),.tob__msg,.tob__chips,.tob__card,.tob__mini,.tob__hello{animation:none}}
+
 .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:120;max-width:calc(100% - 32px);padding:12px 18px;border-radius:12px;background:var(--paper);color:var(--ink);font-weight:650;font-size:.9375rem;box-shadow:0 20px 40px -12px rgba(0,0,0,.6);transform:translate(-50%,calc(100% + 40px));opacity:0;visibility:hidden;transition:transform .5s var(--ease-out),opacity .3s,visibility 0s .5s;pointer-events:none}
 .toast.is-on{transform:translate(-50%,0);opacity:1;visibility:visible;transition:transform .5s var(--ease-out),opacity .2s,visibility 0s}
 
@@ -659,6 +842,9 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
   .svc__grid{grid-template-columns:minmax(0,1fr);gap:0}
   .svc__stage-wrap{order:-1;position:sticky;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));z-index:2;background:var(--ink);padding-block:8px 12px;margin-inline:calc(var(--gutter) * -1) calc(var(--gutter-r) * -1);padding-inline:var(--gutter) var(--gutter-r)}
   .svc__stage{position:relative;top:auto;height:min(40svh,380px);border-radius:22px}
+  .lab__grid{grid-template-columns:minmax(0,1fr)}
+  .lab__stage{min-height:clamp(320px,98vw,480px)}
+  .lab__tiles{grid-template-rows:none}
   .svc__item{min-height:auto;padding-block:clamp(40px,10vw,64px);max-width:none}
   .svc__item:first-child{padding-top:28px}
   .steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:36px}
@@ -714,7 +900,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 </style>
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Marketing Partner","alternateName":"TMP","slogan":"More Leads, Better Bizz.","url":"https://yuwakuuu.github.io/TMP/new/","logo":"https://yuwakuuu.github.io/TMP/new/assets/icon-512.png","image":"https://yuwakuuu.github.io/TMP/new/assets/og.png","description":"Websites, systems, apps, games and marketing that help small local businesses get more leads and more revenue.","founder":{"@type":"Person","name":"Adrian"},"sameAs":["https://github.com/yuwakuuu","https://yuwakuuu.github.io/madebywaku/"],"subjectOf":{"@type":"VideoObject","name":"The Marketing Partner: our new look and new website","description":"A 30-second reveal of The Marketing Partner (TMP): websites, systems, apps, games and marketing for small local businesses.","thumbnailUrl":"https://yuwakuuu.github.io/TMP/new/assets/video/tmp-reveal-poster.webp","uploadDate":"2026-10-24T14:00:00-07:00","duration":"PT30S","contentUrl":"https://yuwakuuu.github.io/TMP/new/assets/video/tmp-reveal-1080.mp4"},"makesOffer":[{"@type":"Offer","name":"Websites, apps and games","priceSpecification":{"@type":"PriceSpecification","minPrice":499.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Systems (scheduling, online store, invoicing, QuickBooks replacement)","priceSpecification":{"@type":"PriceSpecification","minPrice":299.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Marketing: Google, Facebook and Instagram ads, Google Business Profile","priceSpecification":{"@type":"UnitPriceSpecification","minPrice":129.99,"priceCurrency":"USD","unitText":"month"}},{"@type":"Offer","name":"Website membership","priceSpecification":{"@type":"UnitPriceSpecification","price":79.99,"priceCurrency":"USD","unitText":"month"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Marketing Partner","alternateName":"TMP","slogan":"More Leads, Better Bizz.","url":"https://yuwakuuu.github.io/TMP/new/","logo":"https://yuwakuuu.github.io/TMP/new/assets/icon-512.png","image":"https://yuwakuuu.github.io/TMP/new/assets/og.png","description":"Websites, systems, apps, games and marketing that help small local businesses get more leads and more revenue.","founder":{"@type":"Person","name":"Adrian"},"foundingLocation":{"@type":"Place","name":"Mesa, Arizona","address":{"@type":"PostalAddress","addressLocality":"Mesa","addressRegion":"AZ","addressCountry":"US"}},"sameAs":["https://github.com/yuwakuuu","https://yuwakuuu.github.io/madebywaku/"],"subjectOf":{"@type":"VideoObject","name":"The Marketing Partner: our new look and new website","description":"A 30-second reveal of The Marketing Partner (TMP): websites, systems, apps, games and marketing for small local businesses.","thumbnailUrl":"https://yuwakuuu.github.io/TMP/new/assets/video/tmp-reveal-poster.webp","uploadDate":"2026-10-24T14:00:00-07:00","duration":"PT30S","contentUrl":"https://yuwakuuu.github.io/TMP/new/assets/video/tmp-reveal-1080.mp4"},"makesOffer":[{"@type":"Offer","name":"Websites, apps and games","priceSpecification":{"@type":"PriceSpecification","minPrice":499.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Systems (scheduling, online store, invoicing, QuickBooks replacement)","priceSpecification":{"@type":"PriceSpecification","minPrice":299.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Marketing: Google, Facebook and Instagram ads, Google Business Profile","priceSpecification":{"@type":"UnitPriceSpecification","minPrice":129.99,"priceCurrency":"USD","unitText":"month"}},{"@type":"Offer","name":"TMP+ website membership","priceSpecification":{"@type":"UnitPriceSpecification","price":79.99,"priceCurrency":"USD","unitText":"month"}}]}</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -773,7 +959,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
         </g>
         <g transform="translate(458 0)"><use href="#lg-t" fill="#fff"/><use href="#lg-m" fill="#fff"/><use href="#lg-p" fill="#fff"/><rect x="1068" y="824" width="101" height="102" fill="#2dd4bf"/></g>
       </svg>
-      <span class="nav__name">The Marketing Partner</span>
+      <span class="nav__name" id="neon">The Marketing Par<span class="neon__l">t</span>ner</span>
     </a>
     <nav class="nav__links" aria-label="Main">
       <a href="#services">Services</a>
@@ -801,6 +987,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 <div class="menu" id="menu" hidden>
   <nav class="menu__links" aria-label="Menu">
     <a href="#services"><span>Services</span></a>
+    <a href="#lab"><span>3D &amp; motion</span></a>
     <a href="#work"><span>Work</span></a>
     <a href="#pricing"><span>Pricing</span></a>
     <a href="#play"><span>Play</span></a>
@@ -843,10 +1030,10 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 <div class="marquee" aria-label="What we do">
   <div class="marquee__track">
     <ul class="marquee__list">
-      <li>Websites</li><li>Scheduling</li><li>Online stores</li><li>QuickBooks replacement</li><li>Apps</li><li>Games</li><li>Google Ads</li><li>Facebook &amp; Instagram ads</li><li>Google Business Profile</li><li>Local SEO</li><li>Branding</li><li>3D &amp; motion</li>
+      <li>Websites</li><li>Scheduling</li><li>Online stores</li><li>Apps</li><li>Games</li><li>Google Ads</li><li>Facebook &amp; Instagram ads</li><li>Google Business Profile</li><li>Local SEO</li><li>Branding</li><li>3D &amp; motion</li>
     </ul>
     <ul class="marquee__list" aria-hidden="true">
-      <li>Websites</li><li>Scheduling</li><li>Online stores</li><li>QuickBooks replacement</li><li>Apps</li><li>Games</li><li>Google Ads</li><li>Facebook &amp; Instagram ads</li><li>Google Business Profile</li><li>Local SEO</li><li>Branding</li><li>3D &amp; motion</li>
+      <li>Websites</li><li>Scheduling</li><li>Online stores</li><li>Apps</li><li>Games</li><li>Google Ads</li><li>Facebook &amp; Instagram ads</li><li>Google Business Profile</li><li>Local SEO</li><li>Branding</li><li>3D &amp; motion</li>
     </ul>
   </div>
 </div>
@@ -913,7 +1100,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
           <h3 class="svc__name">Systems</h3>
           <p class="svc__tag">Systems that run the back office.</p>
           <p>Scheduling and booking, online stores, quoting and invoicing, customer lists and dashboards. We can even replace software you're overpaying for, like QuickBooks. You name it, we can build it.</p>
-          <ul class="tags"><li>Scheduling</li><li>Online store</li><li>Quoting &amp; invoicing</li><li>QuickBooks replacement</li></ul>
+          <ul class="tags"><li>Scheduling</li><li>Online store</li><li>Quoting &amp; invoicing</li><li>Dashboards</li></ul>
           <p class="svc__price">From <b>$299.99</b> per system</p>
         </article>
         <article class="svc__item" data-i="2">
@@ -956,6 +1143,61 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
           <p class="svc__hint" aria-hidden="true">Drag to spin. Click to poke.</p>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOUR SITE CAN DO: 3D, animation and motion you can play with -->
+<section class="lab" id="lab" aria-labelledby="lab-title">
+  <div class="wrap">
+    <header class="sec-head lab__head">
+      <p class="chip">What your site can do</p>
+      <h2 id="lab-title" data-reveal="rise">Make it move<span class="dot">.</span></h2>
+      <p class="sec-lead">3D you can spin, animation with personality and motion that answers every move. We build it right into your website, and it loads fast on phones too.</p>
+    </header>
+    <div class="lab__grid">
+      <figure class="lab__stage" id="lab-stage" tabindex="0" role="img" aria-label="A chrome infinity symbol you can spin. Drag it, or use the arrow keys.">
+        <canvas class="lab__gl" id="lab-gl" data-cursor="Spin" aria-hidden="true"></canvas>
+        <svg class="lab__fallback" viewBox="0 0 400 200" aria-hidden="true">
+          <defs><linearGradient id="lab-chrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".38" stop-color="#9aa3af"/><stop offset=".5" stop-color="#2b3038"/><stop offset=".62" stop-color="#cfd5dd"/><stop offset="1" stop-color="#5eead4"/></linearGradient></defs>
+          <path d="M350.0 100.0 L349.8 104.7 L349.1 109.4 L348.0 113.9 L346.5 118.4 L344.6 122.6 L342.3 126.7 L339.7 130.5 L336.8 134.0 L333.6 137.3 L330.2 140.2 L326.6 142.9 L322.8 145.2 L318.9 147.2 L314.9 148.9 L310.8 150.3 L306.7 151.4 L302.5 152.2 L298.4 152.7 L294.3 153.0 L290.2 153.0 L286.2 152.8 L282.2 152.4 L278.3 151.8 L274.5 151.0 L270.7 150.0 L267.1 148.9 L263.5 147.6 L260.0 146.2 L256.6 144.7 L253.3 143.1 L250.1 141.4 L246.9 139.6 L243.9 137.8 L240.9 135.8 L238.0 133.8 L235.1 131.8 L232.3 129.7 L229.6 127.5 L227.0 125.4 L224.3 123.1 L221.8 120.9 L219.2 118.6 L216.8 116.4 L214.3 114.1 L211.9 111.7 L209.5 109.4 L207.1 107.1 L204.7 104.7 L202.4 102.4 L200.0 100.0 L197.6 97.6 L195.3 95.3 L192.9 92.9 L190.5 90.6 L188.1 88.3 L185.7 85.9 L183.2 83.6 L180.8 81.4 L178.2 79.1 L175.7 76.9 L173.0 74.6 L170.4 72.5 L167.7 70.3 L164.9 68.2 L162.0 66.2 L159.1 64.2 L156.1 62.2 L153.1 60.4 L149.9 58.6 L146.7 56.9 L143.4 55.3 L140.0 53.8 L136.5 52.4 L132.9 51.1 L129.3 50.0 L125.5 49.0 L121.7 48.2 L117.8 47.6 L113.8 47.2 L109.8 47.0 L105.7 47.0 L101.6 47.3 L97.5 47.8 L93.3 48.6 L89.2 49.7 L85.1 51.1 L81.1 52.8 L77.2 54.8 L73.4 57.1 L69.8 59.8 L66.4 62.7 L63.2 66.0 L60.3 69.5 L57.7 73.3 L55.4 77.4 L53.5 81.6 L52.0 86.1 L50.9 90.6 L50.2 95.3 L50.0 100.0 L50.2 104.7 L50.9 109.4 L52.0 113.9 L53.5 118.4 L55.4 122.6 L57.7 126.7 L60.3 130.5 L63.2 134.0 L66.4 137.3 L69.8 140.2 L73.4 142.9 L77.2 145.2 L81.1 147.2 L85.1 148.9 L89.2 150.3 L93.3 151.4 L97.5 152.2 L101.6 152.7 L105.7 153.0 L109.8 153.0 L113.8 152.8 L117.8 152.4 L121.7 151.8 L125.5 151.0 L129.3 150.0 L132.9 148.9 L136.5 147.6 L140.0 146.2 L143.4 144.7 L146.7 143.1 L149.9 141.4 L153.1 139.6 L156.1 137.8 L159.1 135.8 L162.0 133.8 L164.9 131.8 L167.7 129.7 L170.4 127.5 L173.0 125.4 L175.7 123.1 L178.2 120.9 L180.8 118.6 L183.2 116.4 L185.7 114.1 L188.1 111.7 L190.5 109.4 L192.9 107.1 L195.3 104.7 L197.6 102.4 L200.0 100.0 L202.4 97.6 L204.7 95.3 L207.1 92.9 L209.5 90.6 L211.9 88.3 L214.3 85.9 L216.8 83.6 L219.2 81.4 L221.8 79.1 L224.3 76.9 L227.0 74.6 L229.6 72.5 L232.3 70.3 L235.1 68.2 L238.0 66.2 L240.9 64.2 L243.9 62.2 L246.9 60.4 L250.1 58.6 L253.3 56.9 L256.6 55.3 L260.0 53.8 L263.5 52.4 L267.1 51.1 L270.7 50.0 L274.5 49.0 L278.3 48.2 L282.2 47.6 L286.2 47.2 L290.2 47.0 L294.3 47.0 L298.4 47.3 L302.5 47.8 L306.7 48.6 L310.8 49.7 L314.9 51.1 L318.9 52.8 L322.8 54.8 L326.6 57.1 L330.2 59.8 L333.6 62.7 L336.8 66.0 L339.7 69.5 L342.3 73.3 L344.6 77.4 L346.5 81.6 L348.0 86.1 L349.1 90.6 L349.8 95.3 L350.0 100.0Z" fill="none" stroke="url(#lab-chrome)" stroke-width="30" stroke-linejoin="round"/>
+        </svg>
+        <figcaption class="lab__cap">
+          <span class="lab__kind">3D rendering</span>
+          <span class="lab__desc lab__desc--gl"><span class="hint-fine">Drag to spin it.</span><span class="hint-touch">Swipe to spin it.</span> Real-time chrome, rendered right in your browser.</span><span class="lab__desc lab__desc--still">Real-time chrome you can spin. Your browser has 3D turned off, so this is a still.</span>
+        </figcaption>
+        <div class="lab__finish" role="group" aria-label="Finish">
+          <button type="button" class="lab__chip is-on" data-finish="chrome" aria-pressed="true">Chrome</button>
+          <button type="button" class="lab__chip" data-finish="gold" aria-pressed="false">Gold</button>
+          <button type="button" class="lab__chip" data-finish="teal" aria-pressed="false">Teal</button>
+        </div>
+      </figure>
+      <div class="lab__tiles">
+        <figure class="lab__tile lab__tile--anim" id="lab-anim">
+          <button class="lab__logo" type="button" aria-label="Replay the logo animation">
+            <svg class="lab__lg" viewBox="0 0 1169 1030" aria-hidden="true">
+              <rect class="la-b la-b1" x="348" y="260" width="128" height="180" rx="23"/>
+              <rect class="la-b la-b2" x="520" y="140" width="128" height="300" rx="23"/>
+              <rect class="la-b la-b3" x="692" y="0" width="128" height="440" rx="23"/>
+              <g class="la-w"><use class="la-l la-l1" href="#lg-t"/><use class="la-l la-l2" href="#lg-m"/><use class="la-l la-l3" href="#lg-p"/></g>
+              <rect class="la-d" x="1068" y="824" width="101" height="102"/>
+            </svg>
+          </button>
+          <figcaption><span class="lab__kind">Animation</span><span class="lab__desc">Logos and graphics that come alive. <span class="hint-fine">Click</span><span class="hint-touch">Tap</span> to replay.</span></figcaption>
+        </figure>
+        <figure class="lab__tile lab__tile--type" id="lab-type">
+          <p class="lab__word" aria-label="Motion"><span aria-hidden="true">M</span><span aria-hidden="true">o</span><span aria-hidden="true">t</span><span aria-hidden="true">i</span><span aria-hidden="true">o</span><span aria-hidden="true">n</span><span class="dot" aria-hidden="true">.</span></p>
+          <figcaption><span class="lab__kind">Motion</span><span class="lab__desc">Type that reacts to every move. <span class="hint-fine">Run your cursor through it.</span><span class="hint-touch">Drag your finger through it.</span></span></figcaption>
+        </figure>
+        <figure class="lab__tile lab__tile--shader" id="lab-shader">
+          <canvas class="lab__sh" id="lab-sh" aria-hidden="true"></canvas>
+          <figcaption><span class="lab__kind">Shaders</span><span class="lab__desc">Backgrounds that flow like liquid. <span class="hint-fine">Stir it with your cursor.</span><span class="hint-touch">Stir it with your finger.</span></span></figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="lab__cta">
+      <p>Want something like this on your site?</p>
+      <a class="btn btn--primary btn--magnetic" href="#contact">Start your project</a>
     </div>
   </div>
 </section>
@@ -1111,7 +1353,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
           <li>Scheduling &amp; booking</li>
           <li>Online store</li>
           <li>Quoting &amp; invoicing</li>
-          <li>QuickBooks replacement</li>
+          <li>Customer lists &amp; dashboards</li>
           <li>You name it, we can build it</li>
         </ul>
         <a class="btn btn--ghost btn--block" href="#contact" data-interest="System">Get a quote</a>
@@ -1127,14 +1369,14 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
         <a class="btn btn--primary btn--block" href="#contact" data-interest="Marketing">Start marketing</a>
       </article>
       <article class="plan plan--member">
-        <h3 class="plan__name">Website membership</h3>
-        <p class="plan__price"><span class="plan__from">Optional</span><span class="plan__num">$79<sup>.99</sup></span><span class="plan__per">a month</span></p>
+        <h3 class="plan__name">TMP<span class="plan__plus">+</span> <span class="sr-only">website membership</span></h3>
+        <p class="plan__price"><span class="plan__from">Website membership, optional</span><span class="plan__num">$79<sup>.99</sup></span><span class="plan__per">a month</span></p>
         <ul class="plan__list">
           <li>We cover your domain cost and upkeep</li>
           <li>24/7 maintenance</li>
           <li>Free updates anytime, within reason</li>
         </ul>
-        <a class="btn btn--ghost btn--block" href="#contact" data-interest="Membership">Add membership</a>
+        <a class="btn btn--ghost btn--block" href="#contact" data-interest="TMP+">Add TMP+</a>
       </article>
     </div>
 
@@ -1159,7 +1401,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
         <fieldset class="est__group">
           <legend>Monthly</legend>
           <label class="pick" for="est-marketing"><input type="checkbox" id="est-marketing" checked><span class="pick__ui"><span class="pick__name">Marketing</span><span class="pick__price">$129.99/mo</span></span></label>
-          <label class="pick" for="est-member"><input type="checkbox" id="est-member"><span class="pick__ui"><span class="pick__name">Website membership</span><span class="pick__price">$79.99/mo</span></span></label>
+          <label class="pick" for="est-member"><input type="checkbox" id="est-member"><span class="pick__ui"><span class="pick__name">TMP+ membership</span><span class="pick__price">$79.99/mo</span></span></label>
         </fieldset>
         <p class="est__flash" id="est-flash" role="status"></p>
       </div>
@@ -1217,7 +1459,10 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 <!-- STORY -->
 <section class="story" id="story" aria-labelledby="story-title">
   <div class="wrap story__grid">
-    <h2 id="story-title" data-reveal="rise">Three friends. One promise<span class="dot">.</span></h2>
+    <div class="story__head">
+      <p class="chip chip--place"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a7 7 0 0 0-7 7c0 5.2 7 12 7 12s7-6.8 7-12a7 7 0 0 0-7-7zm0 9.6a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2z"/></svg>Started in Mesa, Arizona</p>
+      <h2 id="story-title" data-reveal="rise">Three friends. One promise<span class="dot">.</span></h2>
+    </div>
     <div class="story__copy">
       <p class="story__big">TMP is three buddies, Adrian, Aiden and Joe, friends since high school.</p>
       <p>We lost a friend, and we started this company to honor him. We do it the best way we know: by helping the businesses and people around us, and by giving back to our community.</p>
@@ -1305,7 +1550,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
     <div class="faq__list">
       <details class="qa"><summary>What does &ldquo;starting at&rdquo; mean?</summary><div class="qa__a"><p>It's the price for a focused, well-built project. Bigger projects with more pages, features or connections cost more. You'll always get a clear quote before any work begins.</p></div></details>
       <details class="qa"><summary>What's included in marketing?</summary><div class="qa__a"><p>Starting at $129.99 a month, we run your ad campaigns on Google, Facebook, Instagram and anywhere else your customers spend time. We also set up your Google Business Profile and work to improve your chances of landing on Google's front page.</p></div></details>
-      <details class="qa"><summary>What does the website membership cover?</summary><div class="qa__a"><p>For $79.99 a month we cover your domain cost and upkeep, keep your site maintained 24/7, and make updates for free whenever you need them, within reason. It's optional. Your website is yours either way.</p></div></details>
+      <details class="qa"><summary>What is TMP+?</summary><div class="qa__a"><p>TMP+ is our website membership. For $79.99 a month we cover your domain cost and upkeep, keep your site maintained 24/7, and make updates for free whenever you need them, within reason. It's optional. Your website is yours either way.</p></div></details>
       <details class="qa"><summary>Can you replace software I already pay for?</summary><div class="qa__a"><p>Often, yes. We built Total Quality Management a desktop app that replaced QuickBooks and saves them $2,000 a year. Tell us what you use and what it costs, and we'll tell you if a custom system makes sense.</p></div></details>
       <details class="qa"><summary>I already have a website. Can you help?</summary><div class="qa__a"><p>Yes. We can redesign it, rebuild it or improve what's there, and help more customers find it.</p></div></details>
       <details class="qa"><summary>How long does a project take?</summary><div class="qa__a"><p>It depends on the scope. You'll get a clear timeline with your quote, before anything starts.</p></div></details>
@@ -1319,6 +1564,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
   <div class="wrap contact__grid">
     <div class="contact__copy">
       <h2 id="contact-title" data-reveal="rise">Let's <span class="grass" data-grass>grow</span> your business<span class="dot">.</span></h2>
+      <p class="grass__hint" aria-hidden="true"><span class="hint-fine">Brush the grass, or click it to mow.</span><span class="hint-touch">Tap the grass to mow it.</span></p>
       <p class="sec-lead">Tell us what you need. We'll get back to you with ideas and a free quote.</p>
       <ul class="contact__points">
         <li>Free quote, no pressure</li>
@@ -1342,7 +1588,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
         <label for="f-i-app"><input type="checkbox" id="f-i-app" name="interest" value="App"><span>App</span></label>
         <label for="f-i-game"><input type="checkbox" id="f-i-game" name="interest" value="Game"><span>Game</span></label>
         <label for="f-i-marketing"><input type="checkbox" id="f-i-marketing" name="interest" value="Marketing"><span>Marketing</span></label>
-        <label for="f-i-membership"><input type="checkbox" id="f-i-membership" name="interest" value="Membership"><span>Membership</span></label>
+        <label for="f-i-membership"><input type="checkbox" id="f-i-membership" name="interest" value="TMP+"><span>TMP+ membership</span></label>
         <label for="f-i-other"><input type="checkbox" id="f-i-other" name="interest" value="Something else"><span>Something else</span></label>
       </fieldset>
       <div class="field"><label for="f-message">Tell us about your project</label><textarea id="f-message" name="message" rows="5"></textarea></div>
@@ -1380,7 +1626,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
     <nav class="foot__cols" aria-label="Footer">
       <div>
         <h3 class="foot__h">Services</h3>
-        <a href="#services">Websites</a><a href="#services">Systems</a><a href="#services">Apps &amp; games</a><a href="#services">Marketing</a><a href="#pricing">Pricing</a>
+        <a href="#services">Websites</a><a href="#services">Systems</a><a href="#services">Apps &amp; games</a><a href="#services">Marketing</a><a href="#lab">3D &amp; motion</a><a href="#pricing">Pricing</a>
       </div>
       <div>
         <h3 class="foot__h">Work</h3>
@@ -1402,11 +1648,76 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
       </div>
     </nav>
     <div class="foot__bottom">
-      <p>&copy; <span id="year">2026</span> The Marketing Partner. All rights reserved.</p>
+      <p>&copy; <span id="year">2026</span> The Marketing Partner. Started in Mesa, Arizona.</p>
       <p class="foot__sam">#4SAMMY. Please check on the people around you.</p>
     </div>
   </div>
 </footer>
+
+<!-- TOB: the TMP butler. Guides visitors, builds a starting quote and sets up a free call. -->
+<div class="tob" id="tob">
+  <p class="tob__hello" id="tob-hello" hidden>
+    <button class="tob__hello-open" type="button" data-sfx="none"><span id="tob-hello-text">Good evening. I'm TOB, your TMP butler.</span> <b>Need a quote?</b></button>
+    <button class="tob__hello-x" type="button" aria-label="Dismiss" data-sfx="none"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </p>
+  <button class="tob__fab" id="tob-fab" type="button" aria-controls="tob-panel" aria-expanded="false" data-sfx="none">
+    <span class="tob__beam" aria-hidden="true"></span>
+    <span class="tob__pad" aria-hidden="true"></span>
+    <span class="tob__holo" aria-hidden="true">
+        <svg class="tob__butler" viewBox="0 0 64 64" aria-hidden="true">
+          <path class="tb-suit" d="M9 64c0-11 9.5-17.5 23-17.5S55 53 55 64z"/>
+          <path class="tb-shirt" d="M25.5 46.6 32 60l6.5-13.4c-2-.5-4.2-.8-6.5-.8s-4.5.3-6.5.8z"/>
+          <path class="tb-lapel" d="M25.5 46.6 32 60l-6 4h-6.5c.8-8.6 2.8-14.6 6-17.4zM38.5 46.6 32 60l6 4h6.5c-.8-8.6-2.8-14.6-6-17.4z"/>
+          <path class="tb-tie" d="m32 50.2-6.4-3.4v6.8zm0 0 6.4-3.4v6.8z"/><circle class="tb-tie" cx="32" cy="50.2" r="1.7"/>
+          <path class="tb-skin" d="M27.5 40h9v7.2c-1.4 1.1-2.9 1.6-4.5 1.6s-3.1-.5-4.5-1.6z"/>
+          <ellipse class="tb-skin" cx="20.4" cy="28.6" rx="2.4" ry="3.3"/><ellipse class="tb-skin" cx="43.6" cy="28.6" rx="2.4" ry="3.3"/>
+          <ellipse class="tb-skin" cx="32" cy="27.6" rx="11.6" ry="13"/>
+          <path class="tb-hair" d="M20.6 26.2C20 16.8 25.4 13 32.4 13c7.4 0 12 4.4 11.2 13.4-1.6-5.2-5.4-7.6-10.4-7.4-2.6.1-4.6.9-6.6 2-1.8 1-3.6 2.6-6 5.2z"/>
+          <path class="tb-line tb-part" d="M29.6 14.2c-1.2 2.2-1.6 4.4-1.4 6.6"/>
+          <path class="tb-line" d="M25.6 28.4q1.7-1.6 3.4 0M35 28.4q1.7-1.6 3.4 0"/>
+          <circle class="tb-mono" cx="36.7" cy="28.1" r="3.7"/>
+          <path class="tb-chain" d="M40.3 29.6c1.6 4.4 1.2 9.6-1.6 14.6"/>
+          <path class="tb-hair" d="M25.6 34.6c2-2.3 4.6-2 6.4-.5 1.8-1.5 4.4-1.8 6.4.5-1.6 1.6-4.2 1.9-6.4.9-2.2 1-4.8.7-6.4-.9z"/>
+          <path class="tb-line" d="M29.6 37.8q2.4 1.4 4.8 0"/>
+        </svg>
+    </span>
+    <span class="tob__scan" aria-hidden="true"></span>
+    <span class="tob__tag" aria-hidden="true">Ask TOB</span>
+    <span class="sr-only">Ask TOB, your TMP butler</span>
+  </button>
+  <section class="tob__panel" id="tob-panel" role="dialog" aria-modal="false" aria-labelledby="tob-title" hidden>
+    <header class="tob__head">
+      <span class="tob__avatar" aria-hidden="true"><svg class="tob__butler tob__butler--sm" viewBox="0 0 64 64" aria-hidden="true">
+          <path class="tb-suit" d="M9 64c0-11 9.5-17.5 23-17.5S55 53 55 64z"/>
+          <path class="tb-shirt" d="M25.5 46.6 32 60l6.5-13.4c-2-.5-4.2-.8-6.5-.8s-4.5.3-6.5.8z"/>
+          <path class="tb-lapel" d="M25.5 46.6 32 60l-6 4h-6.5c.8-8.6 2.8-14.6 6-17.4zM38.5 46.6 32 60l6 4h6.5c-.8-8.6-2.8-14.6-6-17.4z"/>
+          <path class="tb-tie" d="m32 50.2-6.4-3.4v6.8zm0 0 6.4-3.4v6.8z"/><circle class="tb-tie" cx="32" cy="50.2" r="1.7"/>
+          <path class="tb-skin" d="M27.5 40h9v7.2c-1.4 1.1-2.9 1.6-4.5 1.6s-3.1-.5-4.5-1.6z"/>
+          <ellipse class="tb-skin" cx="20.4" cy="28.6" rx="2.4" ry="3.3"/><ellipse class="tb-skin" cx="43.6" cy="28.6" rx="2.4" ry="3.3"/>
+          <ellipse class="tb-skin" cx="32" cy="27.6" rx="11.6" ry="13"/>
+          <path class="tb-hair" d="M20.6 26.2C20 16.8 25.4 13 32.4 13c7.4 0 12 4.4 11.2 13.4-1.6-5.2-5.4-7.6-10.4-7.4-2.6.1-4.6.9-6.6 2-1.8 1-3.6 2.6-6 5.2z"/>
+          <path class="tb-line tb-part" d="M29.6 14.2c-1.2 2.2-1.6 4.4-1.4 6.6"/>
+          <path class="tb-line" d="M25.6 28.4q1.7-1.6 3.4 0M35 28.4q1.7-1.6 3.4 0"/>
+          <circle class="tb-mono" cx="36.7" cy="28.1" r="3.7"/>
+          <path class="tb-chain" d="M40.3 29.6c1.6 4.4 1.2 9.6-1.6 14.6"/>
+          <path class="tb-hair" d="M25.6 34.6c2-2.3 4.6-2 6.4-.5 1.8-1.5 4.4-1.8 6.4.5-1.6 1.6-4.2 1.9-6.4.9-2.2 1-4.8.7-6.4-.9z"/>
+          <path class="tb-line" d="M29.6 37.8q2.4 1.4 4.8 0"/>
+        </svg></span>
+      <div class="tob__who">
+        <h2 class="tob__name" id="tob-title" tabindex="-1">TOB</h2>
+        <p class="tob__role"><i aria-hidden="true"></i>Your TMP butler</p>
+      </div>
+      <button class="tob__icon" id="tob-restart" type="button" aria-label="Start over" title="Start over"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></svg></button>
+      <button class="tob__icon" id="tob-close" type="button" aria-label="Close" title="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </header>
+    <div class="tob__log" id="tob-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+    <form class="tob__form" id="tob-form" autocomplete="off">
+      <label class="sr-only" for="tob-in">Message TOB</label>
+      <input id="tob-in" type="text" maxlength="300" placeholder="Ask TOB anything" enterkeyhint="send">
+      <button class="tob__send" type="submit" aria-label="Send" data-sfx="none"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+    </form>
+  </section>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -1440,6 +1751,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const local = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { /* storage blocked */ } return null; };
 const session = (k, v) => { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) { /* storage blocked */ } return null; };
 const money = (cents) => '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+// Starting prices in cents, shared by the price builder and TOB (the price cards in the page say the same)
+const PRICES = { website: 49999, app: 49999, game: 49999, system: 29999, marketing: 12999, member: 7999 };
 const rafThrottle = (fn) => { let q = false; return (...a) => { if (q) return; q = true; requestAnimationFrame(() => { q = false; fn(...a); }); }; };
 const bus = new EventTarget();
 const emit = (name, detail) => bus.dispatchEvent(new CustomEvent(name, { detail }));
@@ -1625,6 +1938,26 @@ const SFX = (() => {
     perfect(combo) { S.bell(5 + Math.min(combo, 9), 0, 0.12, 1.5); voice({ f: note(12 + Math.min(combo, 8)), dur: 0.35, gain: 0.05, wet: 0.45, at: 0.06 }); },
     fail() { voice({ type: 'sawtooth', f: 230, f2: 62, dur: 0.7, gain: 0.12, lp: 900, lp2: 180, wet: 0.2 }); S.thock(0.06, 0.2); },
     flower() { S.bell(7, 0, 0.1, 2.4); S.bell(9, 0.13, 0.07, 2.4); S.bell(12, 0.26, 0.05, 2.6); },
+    tob() { voice({ f: note(9), f2: note(11), dur: 0.09, gain: 0.03, attack: 0.004, wet: 0.16 }); },
+    sting() {
+      S.pluck(0, 0, 0.13, -0.3); S.pluck(2, 0.15, 0.13, 0); S.pluck(4, 0.3, 0.14, 0.3);
+      [0, 0.08, 0.16].forEach((at, i) => voice({ f: note(7 + i), dur: 0.16, gain: 0.04, wet: 0.12, at: 0.5 + at }));
+      S.thock(1.39, 0.2); S.bell(9, 1.42, 0.06, 1.4);
+    },
+    neon() {
+      voice({ type: 'square', f: 118, dur: 0.09, gain: 0.018, lp: 1500, wet: 0.02 });
+      noise({ dur: 0.025, gain: 0.03, type: 'highpass', f: 5000, q: 0.5, wet: 0 });
+      voice({ type: 'square', f: 120, dur: 0.06, gain: 0.014, lp: 1400, at: 0.19, wet: 0.02 });
+    },
+    mow() {
+      noise({ dur: 0.46, gain: 0.2, f: 900, f2: 5200, q: 0.8, wet: 0.12 });
+      voice({ type: 'sawtooth', f: 122, f2: 98, dur: 0.44, gain: 0.03, lp: 900, wet: 0.04 });
+      [0, 0.07, 0.15, 0.24, 0.33].forEach((at) => noise({ at, dur: 0.03, gain: 0.05, type: 'highpass', f: 6200, q: 0.6, wet: 0 }));
+    },
+    regrow() {
+      [2, 4, 5, 7, 9].forEach((st, i) => voice({ type: 'triangle', f: note(st + 3), dur: 0.5, gain: 0.05, attack: 0.01, wet: 0.35, at: i * 0.11, pan: (i - 2) * 0.2 }));
+      S.bell(12, 0.6, 0.05, 1.8);
+    },
     rustle(k = 0.6) {
       const t = performance.now(); if (t - lastRustle < 85) return; lastRustle = t;
       noise({ dur: 0.14 + 0.14 * k, gain: 0.05 + 0.12 * k, f: 2400 + Math.random() * 2200, f2: 1500 + Math.random() * 600, q: 0.7, wet: 0.14 });
@@ -2317,9 +2650,10 @@ const Contact = (() => {
   $('#copy-message').addEventListener('click', () => copyText(`To: ${CONFIG.contactEmail}\nSubject: ${subject}\n\n${body}`, 'Message copied'));
   $('#copy-email').addEventListener('click', () => copyText(CONFIG.contactEmail, 'Email address copied'));
 
-  function prefill({ interests = [], message = '' } = {}) {
+  function prefill({ interests = [], message = '', name = '', business = '', email = '', phone = '' } = {}) {
     interests.forEach((v) => { const cb = $(`input[name="interest"][value="${v}"]`, form); if (cb) cb.checked = true; });
     if (message) { const ta = form.elements.message; ta.value = ta.value.trim() ? `${ta.value.trim()}\n\n${message}` : message; }
+    [['name', name], ['business', business], ['email', email], ['phone', phone]].forEach(([k, v]) => { if (v) form.elements[k].value = v; });
   }
   // "Get a quote" buttons on the price cards tick the matching interest
   $$('[data-interest]').forEach((a) => a.addEventListener('click', () => prefill({ interests: [a.dataset.interest] })));
@@ -2332,7 +2666,7 @@ const Contact = (() => {
 (() => {
   const root = $('#estimator');
   if (!root) return;
-  const P = { website: 49999, app: 49999, game: 49999, system: 29999, marketing: 12999, member: 7999 };
+  const P = PRICES;
   const box = { website: $('#est-website'), app: $('#est-app'), game: $('#est-game'), marketing: $('#est-marketing'), member: $('#est-member') };
   const sysOut = $('#est-sys'), minus = $('#est-sys-minus'), plus = $('#est-sys-plus'), flash = $('#est-flash'), receipt = $('#est-receipt');
   const odoOnce = Odo($('#odo-once')), odoMo = Odo($('#odo-mo'));
@@ -2345,7 +2679,7 @@ const Contact = (() => {
     if (box.game.checked) rows.push(['Game', P.game, false]);
     if (systems) rows.push([`${systems} ${systems === 1 ? 'system' : 'systems'}`, systems * P.system, false]);
     if (box.marketing.checked) rows.push(['Marketing', P.marketing, true]);
-    if (box.member.checked) rows.push(['Website membership', P.member, true]);
+    if (box.member.checked) rows.push(['TMP+ membership', P.member, true]);
     const once = rows.filter((r) => !r[2]).reduce((s, r) => s + r[1], 0);
     const mo = rows.filter((r) => r[2]).reduce((s, r) => s + r[1], 0);
     return { rows, once, mo };
@@ -2370,8 +2704,8 @@ const Contact = (() => {
   }
   Object.entries(box).forEach(([k, input]) => {
     input.addEventListener('change', () => {
-      if (k === 'member' && input.checked && !box.website.checked) { box.website.checked = true; say('The membership is for websites, so we added one.'); }
-      if (k === 'website' && !input.checked && box.member.checked) { box.member.checked = false; say('The membership needs a website, so we took it off.'); }
+      if (k === 'member' && input.checked && !box.website.checked) { box.website.checked = true; say('TMP+ is for websites, so we added one.'); }
+      if (k === 'website' && !input.checked && box.member.checked) { box.member.checked = false; say('TMP+ needs a website, so we took it off.'); }
       SFX.play(input.checked ? 'toggleOn' : 'toggleOff');
       sync();
     });
@@ -2384,7 +2718,7 @@ const Contact = (() => {
   $('#est-send').addEventListener('click', () => {
     const { rows, once, mo } = plan();
     if (!rows.length) { say('Pick at least one thing first.'); SFX.play('error'); return; }
-    const map = { Website: 'Website', App: 'App', Game: 'Game', Marketing: 'Marketing', 'Website membership': 'Membership' };
+    const map = { Website: 'Website', App: 'App', Game: 'Game', Marketing: 'Marketing', 'TMP+ membership': 'TMP+' };
     const interests = rows.map((r) => map[r[0]] || 'System');
     const lines = rows.map(([n, c, m]) => `- ${n}: ${money(c)}${m ? '/mo' : ''}`);
     const message = `My plan from the price builder:\n${lines.join('\n')}\nStarting at ${money(once)} one-time${mo ? ` + ${money(mo)}/mo` : ''}.`;
@@ -2394,6 +2728,427 @@ const Contact = (() => {
     toast('Plan added to your message');
   });
   sync();
+})();
+
+/* ================================================================
+   TOB, the TMP butler: a hologram in the corner that answers questions, builds a
+   starting quote and sets up a free call. It runs right here in the page. Requests go out
+   the same way the contact form's do: an email the visitor sends, or straight into the form.
+   Optional: set window.TMP_ASSISTANT_ENDPOINT to a server address and the questions TOB
+   can't answer are sent there as POST {question, history}; it should reply with JSON
+   {answer}. Keep any keys on that server, never in this page.
+   ================================================================ */
+(() => {
+  const root = $('#tob');
+  if (!root) return;
+  const fab = $('#tob-fab'), panel = $('#tob-panel'), log = $('#tob-log'), form = $('#tob-form'), input = $('#tob-in');
+  const hello = $('#tob-hello'), helloText = $('#tob-hello-text'), title = $('#tob-title');
+  const touch = !fine;
+  const history = [];
+  const who = { name: '', email: '', phone: '', business: '' };
+  let started = false, open = false, busy = 0, token = 0;
+
+  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const greeting = () => { const h = new Date().getHours(); return h < 5 ? 'Good evening' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'; };
+  // a pause that never ends if the chat is restarted meanwhile, so an old conversation can't carry on into the new one
+  const pause = (ms) => { const my = token; return new Promise((r) => setTimeout(() => { if (my === token) r(); }, reduced ? Math.min(ms, 150) : ms)); };
+  const node = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+  const toBottom = () => { log.scrollTop = log.scrollHeight; };
+  const add = (el) => { log.appendChild(el); requestAnimationFrame(toBottom); setTimeout(toBottom, 360); return el; };
+  const retire = () => $$('.tob__chips:not(.is-used)', log).forEach((c) => c.classList.add('is-used'));
+  const plain = (html) => html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+  // TOB "types" (the logo's three bars bounce), then his message lands
+  async function say(html, wait) {
+    busy++;
+    const dots = add(node('div', 'tob__typing', '<i></i><i></i><i></i>'));
+    await pause(wait ?? Math.min(1150, 420 + plain(html).length * 6));
+    dots.remove();
+    busy = Math.max(0, busy - 1);
+    history.push({ role: 'assistant', text: plain(html) });
+    SFX.play('tob');
+    return add(node('div', 'tob__msg tob__msg--bot', html));
+  }
+  function me(text) { history.push({ role: 'user', text }); return add(node('div', 'tob__msg tob__msg--me', esc(text))); }
+  function chips(list) {
+    const row = node('div', 'tob__chips');
+    list.forEach(([label, act, cls]) => {
+      const b = node('button', 'tob__chip' + (cls ? ` ${cls}` : ''), esc(label));
+      b.type = 'button';
+      b.addEventListener('click', () => { if (busy) return; row.classList.add('is-used'); me(label); act(); });
+      row.appendChild(b);
+    });
+    return add(row);
+  }
+  const choose = (options) => new Promise((resolve) => chips(options.map(([key, label]) => [label, () => resolve([key, label])])));
+  function pick(options, doneLabel) {
+    return new Promise((resolve) => {
+      const row = node('div', 'tob__chips'), chosen = new Set();
+      const go = node('button', 'tob__chip tob__chip--go', esc(doneLabel));
+      go.type = 'button'; go.disabled = true;
+      options.forEach(([key, label]) => {
+        const b = node('button', 'tob__chip', esc(label));
+        b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', () => {
+          const on = !chosen.has(key);
+          if (on) chosen.add(key); else chosen.delete(key);
+          b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', String(on));
+          go.disabled = !chosen.size;
+        });
+        row.appendChild(b);
+      });
+      go.addEventListener('click', () => {
+        if (!chosen.size || busy) return;
+        row.classList.add('is-used');
+        me(options.filter(([k]) => chosen.has(k)).map(([, l]) => l).join(', '));
+        resolve([...chosen]);
+      });
+      row.appendChild(go);
+      add(row);
+    });
+  }
+  // a small form inside the chat
+  function ask(fields, submitLabel) {
+    return new Promise((resolve) => {
+      const f = node('form', 'tob__mini');
+      f.noValidate = true;
+      fields.forEach((d) => {
+        const lab = node('label', '', `${esc(d.label)}${d.required ? '' : ' <span>(optional)</span>'}`);
+        const inp = document.createElement(d.area ? 'textarea' : 'input');
+        if (!d.area) inp.type = d.type || 'text';
+        inp.name = d.name;
+        if (d.auto) inp.autocomplete = d.auto;
+        if (d.value) inp.value = d.value;
+        if (d.type === 'email') inp.inputMode = 'email';
+        lab.appendChild(inp); f.appendChild(lab);
+      });
+      const err = node('p', 'tob__err'); err.setAttribute('role', 'alert'); f.appendChild(err);
+      const btn = node('button', 'tob__chip tob__chip--go', esc(submitLabel)); btn.type = 'submit'; f.appendChild(btn);
+      f.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const v = Object.fromEntries(fields.map((d) => [d.name, f.elements[d.name].value.trim()]));
+        const bad = fields.find((d) => (d.required && !v[d.name])
+          || (d.type === 'email' && v[d.name] && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v[d.name]))
+          || (d.type === 'tel' && v[d.name] && v[d.name].replace(/\D/g, '').length < 7));
+        if (bad) {
+          err.textContent = v[bad.name] ? `That ${bad.label.toLowerCase()} doesn't look quite right.` : `Please add your ${bad.label.toLowerCase().replace(/^your /, '')}.`;
+          f.elements[bad.name].focus(); SFX.play('error');
+          return;
+        }
+        f.remove();
+        me(fields.filter((d) => v[d.name] && !d.area).map((d) => v[d.name]).join(' · ') || 'Done');
+        resolve(v);
+      });
+      add(f);
+      if (!touch) setTimeout(() => f.elements[fields[0].name].focus({ preventScroll: true }), 80);
+    });
+  }
+  const contactFields = (needPhone) => [
+    { name: 'name', label: 'Your name', required: true, auto: 'name', value: who.name },
+    { name: 'email', label: 'Email', type: 'email', required: true, auto: 'email', value: who.email },
+    { name: 'phone', label: 'Phone', type: 'tel', required: needPhone, auto: 'tel', value: who.phone },
+    { name: 'business', label: 'Business name', auto: 'organization', value: who.business },
+  ];
+  const head = (v) => [`Name: ${v.name}`, v.business && `Business: ${v.business}`, `Email: ${v.email}`, v.phone && `Phone: ${v.phone}`].filter(Boolean);
+
+  // the email is ready: open it, copy it, or drop it into the contact form
+  function ready(heading, rows, subject, body, interests, message) {
+    const href = `mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const card = node('div', 'tob__card', `<h3>${esc(heading)}</h3>
+      <ul class="tob__rows">${rows.map(([a, b]) => `<li><span>${esc(a)}</span><b>${esc(b)}</b></li>`).join('')}</ul>
+      <p class="tob__fine">Opens an email to ${esc(CONFIG.contactEmail)} with everything filled in. Press send and the team will reply.</p>
+      <div class="tob__acts"><a class="is-main" href="${href}">Open my email</a><button type="button" data-act="copy">Copy it</button><button type="button" data-act="form">Use the form</button></div>`);
+    $('[data-act="copy"]', card).addEventListener('click', () => copyText(`To: ${CONFIG.contactEmail}\nSubject: ${subject}\n\n${body}`, 'Message copied'));
+    $('[data-act="form"]', card).addEventListener('click', () => { Contact.prefill({ ...who, interests, message }); goTo('#contact', '#f-message'); });
+    return add(card);
+  }
+  function goTo(sel, focusSel) {
+    const el = $(sel);
+    if (!el) return;
+    if (innerWidth <= 560) setOpen(false);
+    el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    if (focusSel) setTimeout(() => { const f = $(focusSel); if (f) f.focus({ preventScroll: true }); }, reduced ? 0 : 900);
+  }
+  log.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (a) { e.preventDefault(); goTo(a.getAttribute('href')); }
+  });
+
+  /* ---------- what TOB knows ---------- */
+  const T = {
+    hello: () => `<p>${greeting()}! How may I help?</p>`,
+    thanks: '<p>My pleasure. Anything else I can do for you?</p>',
+    websites: '<p><b>Websites</b> start at $499.99. Custom-designed, fast on every phone, ready for Google, with forms that turn visitors into calls, quotes and bookings. No templates.</p>',
+    systems: "<p><b>Systems</b> start at $299.99 each: scheduling and booking, online stores, quoting and invoicing, customer lists and dashboards. We can even replace software you're overpaying for, the way we did for <a href=\"#tqm\">Total Quality Management</a>.</p>",
+    apps: '<p><b>Apps</b> start at $499.99, for iPhone, Android and the web: ordering, loyalty, booking, member portals and handy tools for your team.</p>',
+    games: '<p><b>Games</b> start at $499.99: browser games and playable promos that get people talking about your business. There\'s <a href="#play">one to play on this page</a>.</p>',
+    marketing: "<p><b>Marketing</b> starts at $129.99 a month. We run your ads on Google, Facebook and Instagram, set up your Google Business Profile and work on getting you onto Google's front page.</p>",
+    tmpplus: "<p><b>TMP+</b> is our website membership, $79.99 a month. We cover your domain cost and upkeep, keep your site maintained 24/7 and make updates for free, within reason. It's optional, and your website is yours either way.</p>",
+    prices: '<p>Our starting prices:</p><p>Websites, apps and games from $499.99. Systems from $299.99 each. Marketing from $129.99 a month. TMP+ membership $79.99 a month.</p><p>You always get a clear quote before any work begins.</p>',
+    sammy: '<p><b>#4SAMMY</b> is why we started. We lost our friend Sammy, and 5% of all our profits go to his family through <a href="https://gofund.me/80a9ea02c" target="_blank" rel="noopener">his GoFundMe</a>. <a href="#sammy">Read his story</a>.</p>',
+    story: '<p>TMP is three friends from high school: Adrian, Aiden and Joe. We started in Mesa, Arizona, to honor our friend Sammy, and we help small local businesses get found online, bring in more leads and grow. <a href="#story">Our story</a>.</p>',
+    work: '<p>Right this way. We\'ve built for a cleaning company, a dog boarding palace, a dive shop and more. <a href="#work">See our work</a>.</p>',
+    lab: '<p>We build 3D, animation and motion right into websites. You can spin a chrome infinity and stir a liquid shader <a href="#lab">just up the page</a>.</p>',
+    film: '<p>Our 30-second film shows off the new look and the new site. <a href="#film">Watch it here</a>, with the sound on.</p>',
+    time: "<p>It depends on what we're building. You'll get a clear timeline with your quote, before anything starts.</p>",
+    own: "<p>Your website is yours. TMP+ is optional; it just means we look after the site for you.</p>",
+    redesign: "<p>Already have a website? We can redesign it, rebuild it or improve what's there, and help more customers find it.</p>",
+    kinds: '<p>Small and local businesses of every kind: restaurants, salons, contractors, cleaning companies, pet care, shops, studios and more.</p>',
+    contact: () => `<p>You can email the team at <b>${esc(CONFIG.contactEmail)}</b>, or use the <a href="#contact">contact form</a>. I can also get an email ready for you.</p>`,
+    self: "<p>I'm TOB, the butler for this site. I handle the usual questions, put together starting quotes and set up free calls. A real person from the team answers every email.</p>",
+  };
+  const RULES = [
+    [/\b(thanks?|thank you|thx|ty|appreciate|cheers)\b/, 'thanks'],
+    [/\b(sammy|4sammy|gofund|go fund|donat\w*|charity|give back|giving back)\b/, 'sammy'],
+    [/(tmp\s*\+|\btmp plus\b|\bmembership\b|\bmember\b|\bmaintenance\b|\bmaintain\b|\bhosting\b|\bdomain\b|\bupkeep\b)/, 'tmpplus'],
+    [/\b(booking system|booking software|scheduling|scheduler|online stores?|online shops?|e-?commerce|shopify|invoic\w*|quickbooks|software|dashboard\w*|crm|systems?)\b/, 'systems'],
+    [/\b(book|booking|call me|a call|phone call|video call|meeting|meet|appointment|consult\w*|talk to|speak (to|with)|zoom|facetime)\b/, 'BOOK'],
+    [/\b(quote|estimate)\b/, 'QUOTE'],
+    [/\b(how much|price|prices|pricing|cost|costs|budget|rates?|afford|cheap|expensive)\b/, 'prices'],
+    [/\b(marketing|ads?|advertis\w*|seo|google business|front page|leads?|instagram|facebook)\b/, 'marketing'],
+    [/\b(apps?|iphone|android|ios)\b/, 'apps'],
+    [/\b(games?|gaming|playable)\b/, 'games'],
+    [/\b(redesign|rebuild|already have|existing (site|website)|current (site|website)|update my (site|website))\b/, 'redesign'],
+    [/\b(own|ownership|contract|locked in)\b/, 'own'],
+    [/\b(are you (an? )?(ai|bot|robot|human|real)|who are you|what are you|who is tob|what is tob|your name)\b/, 'self'],
+    [/\b(websites?|site|web ?pages?|landing pages?|web design)\b/, 'websites'],
+    [/\b(3d|three d|animation|animate|motion|infinity|chrome|shader)\b/, 'lab'],
+    [/\b(film|video|reel|trailer)\b/, 'film'],
+    [/\b(your work|portfolio|examples?|clients?|projects?|case stud\w*|show me)\b/, 'work'],
+    [/\b(how long|timeline|turnaround|deadline|how many weeks)\b/, 'time'],
+    [/\b(about (you|tmp|the company)|team|founders?|adrian|aiden|joe|story|mesa|arizona|where are you|located|location)\b/, 'story'],
+    [/\b(kinds? of business\w*|industr\w*|restaurants?|salons?|contractors?|plumb\w*|cleaning|pet|studios?)\b/, 'kinds'],
+    [/\b(email|contact|phone number|reach you|get in touch)\b/, 'contact'],
+    [/^(hi|hello|hey|howdy|yo|hiya|sup|good (morning|afternoon|evening))\b/, 'hello'],
+  ];
+  const FOLLOW = {
+    websites: [['Get a quote', () => run(quote)], ['See our work', () => goTo('#work')]],
+    systems: [['Get a quote', () => run(quote)], ['Book a free call', () => run(book)]],
+    apps: [['Get a quote', () => run(quote)], ['Book a free call', () => run(book)]],
+    games: [['Get a quote', () => run(quote)], ['Play the game', () => goTo('#play')]],
+    marketing: [['Get a quote', () => run(quote)], ['Book a free call', () => run(book)]],
+    tmpplus: [['Get a quote', () => run(quote)], ['See prices', () => goTo('#pricing')]],
+    prices: [['Get my quote', () => run(quote)], ['Open the price builder', () => goTo('#estimator')]],
+  };
+  async function topic(key) {
+    const t = T[key];
+    await say(typeof t === 'function' ? t() : t);
+    if (FOLLOW[key]) chips(FOLLOW[key].concat([['Something else', () => run(() => menu('What else can I do for you?'))]]));
+    else menu();
+  }
+  function menu(text) {
+    const show = () => chips([
+      ['Get a quote', () => run(quote), 'tob__chip--go'],
+      ['Book a free call', () => run(book)],
+      ['What do you build?', () => run(services)],
+      ['Prices', () => run(() => topic('prices'))],
+      ['See your work', () => run(() => topic('work'))],
+      ['What is TMP+?', () => run(() => topic('tmpplus'))],
+    ]);
+    return text ? say(text).then(show) : show();
+  }
+  async function services() {
+    await say('<p>We build websites, systems, apps and games, and we run marketing that brings customers in. What would you like to hear about?</p>');
+    const [k] = await choose([['websites', 'Websites'], ['systems', 'Systems'], ['apps', 'Apps'], ['games', 'Games'], ['marketing', 'Marketing'], ['tmpplus', 'TMP+']]);
+    await topic(k);
+  }
+
+  /* ---------- a starting quote ---------- */
+  const NAMES = { website: 'Website', app: 'App', game: 'Game', system: 'System', marketing: 'Marketing', member: 'TMP+' };
+  async function quote() {
+    await say("<p>Splendid. Let's put together your starting price. What can we build for you? Pick as many as you like.</p>");
+    const picks = await pick([['website', 'Website'], ['app', 'App'], ['game', 'Game'], ['system', 'A system'], ['marketing', 'Marketing'], ['member', 'TMP+ membership']], "That's everything");
+    let systems = 0, many = false;
+    if (picks.includes('system')) {
+      await say('<p>How many systems? Scheduling, an online store or invoicing each count as one.</p>');
+      const [n] = await choose([[1, '1'], [2, '2'], [3, '3'], [4, '4'], [5, '5 or more']]);
+      systems = n; many = n >= 5;
+    }
+    if (picks.includes('member') && !picks.includes('website')) {
+      picks.unshift('website');
+      await say("<p>TMP+ looks after a website, so I've added one to your plan.</p>");
+    }
+    const rows = [];
+    if (picks.includes('website')) rows.push(['Website', PRICES.website, false]);
+    if (picks.includes('app')) rows.push(['App', PRICES.app, false]);
+    if (picks.includes('game')) rows.push(['Game', PRICES.game, false]);
+    if (systems) rows.push([`${many ? '5+' : systems} ${systems === 1 ? 'system' : 'systems'}`, systems * PRICES.system, false]);
+    if (picks.includes('marketing')) rows.push(['Marketing', PRICES.marketing, true]);
+    if (picks.includes('member')) rows.push(['TMP+ membership', PRICES.member, true]);
+    const once = rows.filter((r) => !r[2]).reduce((a, r) => a + r[1], 0), mo = rows.filter((r) => r[2]).reduce((a, r) => a + r[1], 0);
+    const total = [once && `${money(once)} one-time`, mo && `${money(mo)} a month`].filter(Boolean).join(' + ');
+    const lines = rows.map(([n, c, m]) => `- ${n}: ${money(c)}${m ? '/mo' : ''}${n.startsWith('5+') ? ' (starting price for 5)' : ''}`);
+    const card = node('div', 'tob__card', `<h3>Your starting price</h3>
+      <ul class="tob__rows">${rows.map(([n, c, m]) => `<li><span>${esc(n)}</span><b>${money(c)}${m ? '/mo' : ''}</b></li>`).join('')}</ul>
+      <p class="tob__total"><span>Starts at</span><b>${esc(total)}</b></p>
+      <p class="tob__fine">Starting prices. You get an exact quote after a free chat, before any work begins.</p>`);
+    await say('<p>Here you are:</p>', 500);
+    add(card);
+    await pause(300);
+    await say('<p>Shall I get this to the team for an exact quote?</p>');
+    const [next] = await choose([['send', 'Yes, send it'], ['call', 'Book a free call'], ['no', 'Not just now']]);
+    const interests = [...new Set(picks.map((k) => NAMES[k]))];
+    const plan = `My starting quote from TOB:\n${lines.join('\n')}\nStarting at ${total}.`;
+    if (next === 'send') {
+      await say('<p>Very good. Where should the team send your quote?</p>');
+      const v = await ask(contactFields(false), 'Get my email ready');
+      Object.assign(who, v);
+      const subject = `Quote request from ${v.name}${v.business ? ` (${v.business})` : ''}`;
+      const body = [...head(v), `Interested in: ${interests.join(', ')}`, '', plan].join('\n');
+      ready('Your quote request', [['Plan', interests.join(', ')], ['Starts at', total], ['Reply to', v.email]], subject, body, interests, plan);
+      await say("<p>All set. Press send in your email and the team will come back with your exact quote. Anything else?</p>");
+      menu();
+    } else if (next === 'call') {
+      await book({ about: interests.join(', '), plan });
+    } else {
+      await say('<p>Of course. Your numbers will be right here whenever you need them.</p>');
+      menu();
+    }
+  }
+
+  /* ---------- a free call ---------- */
+  function nextDays(n) {
+    const out = [], d = new Date();
+    while (out.length < n) {
+      d.setDate(d.getDate() + 1);
+      const wd = d.getDay();
+      if (wd === 0 || wd === 6) continue;
+      out.push(d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }));
+    }
+    return out;
+  }
+  async function book(ctx = {}) {
+    await say("<p>Delighted. A free call is the quickest way to a plan and an exact price. Which day suits you?</p>");
+    let [day] = await choose(nextDays(5).map((d) => [d, d]).concat([['other', 'Another day']]));
+    if (day === 'other') {
+      await say('<p>Which day works best for you?</p>');
+      day = (await ask([{ name: 'day', label: 'Day', required: true }], 'Next')).day;
+    }
+    await say('<p>And what time of day?</p>');
+    const [, time] = await choose([['m', 'Morning'], ['d', 'Midday'], ['a', 'Afternoon'], ['e', 'Evening']]);
+    await say('<p>Phone or video?</p>');
+    const [how, howLabel] = await choose([['phone', 'Phone call'], ['video', 'Video call']]);
+    let about = ctx.about;
+    if (!about) {
+      await say('<p>What would you like to talk about?</p>');
+      [, about] = await choose([['w', 'A website'], ['s', 'A system'], ['a', 'An app or game'], ['m', 'Marketing'], ['t', 'TMP+'], ['o', 'Something else']]);
+    }
+    await say(`<p>Lastly, how can the team reach you to confirm?${how === 'phone' ? ' A phone number helps for a phone call.' : ''}</p>`);
+    const v = await ask(contactFields(how === 'phone'), 'Get my request ready');
+    Object.assign(who, v);
+    const subject = `Free call request from ${v.name}${v.business ? ` (${v.business})` : ''}`;
+    const details = [`Day: ${day}`, `Time: ${time}`, `Call: ${howLabel}`, `About: ${about}`];
+    const body = [...head(v), '', "I'd like to book a free call.", ...details, ctx.plan ? `\n${ctx.plan}` : ''].join('\n').trim();
+    ready('Your free call request', [['Day', day], ['Time', time], ['Call', howLabel], ['About', about]], subject, body, [], `I'd like to book a free call.\n${details.join('\n')}`);
+    await say('<p>Splendid. Press send in your email and the team will confirm your time with you. Anything else?</p>');
+    menu();
+  }
+
+  /* ---------- typing to TOB ---------- */
+  async function backend(question) {
+    const url = window.TMP_ASSISTANT_ENDPOINT;
+    if (!url) return null;
+    try {
+      const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 12000);
+      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, history: history.slice(-12) }), signal: ctl.signal });
+      clearTimeout(to);
+      if (!r.ok) return null;
+      const j = await r.json();
+      return j && typeof j.answer === 'string' && j.answer.trim() ? j.answer.trim() : null;
+    } catch (e) { return null; }
+  }
+  async function understand(text) {
+    const t = text.toLowerCase().replace(/[’']/g, "'");
+    const hit = RULES.find(([re]) => re.test(t));
+    if (hit) {
+      const k = hit[1];
+      if (k === 'QUOTE') return quote();
+      if (k === 'BOOK') return book();
+      return topic(k);
+    }
+    const my = token;
+    const answer = await backend(text);
+    if (my !== token) return new Promise(() => {});
+    if (answer) {
+      await say(answer.split(/\n{2,}/).map((p) => `<p>${esc(p).replace(/\n/g, '<br>')}</p>`).join(''));
+      return menu();
+    }
+    await say("<p>I'm not certain I can answer that one properly, but the team can. Shall I pass your question along, or would you like a quote or a free call?</p>");
+    const [k] = await choose([['pass', 'Ask the team'], ['quote', 'Get a quote'], ['book', 'Book a free call']]);
+    if (k === 'quote') return quote();
+    if (k === 'book') return book();
+    await say('<p>Very good. Where should they reply?</p>');
+    const v = await ask(contactFields(false), 'Get my email ready');
+    Object.assign(who, v);
+    const subject = `A question from ${v.name}${v.business ? ` (${v.business})` : ''}`;
+    const body = [...head(v), '', text].join('\n');
+    ready('Your question for the team', [['Question', text.length > 60 ? `${text.slice(0, 57)}...` : text], ['Reply to', v.email]], subject, body, ['Something else'], text);
+    await say('<p>Press send in your email and the team will get back to you. Anything else?</p>');
+    return menu();
+  }
+  // one conversation at a time: starting something new retires the old buttons
+  function run(fn) { retire(); return Promise.resolve().then(fn).catch(() => {}); }
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text || busy) return;
+    input.value = '';
+    me(text);
+    run(() => understand(text));
+  });
+
+  async function start() {
+    await say(`<p>${greeting()}. I'm TOB, your butler at The Marketing Partner.</p>`, 650);
+    await say('<p>I can put together a starting quote, set up a free call with the team, or answer your questions. How may I help?</p>');
+    menu();
+  }
+
+  /* ---------- opening and closing ---------- */
+  function setOpen(v) {
+    if (v === open) return;
+    open = v;
+    panel.hidden = !v;
+    root.classList.toggle('is-open', v);
+    fab.setAttribute('aria-expanded', String(v));
+    if (v) {
+      hideHello(true);
+      SFX.play('open');
+      if (!started) { started = true; run(start); }
+      setTimeout(() => (touch ? title : input).focus({ preventScroll: true }), 90);
+    } else SFX.play('close');
+  }
+  fab.addEventListener('click', () => setOpen(!open));
+  $('#tob-close').addEventListener('click', () => { setOpen(false); fab.focus({ preventScroll: true }); });
+  $('#tob-restart').addEventListener('click', () => {
+    token++; busy = 0; history.length = 0; log.textContent = '';
+    run(start);
+  });
+  addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (open) { setOpen(false); fab.focus({ preventScroll: true }); }
+    else if (!hello.hidden) hideHello(true);
+  });
+
+  // a hello bubble once a visit, a little after the page opens
+  let helloT = 0;
+  function hideHello(forever) {
+    clearTimeout(helloT);
+    hello.hidden = true;
+    if (forever) session('tmp-tob-hello', '1');
+  }
+  $('.tob__hello-open', hello).addEventListener('click', () => { hideHello(true); setOpen(true); });
+  $('.tob__hello-x', hello).addEventListener('click', () => hideHello(true));
+  const sayHello = () => {
+    if (session('tmp-tob-hello') || open) return;
+    helloT = setTimeout(() => {
+      if (open || html.classList.contains('is-locked')) return;
+      helloText.textContent = `${greeting()}. I'm TOB, your TMP butler.`;
+      hello.hidden = false;
+      SFX.play('tob');
+      helloT = setTimeout(() => hideHello(false), 14000);
+    }, 9000);
+  };
+  if (TMP.state.entered) sayHello(); else bus.addEventListener('entered', sayHello, { once: true });
 })();
 
 /* ================================================================
@@ -2532,9 +3287,10 @@ const Contact = (() => {
 /* ================================================================
    "grow" in grass: thousands of fine blades rooted inside the letters. Each blade is
    drawn as a darker base and a thinner, lighter tip, so it tapers and catches the light.
-   They sway in a rolling breeze, part around your pointer and spring back; a tap or
-   click sends a gust across the word. The real word stays in the page for layout and
-   screen readers; the grass is a canvas laid over it.
+   They sway in a rolling breeze, part around your pointer and spring back. A click or tap
+   mows the word: a pass sweeps across it, the blades drop to stubs, clippings fly and land,
+   and then the lawn grows back. The real word stays in the page for layout and screen
+   readers; the grass is a canvas laid over it (and the clippings fly on a second canvas).
    ================================================================ */
 (() => {
   const words = $$('[data-grass]');
@@ -2547,6 +3303,7 @@ const Contact = (() => {
   const BANDS = 5;   // drawn back to front so nearer tufts overlap the ones behind
   const STRETCH = { '50%': 'ultra-condensed', '62.5%': 'extra-condensed', '75%': 'condensed', '87.5%': 'semi-condensed', '100%': 'normal', '112.5%': 'semi-expanded', '125%': 'expanded', '150%': 'extra-expanded', '200%': 'ultra-expanded' };
   const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
+  const SWEEP = 0.42;   // seconds for the mower to cross the word
 
   words.forEach((el) => {
     const text = el.textContent.trim();
@@ -2556,8 +3313,17 @@ const Contact = (() => {
     el.appendChild(canvas);
     const ctx = canvas.getContext('2d');
     if (!ctx) { canvas.remove(); return; }
+    // clippings fly beyond the word, so they get their own larger canvas that never takes clicks
+    const fx = document.createElement('canvas');
+    fx.className = 'grass__fx';
+    fx.setAttribute('aria-hidden', 'true');
+    el.appendChild(fx);
+    const fctx = fx.getContext('2d');
     let W = 0, H = 0, pad = 0, scale = 1, size = 0, N = 0, soil = null;
     let X, Y, LEN, LEAN, PH, OFF, VEL, SH, MX, MY, TX, TY, baseW = 0.6, buckets = [];
+    // mowing: G is each blade's height (1 = full); CUT is when the mower reaches it, GROW when it starts growing back
+    let G, STUB, CUT, GROW, GDUR, FROM, inkL = 0, inkR = 0, baseY = 0, mowing = 0, fxL = 0, fxT = 0, fxW = 0, fxH = 0, fxS = 1;
+    const parts = [];
     let visible = false, raf = 0, last = 0, t = 0, settle = 0, gust = null, R = 40;
     const P = { x: -1e4, y: -1e4, lx: -1e4, vx: 0, power: 0, inside: false };
 
@@ -2598,10 +3364,11 @@ const Contact = (() => {
       const inside = (x, y) => alpha[(((y * ky) | 0) * MW + ((x * kx) | 0)) * 4 + 3] >= 140;
 
       // where the letters are, and how tall the word is (for top-to-bottom shading)
-      let inked = 0, top = H, bottom = 0;
+      let inked = 0, top = H, bottom = 0, left = W, right = 0;
       for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-        if (inside(x, y)) { inked++; if (y < top) top = y; if (y > bottom) bottom = y; }
+        if (inside(x, y)) { inked++; if (y < top) top = y; if (y > bottom) bottom = y; if (x < left) left = x; if (x > right) right = x; }
       }
+      inkL = left; inkR = Math.max(left + 1, right); baseY = baseline;
       const cap = window.__GRASS_CAP || (fine ? 6500 : 3600);
       const spacing = Math.max(size / 92, Math.sqrt(inked / cap));
       const xs = [], ys = [];
@@ -2615,6 +3382,9 @@ const Contact = (() => {
       LEN = new Float32Array(N); LEAN = new Float32Array(N); PH = new Float32Array(N);
       OFF = new Float32Array(N); VEL = new Float32Array(N); SH = new Uint8Array(N);
       MX = new Float32Array(N); MY = new Float32Array(N); TX = new Float32Array(N); TY = new Float32Array(N);
+      G = new Float32Array(N).fill(1); STUB = new Float32Array(N); CUT = new Float32Array(N).fill(Infinity);
+      GROW = new Float32Array(N).fill(Infinity); GDUR = new Float32Array(N); FROM = new Float32Array(N);
+      mowing = 0; parts.length = 0;
       const span = Math.max(1, bottom - top);
       const baseLen = size * 0.105;
       baseW = Math.max(0.42, size / 125);
@@ -2625,6 +3395,7 @@ const Contact = (() => {
         PH[i] = Math.random() * Math.PI * 2;
         SH[i] = clamp(Math.round((1 - v) * 5.2 + gauss() * 1.6 + 0.4), 0, SHADES.length - 1);
         if (Math.random() < 0.03) SH[i] = SHADES.length - 1;  // a few dry, straw-colored tips
+        STUB[i] = 0.14 + Math.random() * 0.12;
       }
       // bucket by depth band and shade so each batch is one path per stroke
       buckets = [];
@@ -2635,6 +3406,13 @@ const Contact = (() => {
       }
       buckets = buckets.map((band) => band.map((list) => Uint32Array.from(list)));
       R = size * 0.5;
+      // the clippings canvas reaches past the word on every side
+      fxL = Math.round(size * 1.7); fxT = Math.round(size * 1.3);
+      fxW = W + fxL * 2; fxH = H + fxT + Math.round(size * 0.6);
+      fxS = Math.min(2, window.devicePixelRatio || 1);
+      fx.style.left = `${-pad - fxL}px`; fx.style.top = `${-pad - fxT}px`;
+      fx.style.width = `${fxW}px`; fx.style.height = `${fxH}px`;
+      fx.width = Math.round(fxW * fxS); fx.height = Math.round(fxH * fxS);
       bus.dispatchEvent(new CustomEvent('brush-size', { detail: R * 2 }));
       el.classList.add('is-ready');
       draw();
@@ -2669,6 +3447,95 @@ const Contact = (() => {
       return moving;
     }
 
+    // the mower and the regrowth
+    function grow(dt) {
+      if (mowing) {
+        let left = 0;
+        for (let i = 0; i < N; i++) {
+          if (CUT[i] !== Infinity) {
+            if (t >= CUT[i]) {
+              const before = G[i];
+              if (!reduced && before > STUB[i] + 0.2 && Math.random() < clipOdds) clip(i, before);
+              G[i] = FROM[i] = Math.min(G[i], STUB[i]);
+              CUT[i] = Infinity;
+            } else { left++; continue; }
+          }
+          if (GROW[i] !== Infinity) {
+            if (t >= GROW[i]) {
+              const k = Math.min(1, (t - GROW[i]) / GDUR[i]);
+              G[i] = FROM[i] + (1 - FROM[i]) * (1 - Math.pow(1 - k, 3));
+              if (k >= 1) { G[i] = 1; GROW[i] = Infinity; } else left++;
+            } else left++;
+          }
+        }
+        mowing = left;
+      }
+      for (let j = parts.length - 1; j >= 0; j--) {
+        const q = parts[j];
+        q.age += dt;
+        if (!q.landed) {
+          q.vx *= Math.exp(-2.2 * dt); q.vy += 1150 * dt;
+          q.x += q.vx * dt; q.y += q.vy * dt; q.a += q.va * dt;
+          if (q.vy > 0 && q.y >= q.ground) { q.y = q.ground; q.landed = q.age; q.va = 0; q.a = Math.PI / 2 + gauss() * 0.35; }
+        }
+        if (q.age > q.life) parts.splice(j, 1);
+      }
+      return mowing > 0 || parts.length > 0;
+    }
+    let clipOdds = 0.1;
+    function clip(i, before) {
+      const a = LEAN[i] + OFF[i], h = LEN[i] * 0.52 * STUB[i] * 1.9;
+      const len = LEN[i] * (before - STUB[i]) * 0.9;
+      const x = X[i] + Math.sin(a) * h, y = Y[i] - Math.cos(a) * h;
+      parts.push({
+        x: x + fxL, y: y + fxT, a: a - Math.PI / 2, len, age: 0, landed: 0,
+        vx: mowDir * (70 + Math.random() * 260) + gauss() * 50, vy: -(150 + Math.random() * 300), va: (Math.random() - 0.5) * 22,
+        life: 1.1 + Math.random() * 0.9, ground: baseY + fxT + gauss() * size * 0.03,
+        c: SHADES[Math.min(SHADES.length - 1, SH[i] + 1)][1],
+      });
+    }
+    let mowDir = 1, regrowCue = 0;
+    function mow(x) {
+      if (!N) return;
+      mowDir = x < (inkL + inkR) / 2 ? 1 : -1;
+      const t0 = t, span = inkR - inkL;
+      clipOdds = Math.min(0.5, 520 / N);
+      let lastCut = t0;
+      for (let i = 0; i < N; i++) {
+        const k = mowDir > 0 ? (X[i] - inkL) / span : (inkR - X[i]) / span;
+        CUT[i] = reduced ? t0 : t0 + clamp(k, 0, 1) * SWEEP + Math.random() * 0.025;
+        lastCut = Math.max(lastCut, CUT[i]);
+        GROW[i] = reduced ? CUT[i] + 0.6 : CUT[i] + 0.75 + Math.random() * 0.55 + (1 - clamp(k, 0, 1)) * 0.12;
+        GDUR[i] = reduced ? 0.9 : 1.5 + Math.random() * 0.9;
+      }
+      mowing = N;
+      if (!reduced) gust = { t0, dir: mowDir };
+      SFX.play('mow');
+      clearTimeout(regrowCue);
+      regrowCue = setTimeout(() => SFX.play('regrow'), (lastCut - t0 + 0.78) * 1000);
+    }
+
+    let fxDirty = false;
+    function drawFx() {
+      if (!parts.length && !fxDirty) return;
+      fctx.setTransform(fxS, 0, 0, fxS, 0, 0);
+      fctx.clearRect(0, 0, fxW, fxH);
+      fxDirty = parts.length > 0;
+      if (!fxDirty) return;
+      fctx.lineCap = 'round';
+      fctx.lineWidth = baseW * 1.15;
+      for (let j = 0; j < parts.length; j++) {
+        const q = parts[j];
+        const fade = q.landed ? clamp(1 - (q.age - q.landed) / 0.45, 0, 1) : clamp((q.life - q.age) / 0.3, 0, 1);
+        if (fade <= 0) continue;
+        const dx = Math.cos(q.a) * q.len * 0.5, dy = Math.sin(q.a) * q.len * 0.5;
+        fctx.globalAlpha = fade;
+        fctx.strokeStyle = q.c;
+        fctx.beginPath(); fctx.moveTo(q.x - dx, q.y - dy); fctx.lineTo(q.x + dx, q.y + dy); fctx.stroke();
+      }
+      fctx.globalAlpha = 1;
+    }
+
     function draw() {
       ctx.setTransform(scale, 0, 0, scale, 0, 0);
       ctx.clearRect(0, 0, W, H);
@@ -2684,7 +3551,7 @@ const Contact = (() => {
       // where every blade's middle and tip are this frame
       const breeze = reduced ? 0 : 1, tt = t;
       for (let i = 0; i < N; i++) {
-        const x = X[i], y = Y[i], h = LEN[i] * 0.52;
+        const x = X[i], y = Y[i], h = LEN[i] * 0.52 * G[i];
         const a = LEAN[i] + OFF[i] + breeze * (Math.sin(tt * 1.7 - x * 0.045 + PH[i] * 0.35) * 0.13 + Math.sin(tt * 0.55 - x * 0.012) * 0.09);
         const a2 = a * 0.42;
         const mx = x + Math.sin(a2) * h, my = y - Math.cos(a2) * h;
@@ -2715,7 +3582,7 @@ const Contact = (() => {
     function frame(now) {
       raf = 0;
       if (!visible || document.hidden || !N) return;
-      if (P.power > 0.01 || gust) settle = 1.2;   // full frame rate while you play with it
+      if (P.power > 0.01 || gust || mowing || parts.length) settle = 1.2;   // full frame rate while you play with it
       const gap = settle > 0 ? 15 : 41;            // ~24fps for the idle breeze
       if (now - last >= gap) {
         const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
@@ -2723,8 +3590,11 @@ const Contact = (() => {
         if (!P.inside) P.power *= Math.pow(0.04, dt);
         P.vx *= Math.pow(0.02, dt);
         const moving = physics(dt);
+        const busy = grow(dt);
         settle = Math.max(0, settle - dt);
         draw();
+        drawFx();
+        if (busy) settle = Math.max(settle, 0.2);
         if (reduced && !moving && settle <= 0) return;
       }
       raf = requestAnimationFrame(frame);
@@ -2743,9 +3613,9 @@ const Contact = (() => {
     const out = () => { P.inside = false; P.lx = -1e4; kick(); };
     canvas.addEventListener('pointerleave', out);
     canvas.addEventListener('pointercancel', out);
-    canvas.addEventListener('pointerdown', () => {
-      gust = { t0: t, dir: P.x < W / 2 ? 1 : -1 };
-      SFX.play('rustle', 1); SFX.play('rustle', 0.8);
+    canvas.addEventListener('click', (e) => {
+      const r = canvas.getBoundingClientRect();
+      mow((e.clientX - r.left) * (W / r.width));
       kick();
     });
 
@@ -2756,6 +3626,135 @@ const Contact = (() => {
     const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
     fontsReady.then(() => { build(); kick(); });
   });
+})();
+
+/* ================================================================
+   "Make it move": the logo builds itself on a loop (click to replay, with sound),
+   and a word whose letters get out of your way and spring back.
+   ================================================================ */
+(() => {
+  const btn = $('#lab-anim .lab__logo');
+  if (!btn) return;
+  let timer = 0, visible = false;
+  const play = (loop) => {
+    clearTimeout(timer);
+    btn.classList.remove('is-play', 'is-out');
+    void btn.offsetWidth;            // restart the CSS animations from the top
+    btn.classList.add('is-play');
+    if (!loop || reduced) return;
+    timer = setTimeout(() => {
+      btn.classList.add('is-out');
+      timer = setTimeout(() => { if (visible) play(true); }, 620);
+    }, 3700);
+  };
+  btn.addEventListener('click', () => { SFX.play('sting'); play(visible); });
+  new IntersectionObserver(([en]) => {
+    visible = en.isIntersecting;
+    if (visible && !reduced) play(true);
+    else if (!visible) { clearTimeout(timer); btn.classList.remove('is-out'); }
+  }, { threshold: 0.35 }).observe(btn);
+})();
+
+(() => {
+  const tile = $('#lab-type'), word = $('#lab-type .lab__word');
+  if (!tile || !word) return;
+  const L = $$('span', word);
+  const S = L.map(() => ({ x: 0, y: 0, r: 0, vx: 0, vy: 0, vr: 0, cx: 0, cy: 0, hit: 0 }));
+  let P = null, raf = 0, last = 0, visible = false, idleAt = 0, wave = -1, fs = 64;
+  const measure = () => {
+    fs = parseFloat(getComputedStyle(word).fontSize) || 64;
+    L.forEach((el, i) => { S[i].cx = el.offsetLeft + el.offsetWidth / 2; S[i].cy = el.offsetTop + el.offsetHeight / 2; });
+  };
+  const step = (now) => {
+    raf = 0;
+    const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60); last = now;
+    // an idle wave runs through the word now and then, so it's clear it moves
+    if (!P && !reduced && visible) {
+      if (wave < 0 && now - idleAt > 3200) { wave = 0; idleAt = now; }
+      if (wave >= 0) { wave += dt * 9; if (wave > L.length + 3) wave = -1; }
+    }
+    let busy = wave >= 0 || !!P;
+    const R = fs * 1.3;
+    S.forEach((q, i) => {
+      let tx = 0, ty = 0, tr = 0;
+      if (P) {
+        const dx = q.cx - P.x, dy = q.cy - P.y, d = Math.hypot(dx, dy) || 1;
+        if (d < R) {
+          const f = (1 - d / R) ** 2;
+          tx = (dx / d) * f * fs * 0.55; ty = (dy / d) * f * fs * 0.5 - f * fs * 0.08; tr = (dx / d) * f * 24;
+          if (f > 0.35 && now - q.hit > 260) { q.hit = now; SFX.play('tick'); }
+        }
+      }
+      if (wave >= 0) { const w = Math.exp(-((i - wave + 1.5) ** 2) / 0.9); ty -= w * fs * 0.2; tr += w * 7; }
+      q.vx += ((tx - q.x) * 190 - q.vx * 13) * dt; q.x += q.vx * dt;
+      q.vy += ((ty - q.y) * 190 - q.vy * 13) * dt; q.y += q.vy * dt;
+      q.vr += ((tr - q.r) * 170 - q.vr * 12) * dt; q.r += q.vr * dt;
+      if (Math.abs(q.x) + Math.abs(q.y) + Math.abs(q.vx) + Math.abs(q.vy) > 0.05 || Math.abs(q.r) > 0.05) busy = true;
+      const el = L[i];
+      el.style.transform = `translate(${q.x.toFixed(2)}px,${q.y.toFixed(2)}px) rotate(${q.r.toFixed(2)}deg)`;
+      el.style.setProperty('--k', clamp(Math.hypot(q.x, q.y) / (fs * 0.32), 0, 1).toFixed(3));
+    });
+    if ((busy || (!reduced && visible)) && visible && !document.hidden) raf = requestAnimationFrame(step);
+    else last = 0;
+  };
+  const kick = () => { if (!raf && visible) raf = requestAnimationFrame(step); };
+  tile.addEventListener('pointermove', (e) => {
+    const r = word.getBoundingClientRect();
+    P = { x: e.clientX - r.left, y: e.clientY - r.top };
+    idleAt = performance.now();
+    kick();
+  });
+  tile.addEventListener('pointerleave', () => { P = null; idleAt = performance.now(); kick(); });
+  tile.addEventListener('pointercancel', () => { P = null; kick(); });
+  new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) { measure(); kick(); } }, { rootMargin: '60px' }).observe(tile);
+  new ResizeObserver(() => measure()).observe(word);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  document.addEventListener('visibilitychange', kick);
+})();
+
+/* ================================================================
+   Neon sign in the header: it lights up with a stutter once the site opens, then every so
+   often the whole tube or its one tired letter flickers. Dim/off steps only, kept short and
+   small (well under flash limits), and it stays steadily lit for reduced motion.
+   ================================================================ */
+(() => {
+  const sign = $('#neon');
+  if (!sign || reduced) return;
+  const tired = $('.neon__l', sign);
+  const set = (node, st) => { node.classList.toggle('is-off', st === 'off'); node.classList.toggle('is-dim', st === 'dim'); };
+  const shown = () => !document.hidden && sign.offsetParent !== null;
+  let timer = 0;
+  const play = (node, steps, done) => {
+    let i = 0;
+    const next = () => {
+      if (i >= steps.length) { set(node, 'on'); if (done) done(); return; }
+      const [st, ms] = steps[i++];
+      set(node, st); timer = setTimeout(next, ms);
+    };
+    next();
+  };
+  const r = (a, b) => a + Math.random() * (b - a);
+  const stutter = () => {
+    const n = 1 + Math.floor(Math.random() * 3), steps = [];
+    for (let k = 0; k < n; k++) steps.push([Math.random() < 0.6 ? 'off' : 'dim', r(45, 110)], ['on', r(60, 220)]);
+    return steps;
+  };
+  const schedule = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (!shown()) return schedule();
+      if (Math.random() < 0.55) play(tired, stutter(), schedule);
+      else play(sign, stutter(), schedule);
+    }, r(2600, 8500));
+  };
+  const ignite = () => {
+    play(sign, [['off', 420], ['dim', 70], ['off', 150], ['on', 70], ['off', 110], ['dim', 60], ['on', 0]], schedule);
+    setTimeout(() => SFX.play('neon'), 440);
+  };
+  set(sign, 'off');
+  if (TMP.state.entered) setTimeout(ignite, 500);
+  else bus.addEventListener('entered', () => setTimeout(ignite, 700), { once: true });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) schedule(); });
 })();
 
 /* ================================================================
@@ -2931,7 +3930,13 @@ else {
     }
     const [{ RoundedBoxGeometry }, { RoomEnvironment }, { EffectComposer }, { RenderPass }, { UnrealBloomPass }, { OutputPass }] = mods;
     const L = { THREE, RoundedBoxGeometry, RoomEnvironment, EffectComposer, RenderPass, UnrealBloomPass, OutputPass };
-    const safe = (fn, name) => { try { fn(L); } catch (e) { console.warn(`[TMP] ${name} 3D failed`, e); if (name === 'hero') fail(e); } };
+    const safe = (fn, name) => {
+      try { fn(L); } catch (e) {
+        console.warn(`[TMP] ${name} 3D failed`, e);
+        if (name === 'hero') fail(e);
+        if (name === 'lab') { const st = document.getElementById('lab-stage'); if (st) st.classList.add('is-fallback'); }
+      }
+    };
     safe(initHero, 'hero');
     const later = (id, fn, name) => {
       const el = document.getElementById(id);
@@ -2940,6 +3945,8 @@ else {
       io.observe(el);
     };
     later('svc-stage', initStage, 'services');
+    later('lab-stage', initLab, 'lab');
+    later('lab-shader', initShader, 'shader');
     later('game', initGame, 'game');
   } catch (e) { fail(e); }
 }
@@ -3555,6 +4562,237 @@ function initStage({ THREE, RoundedBoxGeometry, RoomEnvironment }) {
     });
     renderer.render(scene, camera);
     return true;
+  });
+  kick();
+}
+
+/* ================================================================
+   LAB: a chrome infinity you can spin. It reflects a little photo studio built in code
+   (a dark room, a big softbox overhead, a white strip and a teal strip at the sides and
+   a warm card behind), which is what makes chrome look like chrome.
+   ================================================================ */
+function initLab({ THREE }) {
+  const canvas = document.getElementById('lab-gl');
+  const stage = document.getElementById('lab-stage');
+  if (!canvas || !stage) return;
+  const renderer = makeRenderer(THREE, canvas, { alpha: true, maxDpr: coarse ? 1.75 : 2 });
+  renderer.setClearColor(0x000000, 0);
+  const scene = new THREE.Scene();
+
+  const env = new THREE.Scene();
+  env.add(new THREE.Mesh(new THREE.BoxGeometry(26, 26, 26), new THREE.MeshBasicMaterial({ color: 0x0b0d10, side: THREE.BackSide })));
+  const panel = (w, h, color, k, pos, look) => {
+    const m = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide });
+    m.color.multiplyScalar(k);
+    const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), m);
+    p.position.set(...pos); p.lookAt(...look); env.add(p);
+  };
+  panel(15, 7, 0xffffff, 7, [0, 10.5, 1.5], [0, 0, 0]);        // softbox overhead
+  panel(2.4, 17, 0xffffff, 5.5, [-10.5, 1, 2.5], [0, 1, 0]);    // white strip, left
+  panel(2.4, 17, 0x2dd4bf, 4.2, [10.5, 1, 1.5], [0, 1, 0]);     // teal strip, right
+  panel(13, 3.4, 0xffe7c4, 2.2, [0, 2.5, -11.5], [0, 2.5, 0]);  // warm card behind
+  panel(10, 10, 0xffffff, 0.85, [0, 0.5, 12], [0, 0, 0]);       // faint fill from the front
+  panel(34, 34, 0x1c2026, 1, [0, -9.5, 0], [0, 0, 0]);          // floor
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(env, 0.02).texture;
+  pmrem.dispose();
+
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
+  camera.position.set(0, 0.35, 11.5);
+  camera.lookAt(0, -0.05, 0);
+
+  // the infinity: a lemniscate whose two strands pass in front of and behind each other,
+  // as a tube that is fuller in the loops and slimmer where it crosses
+  const A = 2.2, C = 0.44, R0 = 0.36, SEG = 520, RAD = 48;
+  class Infinity8 extends THREE.Curve {
+    getPoint(u, out = new THREE.Vector3()) {
+      const t = u * Math.PI * 2, sn = Math.sin(t), cs = Math.cos(t), d = 1 + sn * sn;
+      return out.set(A * cs / d, A * sn * cs / d * 1.32, C * sn);
+    }
+  }
+  const geo = new THREE.TubeGeometry(new Infinity8(), SEG, R0, RAD, true);
+  {
+    const pos = geo.attributes.position, nor = geo.attributes.normal;
+    for (let i = 0; i <= SEG; i++) {
+      const t = (i / SEG) * Math.PI * 2, f = 0.8 + 0.3 * Math.cos(t) ** 2;
+      for (let j = 0; j <= RAD; j++) {
+        const k = i * (RAD + 1) + j;
+        pos.setXYZ(k, pos.getX(k) + nor.getX(k) * R0 * (f - 1), pos.getY(k) + nor.getY(k) * R0 * (f - 1), pos.getZ(k) + nor.getZ(k) * R0 * (f - 1));
+      }
+    }
+    pos.needsUpdate = true;
+    geo.computeBoundingSphere();
+  }
+  const FIN = {
+    chrome: { color: new THREE.Color(0xffffff), rough: 0.055, coat: 0.25 },
+    gold: { color: new THREE.Color(0xffd98a), rough: 0.13, coat: 0.15 },
+    teal: { color: new THREE.Color(0x2dd4bf), rough: 0.19, coat: 0.6 },
+  };
+  const mat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 1, roughness: FIN.chrome.rough, clearcoat: FIN.chrome.coat, clearcoatRoughness: 0.06, envMapIntensity: 1.15 });
+  const knot = new THREE.Mesh(geo, mat);
+  const spinner = new THREE.Group(); spinner.add(knot);
+  const root = new THREE.Group(); root.add(spinner); scene.add(root);
+
+  // a soft contact shadow under it
+  const sc = document.createElement('canvas'); sc.width = sc.height = 128;
+  const g2 = sc.getContext('2d'), grad = g2.createRadialGradient(64, 64, 2, 64, 64, 62);
+  grad.addColorStop(0, 'rgba(0,0,0,.75)'); grad.addColorStop(0.55, 'rgba(0,0,0,.28)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
+  g2.fillStyle = grad; g2.fillRect(0, 0, 128, 128);
+  const shadowTex = new THREE.CanvasTexture(sc);
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(6.2, 1.5), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: 0.6 }));
+  shadow.rotation.x = -Math.PI / 2; shadow.position.y = -1.85; root.add(shadow);
+
+  // on tall, narrow stages (phones) it sits a little higher, clear of the caption
+  let fit = 1, lift = 0;
+  sizeTo(renderer, camera, stage, (w, h) => { fit = clamp((w / h) / 1.45, 0.62, 1); lift = clamp((h / w - 0.62) * 1.1, 0, 0.55); });
+
+  // drag to spin (with inertia), hover to lean, click for a big spin, arrow keys work too
+  let rotY = -0.55, rotX = 0.16, vy = 0, vx = 0, down = false, dragging = false, moved = false, sx = 0, sy = 0, lx = 0, ly = 0;
+  const hover = { x: 0, y: 0, tx: 0, ty: 0 };
+  canvas.addEventListener('pointerdown', (e) => { down = true; moved = false; sx = lx = e.clientX; sy = ly = e.clientY; vy *= 0.3; kick(); });
+  canvas.addEventListener('pointermove', (e) => {
+    const r = canvas.getBoundingClientRect();
+    hover.tx = (e.clientX - r.left) / r.width - 0.5; hover.ty = (e.clientY - r.top) / r.height - 0.5;
+    if (down) {
+      if (!dragging && Math.hypot(e.clientX - sx, e.clientY - sy) > 5) {
+        dragging = true; moved = true;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      }
+      if (dragging) {
+        const dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+        vy = dx * 0.0105; vx = dy * 0.0075;
+        rotY += vy; rotX = clamp(rotX + vx, -1.15, 1.15);
+      }
+    }
+    kick();
+  });
+  const up = () => {
+    if (down && !moved) { vy += 0.34; sfx('swipe'); }
+    down = false; dragging = false; kick();
+  };
+  canvas.addEventListener('pointerup', up);
+  canvas.addEventListener('pointercancel', () => { down = false; dragging = false; });
+  canvas.addEventListener('pointerleave', () => { hover.tx = 0; hover.ty = 0; kick(); });
+  stage.addEventListener('keydown', (e) => {
+    const k = e.key;
+    if (k === 'ArrowLeft' || k === 'ArrowRight') { vy += k === 'ArrowLeft' ? -0.07 : 0.07; e.preventDefault(); }
+    else if (k === 'ArrowUp' || k === 'ArrowDown') { rotX = clamp(rotX + (k === 'ArrowUp' ? -0.14 : 0.14), -1.15, 1.15); e.preventDefault(); }
+    else if (k === 'Enter' || k === ' ') { if (e.target !== stage) return; vy += 0.34; sfx('swipe'); e.preventDefault(); }
+    else return;
+    kick();
+  });
+
+  // finishes: chrome, gold, teal
+  let fin = FIN.chrome, finT = 1;
+  const fromColor = new THREE.Color(), fromRough = { v: 0 }, fromCoat = { v: 0 };
+  $$lab('.lab__chip', stage).forEach((b) => b.addEventListener('click', () => {
+    const next = FIN[b.dataset.finish];
+    if (!next || next === fin) return;
+    fromColor.copy(mat.color); fromRough.v = mat.roughness; fromCoat.v = mat.clearcoat;
+    fin = next; finT = 0;
+    $$lab('.lab__chip', stage).forEach((c) => { const on = c === b; c.classList.toggle('is-on', on); c.setAttribute('aria-pressed', String(on)); });
+    sfx('toggleOn'); kick();
+  }));
+
+  const kick = runner(stage, (dt, t) => {
+    if (!dragging) {
+      rotY += vy * dt * 60;
+      vy *= Math.pow(0.12, dt);
+      if (!reduced && Math.abs(vy) < 0.004) rotY += 0.3 * dt;
+      rotX += (0.16 - rotX) * Math.min(1, dt * 0.6);
+    }
+    hover.x += (hover.tx - hover.x) * Math.min(1, dt * 5);
+    hover.y += (hover.ty - hover.y) * Math.min(1, dt * 5);
+    spinner.rotation.set(rotX + hover.y * 0.22, rotY + hover.x * 0.32, 0);
+    const bob = reduced ? 0 : Math.sin(t * 1.15) * 0.075;
+    spinner.position.y = bob;
+    shadow.material.opacity = 0.6 - bob * 1.2;
+    shadow.scale.setScalar(1 - bob * 0.5);
+    root.scale.setScalar(fit);
+    root.position.y = lift;
+    if (finT < 1) {
+      finT = Math.min(1, finT + dt / 0.45);
+      const e = easeOutCubic(finT);
+      mat.color.copy(fromColor).lerp(fin.color, e);
+      mat.roughness = lerp(fromRough.v, fin.rough, e);
+      mat.clearcoat = lerp(fromCoat.v, fin.coat, e);
+    }
+    renderer.render(scene, camera);
+    return !reduced || dragging || Math.abs(vy) > 0.0005 || finT < 1 || Math.abs(hover.x - hover.tx) > 0.001;
+  });
+  kick();
+}
+function $$lab(sel, root) { return Array.from((root || document).querySelectorAll(sel)); }
+
+/* ================================================================
+   LAB: a liquid gradient in the brand's teals that you can stir
+   ================================================================ */
+function initShader({ THREE }) {
+  const canvas = document.getElementById('lab-sh');
+  const tile = document.getElementById('lab-shader');
+  if (!canvas || !tile) return;
+  const renderer = makeRenderer(THREE, canvas, { maxDpr: coarse ? 1.25 : 1.5 });
+  renderer.toneMapping = THREE.NoToneMapping;
+  const scene = new THREE.Scene();
+  const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const U = { uTime: { value: 7 }, uRes: { value: new THREE.Vector2(1, 1) }, uMouse: { value: new THREE.Vector2(0.72, 0.42) }, uStir: { value: 0 } };
+  const mat = new THREE.ShaderMaterial({
+    uniforms: U,
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+    fragmentShader: `
+      precision highp float;
+      uniform float uTime; uniform vec2 uRes; uniform vec2 uMouse; uniform float uStir;
+      varying vec2 vUv;
+      vec2 hash(vec2 p){ p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3))); return -1.0 + 2.0 * fract(sin(p) * 43758.5453123); }
+      float noise(vec2 p){
+        vec2 i = floor(p), f = fract(p), u = f * f * (3.0 - 2.0 * f);
+        return mix(mix(dot(hash(i), f), dot(hash(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0)), u.x),
+                   mix(dot(hash(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0)), dot(hash(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0)), u.x), u.y);
+      }
+      float fbm(vec2 p){ float v = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { v += a * noise(p); p = p * 2.01 + vec2(1.7, 9.2); a *= 0.5; } return v; }
+      void main(){
+        float asp = uRes.x / max(uRes.y, 1.0);
+        vec2 p = (vUv - 0.5) * vec2(asp, 1.0) * 1.5;
+        vec2 m = (uMouse - 0.5) * vec2(asp, 1.0) * 1.5;
+        vec2 d = p - m; float r2 = dot(d, d);
+        float sw = uStir * exp(-r2 * 5.0);
+        float an = sw * 2.8, cs = cos(an), sn = sin(an);
+        p = m + mat2(cs, -sn, sn, cs) * d;
+        float t = uTime * 0.08;
+        vec2 q = vec2(fbm(p + t), fbm(p + vec2(5.2, 1.3) - t));
+        vec2 r = vec2(fbm(p + 3.5 * q + vec2(1.7, 9.2) + 0.6 * t), fbm(p + 3.5 * q + vec2(8.3, 2.8) - 0.5 * t));
+        float f = 0.5 + 0.5 * fbm(p + 3.5 * r);
+        vec3 col = mix(vec3(0.03, 0.09, 0.10), vec3(0.04, 0.36, 0.34), clamp(f * f * 3.0, 0.0, 1.0));
+        col = mix(col, vec3(0.16, 0.80, 0.72), clamp(length(q) * 1.4, 0.0, 1.0));
+        col = mix(col, vec3(0.82, 1.0, 0.96), clamp(abs(r.x) * 1.6, 0.0, 1.0) * 0.55);
+        col *= (f * f * f + 0.6 * f * f + 0.5 * f) * 1.7;
+        col += vec3(0.16, 0.80, 0.72) * sw * 0.18;
+        col *= 0.8 + 0.2 * smoothstep(1.5, 0.2, length((vUv - 0.5) * vec2(1.7, 1.0)));
+        gl_FragColor = vec4(col, 1.0);
+      }`,
+  });
+  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
+  sizeTo(renderer, cam, tile, (w, h) => U.uRes.value.set(w, h));
+
+  const P = { x: 0.72, y: 0.42, tx: 0.72, ty: 0.42, speed: 0, last: 0 };
+  tile.addEventListener('pointermove', (e) => {
+    const r = tile.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width, ny = 1 - (e.clientY - r.top) / r.height;
+    P.speed = Math.min(1.6, P.speed + Math.hypot(nx - P.tx, ny - P.ty) * 9);
+    P.tx = nx; P.ty = ny; P.last = performance.now();
+    kick();
+  });
+  let skip = false;
+  const kick = runner(tile, (dt) => {
+    P.x += (P.tx - P.x) * Math.min(1, dt * 6); P.y += (P.ty - P.y) * Math.min(1, dt * 6);
+    P.speed *= Math.pow(0.25, dt);
+    U.uStir.value += (P.speed - U.uStir.value) * Math.min(1, dt * 4);
+    U.uMouse.value.set(P.x, P.y);
+    if (!reduced) U.uTime.value += dt;
+    // phones: 30 frames a second is plenty for a slow liquid
+    skip = coarse ? !skip : false;
+    if (!skip) renderer.render(scene, cam);
+    return !reduced || U.uStir.value > 0.01 || Math.abs(P.tx - P.x) > 0.001;
   });
   kick();
 }
