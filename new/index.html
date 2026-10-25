@@ -399,10 +399,16 @@ html.is-entered .hero__offers{animation-delay:.45s}
 .built__n{font-family:var(--font-display);font-weight:760;color:var(--paper)}
 .case__ctas{display:flex;flex-wrap:wrap;gap:12px}
 .save{padding:clamp(20px,3vw,34px);border-radius:26px;background:var(--ink);border:1px solid var(--line)}
-.save__head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 20px;flex-wrap:wrap;margin-bottom:26px}
+/* The header never changes size: the title sits above the total, and each changing part reserves the
+   room of its widest value ($20,000 is wider than any amount the count passes through, and "10 years"
+   is the longest), so counting and sliding never reflow the chart. */
+.save__head{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-bottom:26px}
 .save__title{font-weight:650;color:var(--muted);font-size:.9375rem}
-.save__total{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:860;font-stretch:78%;font-size:clamp(2.6rem,5vw,3.8rem);line-height:1;color:var(--teal);letter-spacing:-.01em}
+.save__total{display:flex;align-items:baseline;gap:4px 10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:860;font-stretch:78%;font-size:clamp(2.6rem,5vw,3.8rem);line-height:1;color:var(--teal);letter-spacing:-.01em}
 .save__total small{font-family:var(--font-text);font-stretch:100%;font-size:.9375rem;font-weight:500;color:var(--muted);letter-spacing:0}
+.save__fit{display:inline-grid;justify-items:start}
+.save__fit > *{grid-area:1/1}
+.save__sizer{visibility:hidden}
 .save__chart{position:relative;height:260px;margin-left:46px}
 .save__grid{position:absolute;left:0;right:0;top:0;bottom:26px;display:flex;flex-direction:column;justify-content:space-between}
 .save__grid span{position:relative;display:block;border-top:1px dashed var(--line-2)}
@@ -1065,7 +1071,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
     <figure class="save" aria-labelledby="save-cap">
       <figcaption class="save__head" id="save-cap">
         <span class="save__title">QuickBooks savings over time</span>
-        <span class="save__total"><span id="save-total">$10,000</span> <small>saved in <span id="save-years">5 years</span></small></span>
+        <span class="save__total"><span class="save__fit"><span id="save-total">$10,000</span><span class="save__sizer" aria-hidden="true">$20,000</span></span> <small>saved in <span class="save__fit"><span id="save-years">5 years</span><span class="save__sizer" aria-hidden="true">10 years</span></span></small></span>
       </figcaption>
       <div class="save__chart" id="save-chart" aria-hidden="true">
         <div class="save__grid"><span data-v="$20k"></span><span data-v="$10k"></span><span data-v="$0"></span></div>
@@ -1465,20 +1471,29 @@ function copyText(text, okMsg) {
   } catch (e) { fallback(); }
 }
 
-/* Count a number up on an element: "$10,000" style when money is true. */
+/* Count a number up on an element: "$10,000" style when money is true.
+   A new target while a count is still running takes over from the number on screen
+   (one animation per element), so quick changes never jump or fight each other. */
+const counting = new WeakMap();
 function countTo(el, to, { duration = 700, prefix = '$', animate = true } = {}) {
-  const from = +(el.dataset.v || 0);
+  const run = counting.get(el);
+  if (run) cancelAnimationFrame(run.raf);
+  const from = run ? run.shown : +(el.dataset.v || 0);
   el.dataset.v = to;
   const fmt = (v) => prefix + Math.round(v).toLocaleString('en-US');
-  if (!animate || reduced || from === to) { el.textContent = fmt(to); return; }
+  if (!animate || reduced || from === to) { counting.delete(el); el.textContent = fmt(to); return; }
+  const state = { raf: 0, shown: from };
+  counting.set(el, state);
   const t0 = performance.now();
   const step = (now) => {
     const k = clamp((now - t0) / duration, 0, 1);
     const e = 1 - Math.pow(1 - k, 4);
-    el.textContent = fmt(from + (to - from) * e);
-    if (k < 1) requestAnimationFrame(step);
+    state.shown = from + (to - from) * e;
+    el.textContent = fmt(state.shown);
+    if (k < 1) state.raf = requestAnimationFrame(step);
+    else counting.delete(el);
   };
-  requestAnimationFrame(step);
+  state.raf = requestAnimationFrame(step);
 }
 
 /* ================================================================
