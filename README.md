@@ -32,7 +32,7 @@ This bundles three.js 0.169.0 and Motion 12.23.24 (both MIT) with only the parts
 
 ## Things to update
 
-- **Contact email:** set `data-email` on the `<form id="contact-form">` in `index.html`. The form opens the visitor's email app addressed to this inbox.
+- **Contact email:** set `data-email` on the `<form id="contact-form">` in `index.html`. The form sends inquiries to this inbox through [FormSubmit](https://formsubmit.co) (no account needed); if sending fails, the visitor can copy the message or open it in their email app instead. A new address has to be activated once: the first submission makes FormSubmit email it an "Activate Form" button, and messages are delivered once that's clicked.
 - **Example project links:** the `href` on each `.card-work` card and in the footer "Work" column. The address shown in the hero's laptop is in the `projects` list at the top of the showcase code in `script.js`.
 
 ## Moving to your own domain

@@ -57,7 +57,7 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="dist/styles.4f337ffd36.min.css">
+  <link rel="stylesheet" href="dist/styles.249ae0c3de.min.css">
   <link rel="modulepreload" href="dist/3d/main3d-XWINUJ4X.js">
   <link rel="preload" href="assets/3d/tmp-wordmark.bin" as="fetch" type="application/octet-stream" crossorigin>
   <script>
@@ -738,8 +738,8 @@
           <h2>Let’s <span class="grass" data-grass>grow</span> your business.</h2>
           <p class="section__lede">Tell us a little about what you need. We’ll get back to you with ideas and a free quote.</p>
         </div>
-        <!-- Set data-email to the inbox that should receive inquiries. -->
-        <form class="form reveal" id="contact-form" data-email="hello@themarketingpartner.com" novalidate>
+        <!-- Set data-email to the inbox that should receive inquiries (sent through FormSubmit, see README). -->
+        <form class="form reveal" id="contact-form" data-email="info@tmpbizz.com" novalidate>
           <div class="form__row">
             <label class="field"><span>Name</span><input name="name" autocomplete="name" required></label>
             <label class="field"><span>Business</span><input name="business" autocomplete="organization"></label>
@@ -762,9 +762,13 @@
           <label class="field"><span>Tell us about your project</span><textarea name="message" rows="4"></textarea></label>
           <button class="btn btn--primary btn--block" type="submit">Send message</button>
           <p class="form__note" role="status" aria-live="polite"></p>
-          <div class="ready" id="form-ready" hidden>
-            <p class="ready__title">Your message is ready.</p>
-            <p class="ready__text">Send it to <span class="ready__email" data-email-text></span> and we’ll reply with ideas and a free quote.</p>
+          <div class="ready" id="form-sent" tabindex="-1" hidden>
+            <p class="ready__title">Thanks! Your message is on its way.</p>
+            <p class="ready__text">We’ll get back to you with ideas and a free quote.</p>
+          </div>
+          <div class="ready" id="form-ready" tabindex="-1" hidden>
+            <p class="ready__title">We couldn’t send your message.</p>
+            <p class="ready__text">Please send it to <span class="ready__email" data-email-text></span> instead and we’ll reply with ideas and a free quote.</p>
             <div class="ready__actions">
               <button class="btn btn--sm btn--primary" type="button" id="copy-message">Copy message</button>
               <a class="link-arrow" id="open-mail" href="#">Open in email app</a>
@@ -818,7 +822,7 @@
     </div>
   </footer>
 
-  <script src="dist/app.b5b6fa7113.min.js" defer></script>
+  <script src="dist/app.4e45b26a17.min.js" defer></script>
   <script type="module" src="dist/3d/main3d-XWINUJ4X.js"></script>
 </body>
 </html>

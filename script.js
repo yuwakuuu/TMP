@@ -458,12 +458,35 @@
     });
   });
 
-  /* Contact form: validate, then prepare the message to send ---------------- */
+  /* Contact form: validate, then send it to the inbox through FormSubmit. If that
+     fails, the message is ready to copy or open in the visitor's email app instead. */
   const note = form.querySelector('.form__note');
+  const sendBtn = form.querySelector('[type="submit"]');
+  const sendLabel = sendBtn.textContent;
+  const sent = document.getElementById('form-sent');
   const ready = document.getElementById('form-ready');
   const copyBtn = document.getElementById('copy-message');
   let message = '';
-  form.addEventListener('submit', (e) => {
+  const send = async (fields) => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15000);
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${form.dataset.email}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(fields),
+        signal: ctrl.signal,
+      });
+      if (!res.ok) return false;
+      // success is "true" once delivered; "false" (with a reason) until the inbox has activated the form
+      return String((await res.json()).success) === 'true';
+    } catch (e) {
+      return false;
+    } finally {
+      clearTimeout(timer);
+    }
+  };
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = new FormData(form);
     const name = form.elements.name;
@@ -492,11 +515,24 @@
     const subject = `New project inquiry${data.get('business') ? ' — ' + data.get('business') : ''}`;
     const body = lines.join('\n');
     message = `Subject: ${subject}\n\n${body}`;
-    ready.querySelector('[data-email-text]').textContent = form.dataset.email;
-    ready.querySelector('#open-mail').href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    // every field (checkbox groups joined into one line), plus the email's subject line
+    const fields = {};
+    for (const key of new Set(data.keys())) fields[key] = data.getAll(key).join(', ');
+    fields._subject = subject;
     note.textContent = '';
-    ready.hidden = false;
-    ready.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+    sent.hidden = true; ready.hidden = true;
+    sendBtn.disabled = true; sendBtn.textContent = 'Sending…';
+    const ok = await send(fields);
+    sendBtn.disabled = false; sendBtn.textContent = sendLabel;
+    if (ok) form.reset();
+    else {
+      ready.querySelector('[data-email-text]').textContent = form.dataset.email;
+      ready.querySelector('#open-mail').href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+    const panel = ok ? sent : ready;
+    panel.hidden = false;
+    panel.focus({ preventScroll: true });   // so screen readers announce the result
+    panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
   });
   copyBtn.addEventListener('click', () => {
     const done = () => { copyBtn.textContent = 'Copied'; setTimeout(() => { copyBtn.textContent = 'Copy message'; }, 2000); };
