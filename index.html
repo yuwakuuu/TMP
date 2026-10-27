@@ -703,8 +703,13 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 .ready{display:grid;gap:10px;padding:20px;border-radius:18px;border:1px solid color-mix(in srgb,var(--teal) 50%,transparent);background:color-mix(in srgb,var(--teal) 8%,var(--ink));animation:fadeUp .5s var(--ease-out) both}
 .ready__title{font-family:var(--font-display);font-weight:800;font-size:1.25rem}
 .ready__text{color:var(--muted);font-size:.9375rem}
-.ready__email{font-weight:700;color:var(--paper);user-select:all;-webkit-user-select:all;word-break:break-all}
+.ready__email{font-weight:700;color:var(--paper);user-select:all;-webkit-user-select:all;overflow-wrap:anywhere}
 .ready__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.ready__title svg{width:22px;height:22px;flex:none;color:var(--teal)}
+.ready--sent .ready__title{display:flex;align-items:center;gap:10px}
+.ready:focus{outline:none}
+.form__trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.btn[aria-busy="true"]{cursor:progress;opacity:.8}
 
 /* ---------- "grow" in grass (drawn by the grass script over the real, hidden word) ---------- */
 .grass{position:relative;display:inline-block;font-weight:900;font-stretch:125%;font-size:1.06em;line-height:.92;letter-spacing:-.025em;padding:.04em .04em .06em;margin:-.04em -.02em -.06em;color:#3f9a2c;cursor:grab;-webkit-tap-highlight-color:transparent}
@@ -824,6 +829,8 @@ html.is-locked .tob{display:none}
 .tob__acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
 .tob__acts a,.tob__acts button{display:inline-flex;align-items:center;min-height:36px;padding:0 13px;border-radius:10px;border:1px solid var(--line-2);background:var(--ink-3);color:var(--paper);font-family:var(--font-display);font-weight:700;font-size:.85rem;text-decoration:none;cursor:pointer}
 .tob__acts .is-main{background:var(--teal);border-color:var(--teal);color:var(--ink)}
+.tob__card--sent{border-color:color-mix(in srgb,var(--teal) 45%,transparent)}
+.tob__card h3 svg{width:16px;height:16px;margin-right:6px;vertical-align:-3px;color:var(--teal)}
 .tob__mini{align-self:stretch;display:grid;gap:9px;padding:14px;border-radius:16px;border:1px solid var(--line-2);background:#0e1114;animation:tobMsg .32s var(--ease-out) both}
 .tob__mini label{display:grid;gap:4px;font-size:.78rem;font-weight:650;color:var(--muted)}
 .tob__mini input,.tob__mini textarea{width:100%;min-height:40px;padding:8px 11px;border-radius:10px;border:1px solid var(--line-2);background:var(--ink-2);color:var(--paper);font:inherit;font-size:.9375rem}
@@ -923,7 +930,7 @@ html.is-locked .tob{display:none}
 </style>
 <link rel="apple-touch-icon" href="new/assets/apple-touch-icon.png">
 <link rel="manifest" href="new/site.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Marketing Partner","alternateName":"TMP","slogan":"More Leads, Better Bizz.","url":"https://tmpbizz.com/","logo":"https://tmpbizz.com/assets/icon-512.png","image":"https://tmpbizz.com/assets/og.png","description":"Websites, systems, apps, games and marketing that help small local businesses get more leads and more revenue.","founder":{"@type":"Person","name":"Adrian"},"foundingLocation":{"@type":"Place","name":"Mesa, Arizona","address":{"@type":"PostalAddress","addressLocality":"Mesa","addressRegion":"AZ","addressCountry":"US"}},"sameAs":["https://github.com/yuwakuuu","https://yuwakuuu.github.io/madebywaku/"],"subjectOf":{"@type":"VideoObject","name":"The Marketing Partner: our new look and new website","description":"A 30-second reveal of The Marketing Partner (TMP): websites, systems, apps, games and marketing for small local businesses.","thumbnailUrl":"https://tmpbizz.com/assets/video/tmp-reveal-poster.webp","uploadDate":"2026-10-24T14:00:00-07:00","duration":"PT30S","contentUrl":"https://tmpbizz.com/assets/video/tmp-reveal-1080.mp4"},"makesOffer":[{"@type":"Offer","name":"Websites, apps and games","priceSpecification":{"@type":"PriceSpecification","minPrice":499.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Systems (scheduling, online store, invoicing, QuickBooks replacement)","priceSpecification":{"@type":"PriceSpecification","minPrice":299.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Marketing: Google, Facebook and Instagram ads, Google Business Profile","priceSpecification":{"@type":"UnitPriceSpecification","minPrice":129.99,"priceCurrency":"USD","unitText":"month"}},{"@type":"Offer","name":"TMP+ website membership","priceSpecification":{"@type":"UnitPriceSpecification","price":79.99,"priceCurrency":"USD","unitText":"month"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Marketing Partner","alternateName":"TMP","slogan":"More Leads, Better Bizz.","url":"https://tmpbizz.com/","logo":"https://tmpbizz.com/new/assets/icon-512.png","image":"https://tmpbizz.com/new/assets/og.png","description":"Websites, systems, apps, games and marketing that help small local businesses get more leads and more revenue.","founder":{"@type":"Person","name":"Adrian"},"foundingLocation":{"@type":"Place","name":"Mesa, Arizona","address":{"@type":"PostalAddress","addressLocality":"Mesa","addressRegion":"AZ","addressCountry":"US"}},"sameAs":["https://github.com/yuwakuuu","https://yuwakuuu.github.io/madebywaku/"],"subjectOf":{"@type":"VideoObject","name":"The Marketing Partner: our new look and new website","description":"A 30-second reveal of The Marketing Partner (TMP): websites, systems, apps, games and marketing for small local businesses.","thumbnailUrl":"https://tmpbizz.com/new/assets/video/tmp-reveal-poster.webp","uploadDate":"2026-10-24T14:00:00-07:00","duration":"PT30S","contentUrl":"https://tmpbizz.com/new/assets/video/tmp-reveal-1080.mp4"},"makesOffer":[{"@type":"Offer","name":"Websites, apps and games","priceSpecification":{"@type":"PriceSpecification","minPrice":499.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Systems (scheduling, online store, invoicing, dashboards)","priceSpecification":{"@type":"PriceSpecification","minPrice":299.99,"priceCurrency":"USD"}},{"@type":"Offer","name":"Marketing: Google, Facebook and Instagram ads, Google Business Profile","priceSpecification":{"@type":"UnitPriceSpecification","minPrice":129.99,"priceCurrency":"USD","unitText":"month"}},{"@type":"Offer","name":"TMP+ website membership","priceSpecification":{"@type":"UnitPriceSpecification","price":79.99,"priceCurrency":"USD","unitText":"month"}}]}</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -1238,7 +1245,7 @@ html.is-locked .tob{display:none}
       <ol class="cf__track" id="cf-track">
         <li class="cf__card" data-i="0" aria-roledescription="slide" aria-label="1 of 5: Total Quality Management">
           <a class="cf__shot" href="https://tmpbizz.com/demo/tqm/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
-            <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/TMP/demo/tqm</span></span>
+            <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/tqm</span></span>
             <img src="new/assets/work/tqm-960.webp" srcset="new/assets/work/tqm-960.webp 960w, new/assets/work/tqm.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Total Quality Management's homepage: a polished grocery-store floor behind the headline Professional Cleaning, Exceptional Standards." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="new/assets/work/tqm-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
@@ -1259,7 +1266,7 @@ html.is-locked .tob{display:none}
         </li>
         <li class="cf__card" data-i="3" aria-roledescription="slide" aria-label="4 of 5: The TOB Company">
           <a class="cf__shot" href="https://tmpbizz.com/demo/tob/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
-            <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/TMP/demo/tob</span></span>
+            <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/tob</span></span>
             <img src="new/assets/work/tob-960.webp" srcset="new/assets/work/tob-960.webp 960w, new/assets/work/tob.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="The TOB Company's homepage: TOB's glowing round face beside the headline Your own AI butler." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="new/assets/work/tob-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
@@ -1509,7 +1516,7 @@ html.is-locked .tob{display:none}
     </div>
     <figure class="sam__photo">
       <div class="sam__frame">
-        <img src="new/assets/sam/sammy.webp" srcset="new/assets/sam/sammy-480.webp 480w, assets/sam/sammy.webp 720w" sizes="(max-width: 760px) 80vw, 420px" width="720" height="900" loading="lazy" decoding="async" alt="Sammy Saka Makori II smiling on a stairway, wearing a black hoodie over a white collared shirt.">
+        <img src="new/assets/sam/sammy.webp" srcset="new/assets/sam/sammy-480.webp 480w, new/assets/sam/sammy.webp 720w" sizes="(max-width: 760px) 80vw, 420px" width="720" height="900" loading="lazy" decoding="async" alt="Sammy Saka Makori II smiling on a stairway, wearing a black hoodie over a white collared shirt.">
         <div class="bouquet" id="bouquet" aria-hidden="true"></div>
       </div>
       <figcaption>Sammy Saka Makori II</figcaption>
@@ -1604,19 +1611,22 @@ html.is-locked .tob{display:none}
         <label for="f-i-other"><input type="checkbox" id="f-i-other" name="interest" value="Something else"><span>Something else</span></label>
       </fieldset>
       <div class="field"><label for="f-message">Tell us about your project</label><textarea id="f-message" name="message" rows="5"></textarea></div>
-      <button class="btn btn--primary btn--lg btn--block" type="submit">Send message</button>
+      <!-- spam trap: people never see this box, bots fill it in -->
+      <div class="form__trap" aria-hidden="true"><label for="f-website">Leave this empty</label><input id="f-website" name="_honey" tabindex="-1" autocomplete="off"></div>
+      <button class="btn btn--primary btn--lg btn--block" type="submit" id="form-send">Send message</button>
       <p class="form__note" id="form-note" role="status" aria-live="polite"></p>
-      <div class="ready" id="form-sent" tabindex="-1" hidden>
-        <p class="ready__title">Thanks! Your message is on its way.</p>
-        <p class="ready__text">We'll get back to you with ideas and a free quote.</p>
+      <div class="ready ready--sent" id="form-sent" tabindex="-1" hidden>
+        <p class="ready__title"><svg aria-hidden="true"><use href="#i-check"/></svg><span id="sent-title">Thanks! Your message is in.</span></p>
+        <p class="ready__text">We'll get back to you at <span class="ready__email" id="sent-email"></span> with ideas and a free quote.</p>
       </div>
       <div class="ready" id="form-ready" tabindex="-1" hidden>
-        <p class="ready__title">We couldn't send your message.</p>
-        <p class="ready__text">Open it in your email app and press send, or copy it and send it to <span class="ready__email" id="ready-email"></span>. We'll reply with ideas and a free quote.</p>
+        <p class="ready__title">Send it from your email instead.</p>
+        <p class="ready__text">We couldn't send it from here just now, so your message is ready to go to <span class="ready__email" id="ready-email"></span>. Pick your email, then press send.</p>
         <div class="ready__actions">
-          <a class="btn btn--primary btn--sm" id="open-mail" href="#">Open in my email app</a>
+          <a class="btn btn--ghost btn--sm" id="mail-gmail" href="#" target="_blank" rel="noopener">Gmail</a>
+          <a class="btn btn--ghost btn--sm" id="mail-outlook" href="#" target="_blank" rel="noopener">Outlook</a>
+          <a class="btn btn--ghost btn--sm" id="mail-app" href="#">Email app</a>
           <button class="btn btn--ghost btn--sm" type="button" id="copy-message">Copy message</button>
-          <button class="btn btn--ghost btn--sm" type="button" id="copy-email">Copy address</button>
         </div>
       </div>
     </form>
@@ -1744,8 +1754,14 @@ html.is-locked .tob{display:none}
    Settings you may want to change
    ================================================================ */
 const CONFIG = {
-  // Inbox that receives project requests from the contact form (sent through FormSubmit, see README). Carried over from the old site.
+  // Inbox that receives messages from the contact form and TOB.
   contactEmail: 'info@tmpbizz.com',
+  // FormSubmit delivers those messages to the inbox. This code from FormSubmit's activation email
+  // stands in for the address, so the address isn't in the code that sends them.
+  formKey: 'a2e0060fa4f7c136a3fcc2c1de8e8f53',
+  // FormSubmit is activated for this domain. Copies of the page anywhere else (previews, tests)
+  // don't send; they show the email options instead, so they never ask the inbox to activate again.
+  formSite: 'tmpbizz.com',
   // Shared count of flowers left for Sammy (free public counter, the same one the old site used).
   flowerApi: 'https://abacus.jasoncameron.dev',
   flowerCounter: 'yuwakuuu-tmp/sammy-flowers',
@@ -2617,46 +2633,82 @@ function Odo(root) {
 }
 
 /* ================================================================
-   Contact form: sends the request to the inbox through FormSubmit. If that
-   fails, the email is ready to open or copy instead.
+   Sending messages. The contact form and TOB post to FormSubmit, which emails
+   CONFIG.contactEmail, so nobody needs an email app. If FormSubmit can't be reached,
+   the same message is ready in Gmail, Outlook or the visitor's own email app instead.
    ================================================================ */
-const Contact = (() => {
-  const form = $('#contact-form');
-  if (!form) return { prefill() {} };
-  const note = $('#form-note'), sent = $('#form-sent'), ready = $('#form-ready');
-  const sendBtn = $('[type="submit"]', form), sendLabel = sendBtn.textContent;
-  $('#ready-email').textContent = CONFIG.contactEmail;
-  let subject = '', body = '';
-  const field = (id) => $('#' + id).closest('.field');
-  const setBad = (id, bad) => { field(id).classList.toggle('is-invalid', bad); $('#' + id).setAttribute('aria-invalid', String(bad)); };
-  ['f-name', 'f-email'].forEach((id) => $('#' + id).addEventListener('input', () => setBad(id, false)));
-  // true once FormSubmit has emailed the inbox; false if it fails or doesn't answer within 15 s
-  const send = async (fields) => {
+const Mail = (() => {
+  const host = location.hostname.toLowerCase();
+  const live = host === CONFIG.formSite || host.endsWith('.' + CONFIG.formSite);
+  // true once FormSubmit says the email went out; false if it refuses, fails or takes over 15 s
+  async function send(fields) {
+    if (!live) return false;
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 15000);
     try {
-      const res = await fetch(`https://formsubmit.co/ajax/${CONFIG.contactEmail}`, {
+      const res = await fetch(`https://formsubmit.co/ajax/${CONFIG.formKey || CONFIG.contactEmail}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(fields),
+        body: JSON.stringify({ _template: 'table', _captcha: 'false', ...fields }),
         signal: ctrl.signal,
       });
       if (!res.ok) return false;
-      // success is "true" once delivered; "false" (with a reason) until the inbox has activated the form
-      return String((await res.json()).success) === 'true';
+      const reply = await res.json();
+      // "true" once delivered; "false" with a reason otherwise (for example before the form is activated)
+      return String(reply && reply.success) === 'true';
     } catch (e) {
       return false;
     } finally {
       clearTimeout(timer);
     }
+  }
+  // the same message, ready to send from the visitor's own email
+  function links(subject, body) {
+    const to = encodeURIComponent(CONFIG.contactEmail), s = encodeURIComponent(subject), b = encodeURIComponent(body);
+    return {
+      gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${s}&body=${b}`,
+      outlook: `https://outlook.live.com/mail/0/deeplink/compose?to=${to}&subject=${s}&body=${b}`,
+      app: `mailto:${CONFIG.contactEmail}?subject=${s}&body=${b}`,
+    };
+  }
+  const copy = (subject, body) => copyText(`To: ${CONFIG.contactEmail}\nSubject: ${subject}\n\n${body}`, 'Message copied');
+  // only the fields that were filled in, under readable names
+  const pack = (pairs) => Object.fromEntries(pairs.filter(([, v]) => v));
+  return { send, links, copy, pack };
+})();
+
+/* ================================================================
+   Contact form
+   ================================================================ */
+const Contact = (() => {
+  const form = $('#contact-form');
+  if (!form) return { prefill() {} };
+  const note = $('#form-note'), sent = $('#form-sent'), ready = $('#form-ready'), btn = $('#form-send');
+  const btnLabel = btn.textContent;
+  $('#ready-email').textContent = CONFIG.contactEmail;
+  // on phones the email app comes first; on computers, Gmail and Outlook do
+  const appFirst = !fine;
+  $('#mail-app').classList.toggle('btn--primary', appFirst);
+  $('#mail-app').classList.toggle('btn--ghost', !appFirst);
+  ['#mail-gmail', '#mail-outlook'].forEach((id) => { $(id).classList.toggle('btn--primary', !appFirst); $(id).classList.toggle('btn--ghost', appFirst); });
+  if (appFirst) $('#mail-app').parentNode.prepend($('#mail-app'));
+  let subject = '', body = '', sending = false;
+  const field = (id) => $('#' + id).closest('.field');
+  const setBad = (id, bad) => { field(id).classList.toggle('is-invalid', bad); $('#' + id).setAttribute('aria-invalid', String(bad)); };
+  ['f-name', 'f-email'].forEach((id) => $('#' + id).addEventListener('input', () => setBad(id, false)));
+  const show = (panel) => {
+    panel.hidden = false;
+    panel.focus({ preventScroll: true });   // so screen readers announce it
+    panel.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
   };
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (sending) return;
     const name = form.elements.name.value.trim(), business = form.elements.business.value.trim();
     const email = form.elements.email.value.trim(), phone = form.elements.phone.value.trim();
     const message = form.elements.message.value.trim();
-    const emailOk = !email || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
     setBad('f-name', !name); setBad('f-email', !emailOk);
     const missing = [];
     if (!name) missing.push('your name');
@@ -2668,8 +2720,9 @@ const Contact = (() => {
       return;
     }
     note.textContent = '';
+    sent.hidden = true; ready.hidden = true;
     const interests = $$('input[name="interest"]:checked', form).map((i) => i.value);
-    subject = `New project inquiry${business ? ` — ${business}` : ''}`;
+    subject = `New project inquiry from ${name}${business ? ` (${business})` : ''}`;
     const lines = [`Name: ${name}`];
     if (business) lines.push(`Business: ${business}`);
     lines.push(`Email: ${email}`);
@@ -2677,26 +2730,38 @@ const Contact = (() => {
     if (interests.length) lines.push(`Interested in: ${interests.join(', ')}`);
     lines.push('', message || 'I would like a free quote.');
     body = lines.join('\n');
-    // every field (the interest chips joined into one line), plus the email's subject line
-    const data = new FormData(form), fields = {};
-    for (const key of new Set(data.keys())) fields[key] = data.getAll(key).join(', ');
-    fields._subject = subject;
-    sent.hidden = true; ready.hidden = true;
-    if (false) sendBtn.textContent = 'Sending…';
-    const href = `mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    $('#open-mail').href = href;
-    window.location.href = href;   // opens their email app with us as the recipient
-    ready.hidden = false;           // fallback buttons if no email app opened
-    ready.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
-    SFX.play('success');
+    const l = Mail.links(subject, body);
+    $('#mail-gmail').href = l.gmail; $('#mail-outlook').href = l.outlook; $('#mail-app').href = l.app;
+
+    // a bot filled in the hidden box: act as if it worked and send nothing
+    const trap = form.elements._honey && form.elements._honey.value;
+    sending = true;
+    btn.disabled = true; btn.setAttribute('aria-busy', 'true'); btn.textContent = 'Sending…';
+    const ok = trap ? true : await Mail.send({
+      ...Mail.pack([['Name', name], ['Business', business], ['Email', email], ['Phone', phone], ['Interested in', interests.join(', ')],
+        ['Message', message || 'I would like a free quote.'], ['Sent from', 'The contact form on tmpbizz.com']]),
+      _subject: subject, _replyto: email,
+    });
+    sending = false;
+    btn.disabled = false; btn.removeAttribute('aria-busy'); btn.textContent = btnLabel;
+    if (ok) {
+      $('#sent-title').textContent = `Thanks, ${name.split(/\s+/)[0]}! Your message is in.`;
+      $('#sent-email').textContent = email;
+      form.reset();
+      show(sent);
+      SFX.play('success');
+    } else {
+      show(ready);
+      SFX.play('open');
+    }
   });
-  $('#copy-message').addEventListener('click', () => copyText(`To: ${CONFIG.contactEmail}\nSubject: ${subject}\n\n${body}`, 'Message copied'));
-  $('#copy-email').addEventListener('click', () => copyText(CONFIG.contactEmail, 'Email address copied'));
+  $('#copy-message').addEventListener('click', () => Mail.copy(subject, body));
 
   function prefill({ interests = [], message = '', name = '', business = '', email = '', phone = '' } = {}) {
     interests.forEach((v) => { const cb = $(`input[name="interest"][value="${v}"]`, form); if (cb) cb.checked = true; });
     if (message) { const ta = form.elements.message; ta.value = ta.value.trim() ? `${ta.value.trim()}\n\n${message}` : message; }
     [['name', name], ['business', business], ['email', email], ['phone', phone]].forEach(([k, v]) => { if (v) form.elements[k].value = v; });
+    sent.hidden = true;
   }
   // "Get a quote" buttons on the price cards tick the matching interest
   $$('[data-interest]').forEach((a) => a.addEventListener('click', () => prefill({ interests: [a.dataset.interest] })));
@@ -2766,16 +2831,17 @@ const Contact = (() => {
     const lines = rows.map(([n, c, m]) => `- ${n}: ${money(c)}${m ? '/mo' : ''}`);
     const message = `My plan from the price builder:\n${lines.join('\n')}\nStarting at ${money(once)} one-time${mo ? ` + ${money(mo)}/mo` : ''}.`;
     Contact.prefill({ interests, message });
-    window.location.href = `mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent('Quote request: ' + interests.join(', '))}&body=${encodeURIComponent(message + '\n\nName:\nBusiness:\nPhone:')}`;
-    toast('Opening your email');
+    $('#contact').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(() => $('#f-name').focus({ preventScroll: true }), reduced ? 0 : 900);
+    toast('Plan added to your message');
   });
   sync();
 })();
 
 /* ================================================================
    TOB, the TMP butler: a hologram in the corner that answers questions, builds a
-   starting quote and sets up a free call. It runs right here in the page. Requests go out
-   as an email the visitor sends, or straight into the contact form.
+   starting quote and sets up a free call. It runs right here in the page. Requests go to the
+   team the same way the contact form's do (see Mail above).
    Optional: set window.TMP_ASSISTANT_ENDPOINT to a server address and the questions TOB
    can't answer are sent there as POST {question, history}; it should reply with JSON
    {answer}. Keep any keys on that server, never in this page.
@@ -2892,17 +2958,38 @@ const Contact = (() => {
     { name: 'business', label: 'Business name', auto: 'organization', value: who.business },
   ];
   const head = (v) => [`Name: ${v.name}`, v.business && `Business: ${v.business}`, `Email: ${v.email}`, v.phone && `Phone: ${v.phone}`].filter(Boolean);
+  const fieldsOf = (v) => [['Name', v.name], ['Business', v.business], ['Email', v.email], ['Phone', v.phone]];
 
-  // the email is ready: open it, copy it, or drop it into the contact form
-  function ready(heading, rows, subject, body, interests, message) {
-    const href = `mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    const card = node('div', 'tob__card', `<h3>${esc(heading)}</h3>
-      <ul class="tob__rows">${rows.map(([a, b]) => `<li><span>${esc(a)}</span><b>${esc(b)}</b></li>`).join('')}</ul>
-      <p class="tob__fine">Opens an email to ${esc(CONFIG.contactEmail)} with everything filled in. Press send and the team will reply.</p>
-      <div class="tob__acts"><a class="is-main" href="${href}">Open my email</a><button type="button" data-act="copy">Copy it</button><button type="button" data-act="form">Use the form</button></div>`);
-    $('[data-act="copy"]', card).addEventListener('click', () => copyText(`To: ${CONFIG.contactEmail}\nSubject: ${subject}\n\n${body}`, 'Message copied'));
+  // sends a request to the team. If that can't happen from here, the card offers it in the
+  // visitor's own email (or the contact form) instead. Resolves true once it's sent.
+  async function deliver({ heading, rows, subject, body, fields, interests = [], message = '' }) {
+    const my = token;
+    busy++;
+    const dots = add(node('div', 'tob__typing', '<i></i><i></i><i></i>'));
+    const [ok] = await Promise.all([
+      Mail.send({ ...Mail.pack(fields), 'Sent from': 'TOB, the butler on tmpbizz.com', _subject: subject, _replyto: who.email }),
+      wait(reduced ? 0 : 700),
+    ]);
+    dots.remove();
+    busy = Math.max(0, busy - 1);
+    if (my !== token) return new Promise(() => {});   // the chat was restarted meanwhile
+    const list = `<ul class="tob__rows">${rows.map(([a, b]) => `<li><span>${esc(a)}</span><b>${esc(b)}</b></li>`).join('')}</ul>`;
+    if (ok) {
+      add(node('div', 'tob__card tob__card--sent', `<h3><svg aria-hidden="true"><use href="#i-check"/></svg>${esc(heading)}: sent</h3>${list}`));
+      SFX.play('success');
+      return true;
+    }
+    const l = Mail.links(subject, body);
+    const mailBtns = [`<a href="${l.gmail}" target="_blank" rel="noopener"${touch ? '' : ' class="is-main"'}>Gmail</a>`,
+      `<a href="${l.outlook}" target="_blank" rel="noopener">Outlook</a>`, `<a href="${l.app}"${touch ? ' class="is-main"' : ''}>Email app</a>`];
+    if (touch) mailBtns.unshift(mailBtns.pop());
+    const card = node('div', 'tob__card', `<h3>${esc(heading)}</h3>${list}
+      <p class="tob__fine">I couldn't send it from here, so it's ready in your email, addressed to ${esc(CONFIG.contactEmail)}. Pick one and press send.</p>
+      <div class="tob__acts">${mailBtns.join('')}<button type="button" data-act="copy">Copy it</button><button type="button" data-act="form">Use the form</button></div>`);
+    $('[data-act="copy"]', card).addEventListener('click', () => Mail.copy(subject, body));
     $('[data-act="form"]', card).addEventListener('click', () => { Contact.prefill({ ...who, interests, message }); goTo('#contact', '#f-message'); });
-    return add(card);
+    add(card);
+    return false;
   }
   function goTo(sel, focusSel) {
     const el = $(sel);
@@ -2937,7 +3024,7 @@ const Contact = (() => {
     own: "<p>Your website is yours. TMP+ is optional; it just means we look after the site for you.</p>",
     redesign: "<p>Already have a website? We can redesign it, rebuild it or improve what's there, and help more customers find it.</p>",
     kinds: '<p>Small and local businesses of every kind: restaurants, salons, contractors, cleaning companies, pet care, shops, studios and more.</p>',
-    contact: () => `<p>You can email the team at <b>${esc(CONFIG.contactEmail)}</b>, or use the <a href="#contact">contact form</a>. I can also get an email ready for you.</p>`,
+    contact: () => `<p>You can email the team at <b>${esc(CONFIG.contactEmail)}</b> or send a message with the <a href="#contact">contact form</a>. I can also send them a quote request or set up a free call for you, right here.</p>`,
     self: "<p>I'm TOB, the butler for this site. I handle the usual questions, put together starting quotes and set up free calls. A real person from the team answers every email.</p>",
   };
   const RULES = [
@@ -3036,12 +3123,14 @@ const Contact = (() => {
     const plan = `My starting quote from TOB:\n${lines.join('\n')}\nStarting at ${total}.`;
     if (next === 'send') {
       await say('<p>Very good. Where should the team send your quote?</p>');
-      const v = await ask(contactFields(false), 'Get my email ready');
+      const v = await ask(contactFields(false), 'Send it');
       Object.assign(who, v);
       const subject = `Quote request from ${v.name}${v.business ? ` (${v.business})` : ''}`;
       const body = [...head(v), `Interested in: ${interests.join(', ')}`, '', plan].join('\n');
-      ready('Your quote request', [['Plan', interests.join(', ')], ['Starts at', total], ['Reply to', v.email]], subject, body, interests, plan);
-      await say("<p>All set. Press send in your email and the team will come back with your exact quote. Anything else?</p>");
+      const ok = await deliver({ heading: 'Your quote request', rows: [['Plan', interests.join(', ')], ['Starts at', total], ['Reply to', v.email]], subject, body,
+        fields: [...fieldsOf(v), ['Interested in', interests.join(', ')], ['Starting quote', `${lines.join('\n')}\nStarting at ${total}.`]], interests, message: plan });
+      await say(ok ? `<p>Done. The team has your plan and will come back to you at <b>${esc(v.email)}</b> with your exact quote. Anything else?</p>`
+        : "<p>I'm afraid I couldn't send it from here. It's all filled in for your email instead: pick one above and press send. Anything else?</p>");
       menu();
     } else if (next === 'call') {
       await book({ about: interests.join(', '), plan });
@@ -3079,13 +3168,17 @@ const Contact = (() => {
       [, about] = await choose([['w', 'A website'], ['s', 'A system'], ['a', 'An app or game'], ['m', 'Marketing'], ['t', 'TMP+'], ['o', 'Something else']]);
     }
     await say(`<p>Lastly, how can the team reach you to confirm?${how === 'phone' ? ' A phone number helps for a phone call.' : ''}</p>`);
-    const v = await ask(contactFields(how === 'phone'), 'Get my request ready');
+    const v = await ask(contactFields(how === 'phone'), 'Send my request');
     Object.assign(who, v);
     const subject = `Free call request from ${v.name}${v.business ? ` (${v.business})` : ''}`;
     const details = [`Day: ${day}`, `Time: ${time}`, `Call: ${howLabel}`, `About: ${about}`];
     const body = [...head(v), '', "I'd like to book a free call.", ...details, ctx.plan ? `\n${ctx.plan}` : ''].join('\n').trim();
-    ready('Your free call request', [['Day', day], ['Time', time], ['Call', howLabel], ['About', about]], subject, body, [], `I'd like to book a free call.\n${details.join('\n')}`);
-    await say('<p>Splendid. Press send in your email and the team will confirm your time with you. Anything else?</p>');
+    const ok = await deliver({ heading: 'Your free call request', rows: [['Day', day], ['Time', time], ['Call', howLabel], ['About', about]], subject, body,
+      fields: [...fieldsOf(v), ['Request', 'A free call'], ['Day', day], ['Time', time], ['Call', howLabel], ['About', about], ['Starting quote', ctx.plan || '']],
+      message: `I'd like to book a free call.\n${details.join('\n')}` });
+    const reach = how === 'phone' && v.phone ? `at <b>${esc(v.phone)}</b>` : `at <b>${esc(v.email)}</b>`;
+    await say(ok ? `<p>Splendid. The team will confirm your time with you ${reach}. Anything else?</p>`
+      : "<p>I'm afraid I couldn't send it from here. It's all filled in for your email instead: pick one above and press send. Anything else?</p>");
     menu();
   }
 
@@ -3123,12 +3216,14 @@ const Contact = (() => {
     if (k === 'quote') return quote();
     if (k === 'book') return book();
     await say('<p>Very good. Where should they reply?</p>');
-    const v = await ask(contactFields(false), 'Get my email ready');
+    const v = await ask(contactFields(false), 'Send my question');
     Object.assign(who, v);
     const subject = `A question from ${v.name}${v.business ? ` (${v.business})` : ''}`;
     const body = [...head(v), '', text].join('\n');
-    ready('Your question for the team', [['Question', text.length > 60 ? `${text.slice(0, 57)}...` : text], ['Reply to', v.email]], subject, body, ['Something else'], text);
-    await say('<p>Press send in your email and the team will get back to you. Anything else?</p>');
+    const ok = await deliver({ heading: 'Your question for the team', rows: [['Question', text.length > 60 ? `${text.slice(0, 57)}...` : text], ['Reply to', v.email]], subject, body,
+      fields: [...fieldsOf(v), ['Question', text]], interests: ['Something else'], message: text });
+    await say(ok ? `<p>Sent. The team will get back to you at <b>${esc(v.email)}</b>. Anything else?</p>`
+      : "<p>I'm afraid I couldn't send it from here. It's all filled in for your email instead: pick one above and press send. Anything else?</p>");
     return menu();
   }
   // one conversation at a time: starting something new retires the old buttons
