@@ -288,7 +288,7 @@ html.is-entered .hero__offers{animation-delay:.45s}
 @keyframes marq{to{transform:translateX(-50%)}}
 
 /* ---------- section scaffolding ---------- */
-.mission,.svc,.work,.case,.pricing,.process,.play,.story,.crew,.faq,.contact{padding-block:clamp(88px,12vw,168px)}
+.mission,.svc,.work,.case,.why,.pricing,.process,.play,.story,.crew,.faq,.contact{padding-block:clamp(88px,12vw,168px)}
 .sec-head{display:grid;gap:18px;margin-bottom:clamp(40px,6vw,72px);max-width:940px}
 .sec-head h2,.case h2,.story h2,.faq h2,.contact h2,.play h2{font-size:var(--step-4);font-weight:840;font-stretch:108%;letter-spacing:-.04em;line-height:.98}
 .sec-lead{font-size:var(--step-1);color:var(--muted);max-width:52ch;line-height:1.5}
@@ -495,6 +495,25 @@ input[type=range]::-moz-range-progress{height:6px;border-radius:4px;background:v
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:30px;margin-top:-12px;border-radius:6px;background:var(--paper);border:0;box-shadow:0 4px 14px rgba(0,0,0,.4)}
 input[type=range]::-moz-range-thumb{width:22px;height:30px;border-radius:6px;background:var(--paper);border:0}
 
+/* ---------- why us ---------- */
+.why__mission{font-family:var(--font-display);font-weight:780;font-stretch:106%;font-size:var(--step-3);line-height:1.1;letter-spacing:-.03em;text-wrap:balance}
+.why__mission em{font-style:normal;color:var(--teal)}
+.why__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.why__card{display:flex;flex-direction:column;gap:12px;padding:28px 24px;border-radius:22px;border:1px solid var(--line);background:var(--ink-2);transition:border-color .3s}
+.why__card:hover{border-color:var(--line-2)}
+.why__kind{font-weight:650;font-size:.9375rem;color:var(--teal)}
+.why__card h3{font-size:var(--step-2);font-weight:820;font-stretch:106%;letter-spacing:-.03em;line-height:1.08}
+.why__card p:not(.why__kind){color:var(--muted)}
+/* the last card says how we keep prices low and turnarounds fast: the team does the work, AI tools take the busywork */
+.why__card--how{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:center;padding:clamp(24px,3.4vw,44px);background:linear-gradient(180deg,color-mix(in srgb,var(--teal) 13%,var(--ink-2)),var(--ink-2) 72%);border-color:color-mix(in srgb,var(--teal) 50%,transparent)}
+.why__card--how:hover{border-color:var(--teal)}
+.why__card--how h3{font-size:var(--step-3);letter-spacing:-.035em;line-height:1.02}
+.why__how{display:flex;flex-direction:column;gap:12px}
+.why__steps-title{font-size:.8125rem;font-weight:650;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.why__steps{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.why__steps li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-family:var(--font-display);font-weight:720;font-stretch:104%}
+.why__steps svg{width:20px;height:20px;flex:none;color:var(--teal)}
+
 /* ---------- pricing ---------- */
 .plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;perspective:1200px}
 .plan{--mx:50%;--my:0%;position:relative;display:flex;flex-direction:column;gap:20px;padding:28px 24px;border-radius:22px;background:radial-gradient(260px circle at var(--mx) var(--my),rgba(255,255,255,.05),transparent 70%),var(--ink-2);border:1px solid var(--line);transition:border-color .3s,transform .5s var(--ease-out);transform-style:preserve-3d}
@@ -656,12 +675,14 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 .crew__card--locked .crew__role{margin-top:-4px}
 .crew__soon{display:flex;align-items:center;gap:8px;font-size:.9375rem}
 .crew__soon svg{width:18px;height:18px;flex:none}
+.crew__note{display:flex;gap:10px;margin-top:22px;max-width:72ch;font-size:.9375rem;color:var(--muted)}
+.crew__note::before{content:"";flex:none;width:7px;height:7px;margin-top:.6em;border-radius:1.5px;background:var(--teal)}
 @keyframes shimmer{from{background-position:120% 0}to{background-position:-120% 0}}
 @media (min-width:961px){
   .crew__cards:has(> .crew__card--locked + .crew__card--locked){grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
   .crew__cards:has(> .crew__card--locked + .crew__card--locked) > .crew__card--bio{grid-column:1;grid-row:span 2}
 }
-/* on Adrian's card the bars bounce like a level meter (he's an audio engineer) */
+/* on a bio card the bars bounce like a level meter (Adrian's an audio engineer) */
 @media (prefers-reduced-motion:no-preference){
   .crew__card--bio:hover .crew__face i{animation:crewEq .9s ease-in-out infinite alternate}
   .crew__card--bio:hover .crew__face i:nth-child(2){animation-duration:.72s;animation-delay:-.3s}
@@ -860,6 +881,8 @@ html.is-locked .tob{display:none}
 .loader__pct,.hero__offers b,.svc__price b,.cf__count,.save__total,.plan__num,.pick__price,.stepper output,.odo,.step__n,.play__stats dd,.game__live,.pledge__num,.num{font-family:var(--font-num)}
 
 /* ---------- responsive ---------- */
+/* with seven links the full lockup needs about 1280px, so the name goes first and the links stay */
+@media (max-width:1320px){.nav__name{display:none}}
 @media (max-width:1180px){
   .nav__links,.nav__name{display:none}
   .nav__links + .nav__actions{margin-left:auto}
@@ -868,6 +891,7 @@ html.is-locked .tob{display:none}
 @media (max-width:960px){
   :root{--nav-h:64px}
   .plans{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .why__grid,.why__card--how{grid-template-columns:minmax(0,1fr)}
   .mission__grid,.case__grid,.story__grid,.faq__grid,.contact__grid,.play__grid,.sam__grid{grid-template-columns:minmax(0,1fr)}
   .chain{max-width:520px}
   .svc__grid{grid-template-columns:minmax(0,1fr);gap:0}
@@ -909,6 +933,7 @@ html.is-locked .tob{display:none}
   .hero__offers{margin-top:28px;flex-direction:column;gap:8px}
   .hero__hint{left:var(--gutter);right:auto}
   .plans,.crew__cards{grid-template-columns:minmax(0,1fr)}
+  .why__card{padding:22px}
   .crew__card--bio{grid-template-columns:minmax(0,1fr);gap:16px;padding:22px}
   .crew__card--bio .crew__face{min-height:0;height:140px}
   .form__row{grid-template-columns:minmax(0,1fr)}
@@ -997,6 +1022,7 @@ html.is-locked .tob{display:none}
     <nav class="nav__links" aria-label="Main">
       <a href="#services">Services</a>
       <a href="#work">Work</a>
+      <a href="#why">Why us</a>
       <a href="#pricing">Pricing</a>
       <a href="#play">Play</a>
       <a href="#story">Story</a>
@@ -1022,6 +1048,7 @@ html.is-locked .tob{display:none}
     <a href="#services"><span>Services</span></a>
     <a href="#lab"><span>3D &amp; motion</span></a>
     <a href="#work"><span>Work</span></a>
+    <a href="#why"><span>Why us</span></a>
     <a href="#pricing"><span>Pricing</span></a>
     <a href="#play"><span>Play</span></a>
     <a href="#story"><span>Our story</span></a>
@@ -1250,21 +1277,21 @@ html.is-locked .tob{display:none}
         <li class="cf__card" data-i="0" aria-roledescription="slide" aria-label="1 of 6: Total Quality Management">
           <a class="cf__shot" href="https://tmpbizz.com/demo/tqm/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/tqm</span></span>
-            <img src="assets/work/tqm-960.webp" srcset="assets/work/tqm-960.webp 960w, new/assets/work/tqm.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Total Quality Management's homepage: a polished grocery-store floor behind the headline Professional Cleaning, Exceptional Standards." loading="lazy" decoding="async" draggable="false">
+            <img src="assets/work/tqm-960.webp" srcset="assets/work/tqm-960.webp 960w, assets/work/tqm.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Total Quality Management's homepage: a polished grocery-store floor behind the headline Professional Cleaning, Exceptional Standards." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="assets/work/tqm-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
         <li class="cf__card" data-i="1" aria-roledescription="slide" aria-label="2 of 6: Happy Pets Palace &amp; Playground">
           <a class="cf__shot" href="https://yuwakuuu.github.io/happypetspalace-redesign/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/happypetspalace-redesign</span></span>
-            <img src="assets/work/happypets-960.webp" srcset="assets/work/happypets-960.webp 960w, new/assets/work/happypets.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Happy Pets Palace &amp; Playground's homepage with the headline A palace to stay, a playground to play, beside a photo of five happy dogs." loading="lazy" decoding="async" draggable="false">
+            <img src="assets/work/happypets-960.webp" srcset="assets/work/happypets-960.webp 960w, assets/work/happypets.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Happy Pets Palace &amp; Playground's homepage with the headline A palace to stay, a playground to play, beside a photo of five happy dogs." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="assets/work/happypets-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
         <li class="cf__card" data-i="2" aria-roledescription="slide" aria-label="3 of 6: The Scuba Shop">
           <a class="cf__shot" href="https://yuwakuuu.github.io/scubashop-revamp/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/scubashop-revamp</span></span>
-            <img src="assets/work/scuba-960.webp" srcset="assets/work/scuba-960.webp 960w, new/assets/work/scuba.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="The Scuba Shop's homepage: a diver swimming underwater behind the headline Learn to dive." loading="lazy" decoding="async" draggable="false">
+            <img src="assets/work/scuba-960.webp" srcset="assets/work/scuba-960.webp 960w, assets/work/scuba.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="The Scuba Shop's homepage: a diver swimming underwater behind the headline Learn to dive." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="assets/work/scuba-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
@@ -1278,14 +1305,14 @@ html.is-locked .tob{display:none}
         <li class="cf__card" data-i="4" aria-roledescription="slide" aria-label="5 of 6: The TOB Company">
           <a class="cf__shot" href="https://tmpbizz.com/demo/tob/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/tob</span></span>
-            <img src="assets/work/tob-960.webp" srcset="assets/work/tob-960.webp 960w, new/assets/work/tob.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="The TOB Company's homepage: TOB's glowing round face beside the headline Your own AI butler." loading="lazy" decoding="async" draggable="false">
+            <img src="assets/work/tob-960.webp" srcset="assets/work/tob-960.webp 960w, assets/work/tob.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="The TOB Company's homepage: TOB's glowing round face beside the headline Your own AI butler." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="assets/work/tob-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
         <li class="cf__card" data-i="5" aria-roledescription="slide" aria-label="6 of 6: madebywaku">
           <a class="cf__shot" href="https://yuwakuuu.github.io/madebywaku/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/madebywaku</span></span>
-            <img src="assets/work/madebywaku-960.webp" srcset="assets/work/madebywaku-960.webp 960w, new/assets/work/madebywaku.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="madebywaku's homepage: a glossy 3D infinity loop beside the headline Made by Waku." loading="lazy" decoding="async" draggable="false">
+            <img src="assets/work/madebywaku-960.webp" srcset="assets/work/madebywaku-960.webp 960w, assets/work/madebywaku.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="madebywaku's homepage: a glossy 3D infinity loop beside the headline Made by Waku." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="assets/work/madebywaku-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
@@ -1371,6 +1398,51 @@ html.is-locked .tob{display:none}
       </label>
       <p class="save__note">At $2,000 a year, each bar adds up what TQM keeps by not paying for QuickBooks.</p>
     </figure>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why" id="why" aria-labelledby="why-title">
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 id="why-title" data-reveal="rise">Why us<span class="dot">?</span></h2>
+      <p class="why__mission">Our mission is to help <em>the little guys</em>, like&nbsp;us.</p>
+      <p class="sec-lead">We're a small business too. We built TMP so businesses like ours can look as good as the big guys and go toe to toe with them, without the big-agency price&nbsp;tag.</p>
+    </header>
+    <div class="why__grid">
+      <article class="why__card">
+        <p class="why__kind">Quality</p>
+        <h3>Big-business quality</h3>
+        <p>High-quality, industry-standard work that levels up your image, so you can compete with the big businesses in your&nbsp;field.</p>
+      </article>
+      <article class="why__card">
+        <p class="why__kind">Price</p>
+        <h3>Small-business prices</h3>
+        <p>Low, affordable prices that don't hurt your pocket. Every project starts with a clear quote, so you know the cost before we&nbsp;begin.</p>
+      </article>
+      <article class="why__card">
+        <p class="why__kind">Speed</p>
+        <h3>Faster turnarounds</h3>
+        <p>We turn projects around faster than the average agency, so your new site, system or app starts working for you&nbsp;sooner.</p>
+      </article>
+      <article class="why__card why__card--how">
+        <div class="why__how">
+          <p class="why__kind">How we do it</p>
+          <h3>Real people do the real work</h3>
+          <p>We use AI tools to speed up the build, and that's how we keep prices low and turnarounds fast. But the thinking, the craft and the final say are ours. AI just takes the busywork off our hands, so you get the savings and the speed, with no corners&nbsp;cut.</p>
+        </div>
+        <div>
+          <p class="why__steps-title" id="why-steps">On every project, our team</p>
+          <ul class="why__steps" aria-labelledby="why-steps">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Plans it with you</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Designs it around your brand</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Reviews the work</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Tests it on every screen size</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Stands behind it</li>
+          </ul>
+        </div>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -1538,7 +1610,7 @@ html.is-locked .tob{display:none}
     </div>
     <figure class="sam__photo">
       <div class="sam__frame">
-        <img src="assets/sam/sammy.webp" srcset="assets/sam/sammy-480.webp 480w, new/assets/sam/sammy.webp 720w" sizes="(max-width: 760px) 80vw, 420px" width="720" height="900" loading="lazy" decoding="async" alt="Sammy Saka Makori II smiling on a stairway, wearing a black hoodie over a white collared shirt.">
+        <img src="assets/sam/sammy.webp" srcset="assets/sam/sammy-480.webp 480w, assets/sam/sammy.webp 720w" sizes="(max-width: 760px) 80vw, 420px" width="720" height="900" loading="lazy" decoding="async" alt="Sammy Saka Makori II smiling on a stairway, wearing a black hoodie over a white collared shirt.">
         <div class="bouquet" id="bouquet" aria-hidden="true"></div>
       </div>
       <figcaption>Sammy Saka Makori II</figcaption>
@@ -1559,8 +1631,8 @@ html.is-locked .tob{display:none}
   </div>
 </section>
 
-<!-- CREW: Adrian's bio is in. Aiden's and Joe's cards say "Bio coming soon" until theirs are written:
-     to add one, copy Adrian's card over theirs and change the name, role, words and tags. -->
+<!-- CREW: one wide card per person, the bars on the left and the bio on the right.
+     A new teammate's card can say "Bio coming soon" (crew__card--locked) until theirs is written. -->
 <section class="crew" id="crew" aria-labelledby="crew-title">
   <div class="wrap">
     <header class="sec-head">
@@ -1578,9 +1650,30 @@ html.is-locked .tob{display:none}
           <ul class="tags"><li>Games since 4th grade</li><li>Programming</li><li>Audio engineering</li><li>Content &amp; social</li><li>500K+ SoundCloud plays</li></ul>
         </div>
       </article>
-      <article class="crew__card crew__card--locked"><span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span><h3>Aiden</h3><p class="crew__role">Co-owner</p><p class="crew__soon"><svg aria-hidden="true"><use href="#i-lock"/></svg>Bio coming soon</p></article>
-      <article class="crew__card crew__card--locked"><span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span><h3>Joe</h3><p class="crew__role">Co-owner</p><p class="crew__soon"><svg aria-hidden="true"><use href="#i-lock"/></svg>Bio coming soon</p></article>
+      <article class="crew__card crew__card--bio">
+        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div class="crew__body">
+          <h3>Aiden</h3>
+          <p class="crew__role">Co-owner &middot; Marketing Director &amp; Lead Generation</p>
+          <p class="crew__text">I worked as a service advisor in the car business, and I decided to take it a step further: build something of my own and help the small businesses around us.</p>
+          <p class="crew__text">Multitasking, customer service and getting things done before the deadline are what I do best. At TMP I run marketing and lead generation, and I also do game development and design. I'm working on a mobile game right now, and it's coming out down the road.</p>
+          <p class="crew__quote">&ldquo;I'm here to make people's lives easier.&rdquo;</p>
+          <ul class="tags"><li>Service advisor</li><li>Multitasking</li><li>Customer service</li><li>Done before deadlines</li><li>Game dev &amp; design</li></ul>
+        </div>
+      </article>
+      <article class="crew__card crew__card--bio">
+        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div class="crew__body">
+          <h3>Joe</h3>
+          <p class="crew__role">Co-owner &middot; Lead Game Developer &amp; Project Oversight</p>
+          <p class="crew__text">I'm a site manager, and I already run a tight team at my current job, so the move to TMP was a smooth one.</p>
+          <p class="crew__text">I'm performance-driven. I chase results, not talk, and I'll always be brutally honest with you. At TMP I lead game development and keep an eye on every project from start to finish.</p>
+          <p class="crew__quote">&ldquo;My goal is to give you honest, quality work.&rdquo;</p>
+          <ul class="tags"><li>Site manager</li><li>Runs a tight team</li><li>Performance-driven</li><li>Results over talk</li><li>Brutally honest</li></ul>
+        </div>
+      </article>
     </div>
+    <p class="crew__note">We're a small crew, so everyone does a bit of every role. The titles are just there to give you a clearer picture of the business.</p>
   </div>
 </section>
 
@@ -1693,7 +1786,7 @@ html.is-locked .tob{display:none}
       </div>
       <div>
         <h3 class="foot__h">Company</h3>
-        <a href="#story">Our story</a><a href="#play">Play</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+        <a href="#why">Why us</a><a href="#story">Our story</a><a href="#play">Play</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
       </div>
     </nav>
     <div class="foot__bottom">
@@ -3051,7 +3144,8 @@ const Contact = (() => {
     prices: '<p>Our starting prices:</p><p>Websites, apps and games from $499.99. Systems from $249.99 each, and the price can vary with the complexity of the system or task. TMP+ Care membership $99.99 a month for upkeep and free updates, or TMP+ Grow $249.99 a month with Google Business Profile management and SEO included.</p><p>You always get a clear quote before any work begins.</p>',
     sammy: '<p><b>#4SAMMY</b> is why we started. We lost our friend Sammy, and 5% of all our profits go to his family through <a href="https://gofund.me/80a9ea02c" target="_blank" rel="noopener">his GoFundMe</a>. <a href="#sammy">Read his story</a>.</p>',
     story: '<p>TMP is three friends from high school: Adrian, Aiden and Joe. We started in Mesa, Arizona, to honor our friend Sammy, and we help small local businesses get found online, bring in more leads and grow. <a href="#story">Our story</a>.</p>',
-    crew: '<p><b>Adrian</b> is our founder. He has been making games since 4th grade, and he also does programming, audio engineering, content creation and social media. His music passed 500,000 plays on SoundCloud, and he has performed at concerts with artists like D&nbsp;Savage and Wifisfuneral. <b>Aiden</b> and <b>Joe</b> are co-owners, and their bios are coming soon. <a href="#crew">Meet the crew</a>.</p>',
+    crew: '<p><b>Adrian</b> is our founder. He has been making games since 4th grade, and he also does programming, audio engineering, content creation and social media. His music passed 500,000 plays on SoundCloud, and he has performed at concerts with artists like D&nbsp;Savage and Wifisfuneral. <b>Aiden</b> is a co-owner and runs marketing and lead generation. He worked as a service advisor in the car business, and he also does game development and design, with a mobile game on the way. <b>Joe</b> is a co-owner and our lead game developer, and he oversees every project. He is a site manager who already runs a tight team, and he will always be brutally honest with you. On a crew this small, everyone does a bit of every role. <a href="#crew">Meet the crew</a>.</p>',
+    why: '<p>Our mission is to help the little guys, like us. You get high-quality, industry-standard work at low, affordable prices, and faster turnarounds than the average agency. How? We use AI tools to speed up the build, but our team does the real work: we plan, design, review, test and stand behind every project. AI just takes the busywork off our hands, so you get the savings and the speed. <a href="#why">Why us</a>.</p>',
     work: '<p>Right this way. We\'ve built for a cleaning company, a dog boarding palace, a dive shop and more. <a href="#work">See our work</a>.</p>',
     lab: '<p>We build 3D, animation and motion right into websites. You can spin a chrome infinity and stir a liquid shader <a href="#lab">just up the page</a>.</p>',
     film: '<p>Our 30-second film shows off the new look and the new site. <a href="#film">Watch it here</a>, with the sound on.</p>',
@@ -3066,6 +3160,7 @@ const Contact = (() => {
     [/\b(thanks?|thank you|thx|ty|appreciate|cheers)\b/, 'thanks'],
     [/\b(sammy|4sammy|gofund|go fund|donat\w*|charity|give back|giving back)\b/, 'sammy'],
     [/(tmp\s*\+|\btmp plus\b|\bmembership\b|\bmember\b|\bmaintenance\b|\bmaintain\b|\bhosting\b|\bdomain\b|\bupkeep\b)/, 'tmpplus'],
+    [/\b(why (should|would|do|did) (i|we|people|anyone) (choose|pick|hire|go with|use|trust|work with)|why (choose|pick|hire|use|trust) (you|tmp)|why (you|tmp|the marketing partner)\b|what makes (you|tmp) (different|special|better|stand out)|(do|does|did) (you|tmp|your team|the team) use (ai|chatgpt|artificial intelligence)\b|(using|use|uses|with) (ai|chatgpt)\b|ai[- ](tools?|generated|written|made|built)\b|(built|made|written|done) (by|with) (ai|a robot|robots)\b|(how|why) (are|is) (you|tmp|it|everything) so (cheap|affordable|fast|quick)|(other|most|big|typical|average) agenc\w*)/, 'why'],
     [/\b(booking system|booking software|scheduling|scheduler|online stores?|online shops?|e-?commerce|shopify|invoic\w*|quickbooks|software|dashboard\w*|crm|systems?)\b/, 'systems'],
     [/\b(book|booking|call me|a call|phone call|video call|meeting|meet|appointment|consult\w*|talk to|speak (to|with)|zoom|facetime)\b/, 'BOOK'],
     [/\b(quote|estimate)\b/, 'QUOTE'],
@@ -3942,9 +4037,9 @@ const Contact = (() => {
   if (!box || !video) return;
   const pickSource = () => {
     // H.264 plays almost everywhere; browsers without it get the WebM copy
-    if (!video.canPlayType('video/mp4; codecs="avc1.640029, mp4a.40.2"')) return 'new/assets/video/tmp-reveal-1080.webm';
+    if (!video.canPlayType('video/mp4; codecs="avc1.640029, mp4a.40.2"')) return 'assets/video/tmp-reveal-1080.webm';
     const wide = box.clientWidth * (window.devicePixelRatio || 1) >= 1100;
-    return wide ? 'new/assets/video/tmp-reveal-1080.mp4' : 'new/assets/video/tmp-reveal-720.mp4';
+    return wide ? 'assets/video/tmp-reveal-1080.mp4' : 'assets/video/tmp-reveal-720.mp4';
   };
   const play = () => {
     if (!video.getAttribute('src')) { video.src = pickSource(); }
