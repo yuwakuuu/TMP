@@ -708,7 +708,8 @@ var IG_FEED_URL = '';
     var DRUM_X = 268, DRUM_Y = 46, ROLL_Y = MIXTOP - 46;
     var xStart = leftEdge - 60;
     var dist = DRUM_X - xStart;
-    var turns = Math.max(1, Math.round((dist / 46) * 180 / Math.PI / 22.5)) * 22.5;
+    // whole turns only, so the "O" inside the saw blade finishes upright, exactly like the logo it hands off to
+    var turns = Math.max(1, Math.round((dist / 46) * 180 / Math.PI / 360)) * 360;
 
     // lumpy profile for the hot mix
     var lumps = [], seed = 7;
