@@ -653,6 +653,7 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 /* One card per person, three across (one row each below 961px). Each bio starts closed: the bars, name
    and role show, and a click opens the words and tags with the same smooth open as the FAQ answers.
    A new teammate can get a "Bio coming soon" card (crew__card--locked) until their bio is written. */
+.crew .sec-lead strong{font-weight:600;color:var(--paper)}
 .crew__cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
 .crew__card{position:relative;display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:22px;border:1px solid var(--line);background:var(--ink-2);overflow:hidden}
 details.crew__card{display:block;padding:0;transition:border-color .3s}
@@ -1655,7 +1656,7 @@ html.is-locked .tob{display:none}
   <div class="wrap">
     <header class="sec-head">
       <h2 id="crew-title" data-reveal="rise">Meet the crew<span class="dot">.</span></h2>
-      <p class="sec-lead">All three of us did freelance work before TMP. We joined forces to make our work even more polished, with better production on every&nbsp;project.</p>
+      <p class="sec-lead">All three of us did freelance work before TMP. We joined forces to make our work even more polished, with better production on every project. <strong>Together, we make one universal super tool for the new&nbsp;age.</strong></p>
     </header>
     <div class="crew__cards" id="crew-cards">
       <details class="crew__card">
@@ -1666,10 +1667,11 @@ html.is-locked .tob{display:none}
           <span class="crew__more" aria-hidden="true"><span class="crew__more-open">Read bio</span><span class="crew__more-close">Close</span></span>
         </summary>
         <div class="crew__body">
-          <p class="crew__text">I'm a marketing director at Total Quality Management (TQM). I've also been making games since 4th grade and programming since middle school.</p>
-          <p class="crew__text">Along the way I picked up audio engineering and content creation, and my music has passed 500,000 plays on SoundCloud. At TMP I lead development, turning our plans into the websites, systems and apps we build for you.</p>
+          <p class="crew__text">I'm a marketing director at Total Quality Management (TQM). I've been making games since 4th grade and programming since middle school, and I do graphic design too.</p>
+          <p class="crew__text">My music has passed 500,000 plays on SoundCloud, and when I performed at shows I always met my ticket sales quota and went above and beyond. I've also run a TikTok that's grown to 5,000 followers, over half a million views and almost 200,000 likes.</p>
+          <p class="crew__text">At TMP I lead development, turning our plans into the websites, systems and apps we build for you.</p>
           <p class="crew__quote">&ldquo;I'm a universal tool for the new age of media.&rdquo;</p>
-          <ul class="tags"><li>Marketing director</li><li>Programming</li><li>Game dev</li><li>Audio engineering</li><li>Content creation</li></ul>
+          <ul class="tags"><li>Marketing director</li><li>Programming</li><li>Game dev</li><li>Graphic design</li><li>Audio engineering</li></ul>
         </div>
       </details>
       <details class="crew__card">
@@ -1680,10 +1682,11 @@ html.is-locked .tob{display:none}
           <span class="crew__more" aria-hidden="true"><span class="crew__more-open">Read bio</span><span class="crew__more-close">Close</span></span>
         </summary>
         <div class="crew__body">
-          <p class="crew__text">I'm a service advisor in the car business, and I decided to take it a step further: build something of my own and help the small businesses around us.</p>
-          <p class="crew__text">Multitasking, customer service and beating deadlines are what I do best. At TMP I run marketing and lead generation, and I'm working on a mobile game that's coming out down the road.</p>
+          <p class="crew__text">I started out in the service department in the car business and worked my way up to service advisor. Then I decided to take it a step further: build something of my own and help the small businesses around us.</p>
+          <p class="crew__text">Multitasking, customer service and beating deadlines are what I do best. I also have a history in audio production, and I'm working on a mobile game that's coming out down the road.</p>
+          <p class="crew__text">At TMP I run marketing and lead generation.</p>
           <p class="crew__quote">&ldquo;I'm here to make people's lives easier.&rdquo;</p>
-          <ul class="tags"><li>Service advisor</li><li>Multitasking</li><li>Customer service</li><li>Beats deadlines</li><li>Game dev &amp; design</li></ul>
+          <ul class="tags"><li>Service advisor</li><li>Customer service</li><li>Multitasking</li><li>Audio production</li><li>Game dev &amp; design</li></ul>
         </div>
       </details>
       <details class="crew__card">
@@ -1694,10 +1697,11 @@ html.is-locked .tob{display:none}
           <span class="crew__more" aria-hidden="true"><span class="crew__more-open">Read bio</span><span class="crew__more-close">Close</span></span>
         </summary>
         <div class="crew__body">
-          <p class="crew__text">I'm a site manager, and I already run a tight team at my current job, so the move to TMP was a smooth one.</p>
-          <p class="crew__text">I'm performance-driven. I chase results, not talk, and I'll always be brutally honest with you. At TMP I handle content management and keep an eye on every project from start to finish.</p>
+          <p class="crew__text">I started at my current job as a beginner, learned the ropes and climbed my way up to site manager. I already run a tight team there, so the move to TMP was a smooth one.</p>
+          <p class="crew__text">I'm performance-driven. I chase results, not talk, and I'll always be brutally honest with you. I also have a history in content creation, even streaming.</p>
+          <p class="crew__text">At TMP I handle content management and keep an eye on every project from start to finish.</p>
           <p class="crew__quote">&ldquo;My goal is to give you honest, quality work.&rdquo;</p>
-          <ul class="tags"><li>Site manager</li><li>Runs a tight team</li><li>Performance-driven</li><li>Results over talk</li><li>Brutally honest</li></ul>
+          <ul class="tags"><li>Site manager</li><li>Runs a tight team</li><li>Performance-driven</li><li>Brutally honest</li><li>Content &amp; streaming</li></ul>
         </div>
       </details>
     </div>
@@ -3172,7 +3176,7 @@ const Contact = (() => {
     prices: '<p>Our starting prices:</p><p>Websites, apps and games from $499.99. Systems from $249.99 each, and the price can vary with the complexity of the system or task. TMP+ Care membership $99.99 a month for upkeep and free updates, or TMP+ Grow $249.99 a month with Google Business Profile management and SEO included.</p><p>You always get a clear quote before any work begins.</p>',
     sammy: '<p><b>#4SAMMY</b> is why we started. We lost our friend Sammy, and 5% of all our profits go to his family through <a href="https://gofund.me/80a9ea02c" target="_blank" rel="noopener">his GoFundMe</a>. <a href="#sammy">Read his story</a>.</p>',
     story: '<p>TMP is three friends from high school: Adrian, Aiden and Joe. We started in Mesa, Arizona, to honor our friend Sammy, and we help small local businesses get found online, bring in more leads and grow. <a href="#story">Our story</a>.</p>',
-    crew: '<p><b>Adrian</b> is our founder and lead developer, and he is a marketing director at Total Quality Management (TQM). He has been making games since 4th grade and programming since middle school, and he is also an audio engineer and content creator. <b>Aiden</b> is a co-owner and runs marketing and lead generation. He is a service advisor in the car business, and he also does game development and design, with a mobile game on the way. <b>Joe</b> is a co-owner who runs content management and oversees every project. He is a site manager who already runs a tight team, and he will always be brutally honest with you. All three did freelance work before TMP and joined forces to make their work even more polished. On a crew this small, everyone does a bit of every role. <a href="#crew">Meet the crew</a>.</p>',
+    crew: '<p><b>Adrian</b> is our founder and lead developer, and he is a marketing director at Total Quality Management (TQM). He has been making games since 4th grade and programming since middle school, he does graphic design and audio engineering, and his TikTok has grown to 5,000 followers and over half a million views. <b>Aiden</b> is a co-owner and runs marketing and lead generation. He started out in the service department in the car business and worked his way up to service advisor, and he has a history in audio production and game design, with a mobile game on the way. <b>Joe</b> is a co-owner who runs content management and oversees every project. He started his current job as a beginner and climbed his way up to site manager, he has a history in content creation and streaming, and he will always be brutally honest with you. All three did freelance work before TMP and joined forces to make their work even more polished. Together they make one universal super tool for the new age, and on a crew this small, everyone does a bit of every role. <a href="#crew">Meet the crew</a>.</p>',
     why: '<p>Our mission is to help the little guys, like us: high-quality, industry-standard work at low, affordable prices, with faster turnarounds than the average agency. We use AI to help you, and that is what lets us keep prices low and turnarounds fast, while our team plans, designs, reviews, tests and stands behind every project. <a href="#why">Why us</a>.</p>',
     work: '<p>Right this way. We\'ve built for a cleaning company, a dog boarding palace, a dive shop and more. <a href="#work">See our work</a>.</p>',
     lab: '<p>We build 3D, animation and motion right into websites. You can spin a chrome infinity and stir a liquid shader <a href="#lab">just up the page</a>.</p>',
