@@ -504,7 +504,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:30px;border-radius:6px;bac
 .why__kind{font-weight:650;font-size:.9375rem;color:var(--teal)}
 .why__card h3{font-size:var(--step-2);font-weight:820;font-stretch:106%;letter-spacing:-.03em;line-height:1.08}
 .why__card p:not(.why__kind){color:var(--muted)}
-/* the last card says how we keep prices low and turnarounds fast: the team does the work, AI tools take the busywork */
+/* the last card says how we keep prices low and turnarounds fast: AI that works for the customer, and a team that does every step */
 .why__card--how{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:center;padding:clamp(24px,3.4vw,44px);background:linear-gradient(180deg,color-mix(in srgb,var(--teal) 13%,var(--ink-2)),var(--ink-2) 72%);border-color:color-mix(in srgb,var(--teal) 50%,transparent)}
 .why__card--how:hover{border-color:var(--teal)}
 .why__card--how h3{font-size:var(--step-3);letter-spacing:-.035em;line-height:1.02}
@@ -650,10 +650,13 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 .sam__help a{color:var(--day-teal);font-weight:650}
 
 /* ---------- crew ---------- */
-/* Each finished bio gets a wide card: the bars on the left, the words on the right.
-   While two bios are still to come, the finished one sits on the left and those two stack beside it. */
-.crew__cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+/* One card per person, three across (one row each below 961px). Each bio starts closed: the bars, name
+   and role show, and a click opens the words and tags with the same smooth open as the FAQ answers.
+   A new teammate can get a "Bio coming soon" card (crew__card--locked) until their bio is written. */
+.crew__cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
 .crew__card{position:relative;display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:22px;border:1px solid var(--line);background:var(--ink-2);overflow:hidden}
+details.crew__card{display:block;padding:0;transition:border-color .3s}
+details.crew__card:hover,details.crew__card[open]{border-color:var(--line-2)}
 .crew__card h3{font-size:1.6rem;font-weight:830;font-stretch:108%;letter-spacing:-.03em;margin-top:8px}
 .crew__card p{color:var(--muted)}
 .crew__role{font-weight:650;color:var(--teal)!important;font-size:.9375rem}
@@ -662,13 +665,26 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 .crew__face i:nth-child(1){height:38%}
 .crew__face i:nth-child(2){height:64%;background:var(--bar-2)}
 .crew__face i:nth-child(3){height:92%;background:var(--teal)}
-.crew__card--bio{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,clamp(150px,16vw,230px)) minmax(0,1fr);gap:clamp(20px,2.2vw,28px);padding:24px}
-.crew__card--bio .crew__face{height:auto;min-height:260px;padding:clamp(18px,1.8vw,24px)}
-.crew__body{display:flex;flex-direction:column;gap:12px;min-width:0;max-width:66ch}
-.crew__card .crew__body h3{margin-top:0}
-.crew__text{font-size:1rem;line-height:1.62}
-.crew__quote{margin-top:4px;font-family:var(--font-display);font-weight:780;font-stretch:104%;font-size:var(--step-1);line-height:1.3;letter-spacing:-.01em;color:var(--paper)!important;text-wrap:balance}
-.crew__body .tags{margin-top:6px}
+.crew__sum{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"face" "name" "role" "more";row-gap:2px;padding:22px;border-radius:21px}
+.crew__sum::-webkit-details-marker{display:none}
+.crew__sum:focus-visible{outline-offset:-4px}
+.crew__sum .crew__face{grid-area:face;margin-bottom:16px}
+.crew__sum h3{grid-area:name;margin:0}
+.crew__sum .crew__role{grid-area:role}
+/* side by side, every role gets two lines so the Read bio rows line up */
+@media (min-width:961px){.crew__sum .crew__role{min-height:3.2em}}
+.crew__more{grid-area:more;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--font-display);font-weight:700;font-size:.9375rem;white-space:nowrap}
+.crew__more::after{content:"";flex:none;width:16px;height:16px;background:linear-gradient(var(--teal),var(--teal)) center/16px 2.5px no-repeat,linear-gradient(var(--teal),var(--teal)) center/2.5px 16px no-repeat;transition:transform .4s var(--ease-out)}
+.crew__card[open] .crew__more::after{transform:rotate(135deg)}
+.crew__card[open] .crew__more-open,.crew__card:not([open]) .crew__more-close{display:none}
+/* the FAQ script animates the bio's height, so all of its spacing sits inside it */
+.crew__body{overflow:hidden;padding-inline:22px}
+.crew__body > * + *{margin-top:12px}
+.crew__body > :last-child{padding-bottom:24px}
+.crew__text{font-size:1rem;line-height:1.62;text-wrap:pretty}
+.crew__quote{font-family:var(--font-display);font-weight:780;font-stretch:104%;font-size:var(--step-1);line-height:1.3;letter-spacing:-.01em;color:var(--paper)!important;text-wrap:balance}
+.crew__body .crew__quote{margin-top:16px}
+.crew__body .tags{margin-top:18px}
 .crew__card--locked .crew__face{flex:1 0 96px;height:auto;min-height:96px}
 .crew__card--locked .crew__face i{background:var(--bar-1)!important}
 .crew__card--locked .crew__face::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.06) 50%,transparent 70%);background-size:250% 100%;animation:shimmer 2.6s linear infinite}
@@ -678,15 +694,11 @@ label.pick.has-focus{outline:3px solid var(--teal);outline-offset:2px}
 .crew__note{display:flex;gap:10px;margin-top:22px;max-width:72ch;font-size:.9375rem;color:var(--muted)}
 .crew__note::before{content:"";flex:none;width:7px;height:7px;margin-top:.6em;border-radius:1.5px;background:var(--teal)}
 @keyframes shimmer{from{background-position:120% 0}to{background-position:-120% 0}}
-@media (min-width:961px){
-  .crew__cards:has(> .crew__card--locked + .crew__card--locked){grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
-  .crew__cards:has(> .crew__card--locked + .crew__card--locked) > .crew__card--bio{grid-column:1;grid-row:span 2}
-}
-/* on a bio card the bars bounce like a level meter (Adrian's an audio engineer) */
+/* hovering a bio card makes its bars bounce like a level meter (Adrian's an audio engineer) */
 @media (prefers-reduced-motion:no-preference){
-  .crew__card--bio:hover .crew__face i{animation:crewEq .9s ease-in-out infinite alternate}
-  .crew__card--bio:hover .crew__face i:nth-child(2){animation-duration:.72s;animation-delay:-.3s}
-  .crew__card--bio:hover .crew__face i:nth-child(3){animation-duration:1.06s;animation-delay:-.55s}
+  details.crew__card:hover .crew__face i{animation:crewEq .9s ease-in-out infinite alternate}
+  details.crew__card:hover .crew__face i:nth-child(2){animation-duration:.72s;animation-delay:-.3s}
+  details.crew__card:hover .crew__face i:nth-child(3){animation-duration:1.06s;animation-delay:-.55s}
 }
 @keyframes crewEq{from{transform:scaleY(1)}to{transform:scaleY(.6)}}
 
@@ -892,6 +904,14 @@ html.is-locked .tob{display:none}
   :root{--nav-h:64px}
   .plans{grid-template-columns:repeat(2,minmax(0,1fr))}
   .why__grid,.why__card--how{grid-template-columns:minmax(0,1fr)}
+  .crew__cards{grid-template-columns:minmax(0,1fr)}
+  .crew__sum{grid-template-columns:76px minmax(0,1fr) auto;grid-template-areas:"face name more" "face role more";column-gap:16px;padding:16px}
+  .crew__sum .crew__face{height:76px;padding:12px;gap:5px;margin-bottom:0;border-radius:12px}
+  .crew__sum .crew__face i{border-radius:4px}
+  .crew__sum h3{align-self:end}
+  .crew__sum .crew__role{align-self:start}
+  .crew__more{margin:0;padding:0;border:0}
+  .crew__body{padding-inline:16px}
   .mission__grid,.case__grid,.story__grid,.faq__grid,.contact__grid,.play__grid,.sam__grid{grid-template-columns:minmax(0,1fr)}
   .chain{max-width:520px}
   .svc__grid{grid-template-columns:minmax(0,1fr);gap:0}
@@ -934,8 +954,7 @@ html.is-locked .tob{display:none}
   .hero__hint{left:var(--gutter);right:auto}
   .plans,.crew__cards{grid-template-columns:minmax(0,1fr)}
   .why__card{padding:22px}
-  .crew__card--bio{grid-template-columns:minmax(0,1fr);gap:16px;padding:22px}
-  .crew__card--bio .crew__face{min-height:0;height:140px}
+  .crew__more > span{display:none}
   .form__row{grid-template-columns:minmax(0,1fr)}
   .built li{grid-template-columns:minmax(0,1fr);gap:4px}
   .save__chart{height:210px;margin-left:40px}
@@ -1428,8 +1447,8 @@ html.is-locked .tob{display:none}
       <article class="why__card why__card--how">
         <div class="why__how">
           <p class="why__kind">How we do it</p>
-          <h3>Real people do the real work</h3>
-          <p>We use AI tools to speed up the build, and that's how we keep prices low and turnarounds fast. But the thinking, the craft and the final say are ours. AI just takes the busywork off our hands, so you get the savings and the speed, with no corners&nbsp;cut.</p>
+          <h3>We put AI to work for you</h3>
+          <p>We use AI to help you. It's what lets us give you lower prices and faster turnarounds than the average agency, while our team gives every project its full attention, from the first call to launch&nbsp;day.</p>
         </div>
         <div>
           <p class="why__steps-title" id="why-steps">On every project, our team</p>
@@ -1631,47 +1650,55 @@ html.is-locked .tob{display:none}
   </div>
 </section>
 
-<!-- CREW: one wide card per person, the bars on the left and the bio on the right.
-     A new teammate's card can say "Bio coming soon" (crew__card--locked) until theirs is written. -->
+<!-- CREW: one card per person. Each bio is a <details> that starts closed and opens like the FAQ answers. -->
 <section class="crew" id="crew" aria-labelledby="crew-title">
   <div class="wrap">
     <header class="sec-head">
       <h2 id="crew-title" data-reveal="rise">Meet the crew<span class="dot">.</span></h2>
     </header>
     <div class="crew__cards" id="crew-cards">
-      <article class="crew__card crew__card--bio">
-        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
-        <div class="crew__body">
+      <details class="crew__card">
+        <summary class="crew__sum">
+          <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
           <h3>Adrian</h3>
-          <p class="crew__role">Founder</p>
-          <p class="crew__text">I've been making games since 4th grade. By middle school I was obsessed with programming, and in high school I took AP Computer Science and computer maintenance classes, plus marketing. Along the way I learned audio engineering and got into content creation and social media management.</p>
-          <p class="crew__text">In three years of releasing music on SoundCloud I passed 500,000 plays, and I've performed at concerts with artists like D&nbsp;Savage and Wifisfuneral.</p>
+          <span class="crew__role">Founder &middot; Lead Developer</span>
+          <span class="crew__more" aria-hidden="true"><span class="crew__more-open">Read bio</span><span class="crew__more-close">Close</span></span>
+        </summary>
+        <div class="crew__body">
+          <p class="crew__text">I've been making games since 4th grade and programming since middle school. Along the way I picked up audio engineering and content creation, and my music has passed 500,000 plays on SoundCloud.</p>
+          <p class="crew__text">At TMP I lead development, turning our plans into the websites, systems and apps we build for you.</p>
           <p class="crew__quote">&ldquo;I'm a universal tool for the new age of media.&rdquo;</p>
-          <ul class="tags"><li>Games since 4th grade</li><li>Programming</li><li>Audio engineering</li><li>Content &amp; social</li><li>500K+ SoundCloud plays</li></ul>
+          <ul class="tags"><li>Programming</li><li>Game dev</li><li>Audio engineering</li><li>Content creation</li><li>Social media</li></ul>
         </div>
-      </article>
-      <article class="crew__card crew__card--bio">
-        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
-        <div class="crew__body">
+      </details>
+      <details class="crew__card">
+        <summary class="crew__sum">
+          <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
           <h3>Aiden</h3>
-          <p class="crew__role">Co-owner &middot; Marketing Director &amp; Lead Generation</p>
-          <p class="crew__text">I worked as a service advisor in the car business, and I decided to take it a step further: build something of my own and help the small businesses around us.</p>
-          <p class="crew__text">Multitasking, customer service and getting things done before the deadline are what I do best. At TMP I run marketing and lead generation, and I also do game development and design. I'm working on a mobile game right now, and it's coming out down the road.</p>
-          <p class="crew__quote">&ldquo;I'm here to make people's lives easier.&rdquo;</p>
-          <ul class="tags"><li>Service advisor</li><li>Multitasking</li><li>Customer service</li><li>Done before deadlines</li><li>Game dev &amp; design</li></ul>
-        </div>
-      </article>
-      <article class="crew__card crew__card--bio">
-        <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="crew__role">Co-owner &middot; Marketing Director &amp; Lead Generation</span>
+          <span class="crew__more" aria-hidden="true"><span class="crew__more-open">Read bio</span><span class="crew__more-close">Close</span></span>
+        </summary>
         <div class="crew__body">
+          <p class="crew__text">I worked as a service advisor in the car business, and I decided to take it a step further: build something of my own and help the small businesses around us.</p>
+          <p class="crew__text">Multitasking, customer service and beating deadlines are what I do best. At TMP I run marketing and lead generation, and I'm working on a mobile game that's coming out down the road.</p>
+          <p class="crew__quote">&ldquo;I'm here to make people's lives easier.&rdquo;</p>
+          <ul class="tags"><li>Service advisor</li><li>Multitasking</li><li>Customer service</li><li>Beats deadlines</li><li>Game dev &amp; design</li></ul>
+        </div>
+      </details>
+      <details class="crew__card">
+        <summary class="crew__sum">
+          <span class="crew__face" aria-hidden="true"><i></i><i></i><i></i></span>
           <h3>Joe</h3>
-          <p class="crew__role">Co-owner &middot; Lead Game Developer &amp; Project Oversight</p>
+          <span class="crew__role">Co-owner &middot; Lead Game Developer &amp; Project Oversight</span>
+          <span class="crew__more" aria-hidden="true"><span class="crew__more-open">Read bio</span><span class="crew__more-close">Close</span></span>
+        </summary>
+        <div class="crew__body">
           <p class="crew__text">I'm a site manager, and I already run a tight team at my current job, so the move to TMP was a smooth one.</p>
           <p class="crew__text">I'm performance-driven. I chase results, not talk, and I'll always be brutally honest with you. At TMP I lead game development and keep an eye on every project from start to finish.</p>
           <p class="crew__quote">&ldquo;My goal is to give you honest, quality work.&rdquo;</p>
           <ul class="tags"><li>Site manager</li><li>Runs a tight team</li><li>Performance-driven</li><li>Results over talk</li><li>Brutally honest</li></ul>
         </div>
-      </article>
+      </details>
     </div>
     <p class="crew__note">We're a small crew, so everyone does a bit of every role. The titles are just there to give you a clearer picture of the business.</p>
   </div>
@@ -3144,8 +3171,8 @@ const Contact = (() => {
     prices: '<p>Our starting prices:</p><p>Websites, apps and games from $499.99. Systems from $249.99 each, and the price can vary with the complexity of the system or task. TMP+ Care membership $99.99 a month for upkeep and free updates, or TMP+ Grow $249.99 a month with Google Business Profile management and SEO included.</p><p>You always get a clear quote before any work begins.</p>',
     sammy: '<p><b>#4SAMMY</b> is why we started. We lost our friend Sammy, and 5% of all our profits go to his family through <a href="https://gofund.me/80a9ea02c" target="_blank" rel="noopener">his GoFundMe</a>. <a href="#sammy">Read his story</a>.</p>',
     story: '<p>TMP is three friends from high school: Adrian, Aiden and Joe. We started in Mesa, Arizona, to honor our friend Sammy, and we help small local businesses get found online, bring in more leads and grow. <a href="#story">Our story</a>.</p>',
-    crew: '<p><b>Adrian</b> is our founder. He has been making games since 4th grade, and he also does programming, audio engineering, content creation and social media. His music passed 500,000 plays on SoundCloud, and he has performed at concerts with artists like D&nbsp;Savage and Wifisfuneral. <b>Aiden</b> is a co-owner and runs marketing and lead generation. He worked as a service advisor in the car business, and he also does game development and design, with a mobile game on the way. <b>Joe</b> is a co-owner and our lead game developer, and he oversees every project. He is a site manager who already runs a tight team, and he will always be brutally honest with you. On a crew this small, everyone does a bit of every role. <a href="#crew">Meet the crew</a>.</p>',
-    why: '<p>Our mission is to help the little guys, like us. You get high-quality, industry-standard work at low, affordable prices, and faster turnarounds than the average agency. How? We use AI tools to speed up the build, but our team does the real work: we plan, design, review, test and stand behind every project. AI just takes the busywork off our hands, so you get the savings and the speed. <a href="#why">Why us</a>.</p>',
+    crew: '<p><b>Adrian</b> is our founder and lead developer. He has been making games since 4th grade and programming since middle school, and he is also an audio engineer and content creator. <b>Aiden</b> is a co-owner and runs marketing and lead generation. He worked as a service advisor in the car business, and he also does game development and design, with a mobile game on the way. <b>Joe</b> is a co-owner and our lead game developer, and he oversees every project. He is a site manager who already runs a tight team, and he will always be brutally honest with you. On a crew this small, everyone does a bit of every role. <a href="#crew">Meet the crew</a>.</p>',
+    why: '<p>Our mission is to help the little guys, like us: high-quality, industry-standard work at low, affordable prices, with faster turnarounds than the average agency. We use AI to help you, and that is what lets us keep prices low and turnarounds fast, while our team plans, designs, reviews, tests and stands behind every project. <a href="#why">Why us</a>.</p>',
     work: '<p>Right this way. We\'ve built for a cleaning company, a dog boarding palace, a dive shop and more. <a href="#work">See our work</a>.</p>',
     lab: '<p>We build 3D, animation and motion right into websites. You can spin a chrome infinity and stir a liquid shader <a href="#lab">just up the page</a>.</p>',
     film: '<p>Our 30-second film shows off the new look and the new site. <a href="#film">Watch it here</a>, with the sound on.</p>',
@@ -3529,11 +3556,11 @@ const Contact = (() => {
 })();
 
 /* ================================================================
-   FAQ: smooth open and close
+   FAQ answers and crew bios: smooth open and close
    ================================================================ */
 (() => {
-  $$('.qa').forEach((d) => {
-    const sum = $('summary', d), body = $('.qa__a', d);
+  $$('.qa, details.crew__card').forEach((d) => {
+    const sum = $('summary', d), body = $('.qa__a, .crew__body', d);
     sum.addEventListener('click', (e) => {
       e.preventDefault();
       if (d.dataset.busy) return;
