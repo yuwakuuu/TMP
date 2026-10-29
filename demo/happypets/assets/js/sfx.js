@@ -175,6 +175,10 @@
         t += B.len / src.playbackRate.value + .05 + Math.random() * .05;              // quick "arf-arf" rhythm
       }
     },
+    shutter: () => {   // camera shutter: a crisp snap, then the mirror slapping back
+      noise({ dur: .05, vol: .16, f0: 2400, f1: 6400 }); tone({ type: 'square', f0: 1700, f1: 700, dur: .035, vol: .045, q: 4200 });
+      noise({ dur: .07, vol: .1, f0: 1800, f1: 4200, delay: .085 }); tone({ type: 'square', f0: 900, f1: 1500, dur: .03, vol: .035, q: 3000, delay: .09 });
+    },
     open: () => { lib.squeak(); tone({ f0: 500, f1: 900, dur: .15, vol: .08, delay: .12 }); },
     close: () => tone({ f0: 700, f1: 300, dur: .14, vol: .08 }),
   };
