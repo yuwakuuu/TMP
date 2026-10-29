@@ -81,6 +81,38 @@ def reviews_grid():
 def attrs(s):
     return {m.group(1): m.group(3) if m.group(3) is not None else m.group(4) for m in re.finditer(r'(\w+)=("([^"]*)"|\'([^\']*)\')', s)}
 
+def img_size(rel):
+    """Pixel size of a WebP/PNG/JPEG in the site folder (no Pillow needed), so <img> tags can carry width and
+    height and the page doesn't jump when the photo arrives. None if unknown."""
+    try:
+        b = (ROOT / rel).read_bytes()
+    except OSError:
+        return None
+    try:
+        if b[:4] == b'RIFF' and b[8:12] == b'WEBP':
+            kind = b[12:16]
+            if kind == b'VP8X':
+                return 1 + int.from_bytes(b[24:27], 'little'), 1 + int.from_bytes(b[27:30], 'little')
+            if kind == b'VP8 ':
+                return int.from_bytes(b[26:28], 'little') & 0x3FFF, int.from_bytes(b[28:30], 'little') & 0x3FFF
+            if kind == b'VP8L':
+                v = int.from_bytes(b[21:25], 'little')
+                return (v & 0x3FFF) + 1, ((v >> 14) & 0x3FFF) + 1
+        if b[:8] == b'\x89PNG\r\n\x1a\n':
+            return int.from_bytes(b[16:20], 'big'), int.from_bytes(b[20:24], 'big')
+        if b[:2] == b'\xff\xd8':
+            i = 2
+            while i < len(b) - 9:
+                if b[i] != 0xFF:
+                    i += 1; continue
+                m = b[i + 1]
+                if m in (0xC0, 0xC1, 0xC2):
+                    return int.from_bytes(b[i + 7:i + 9], 'big'), int.from_bytes(b[i + 5:i + 7], 'big')
+                i += 2 + int.from_bytes(b[i + 2:i + 4], 'big')
+    except Exception:
+        return None
+    return None
+
 def hero(a):
     plain = re.sub(r'<[^>]+>', '', a['title'])
     crumb = a.get('crumb', '')
@@ -89,7 +121,9 @@ def hero(a):
     img = ''
     if a.get('img'):
         tag = f'<span class="tag">{a["tag"]}</span>' if a.get('tag') else ''
-        img = f'''<div data-reveal="scale" style="--i:2"><div class="photo-card tilt"><img src="{a['img']}" alt="{html.escape(a.get('alt', plain))}">{tag}</div></div>'''
+        wh = img_size(a['img'])
+        dims = f' width="{wh[0]}" height="{wh[1]}"' if wh else ''
+        img = f'''<div data-reveal="scale" style="--i:2"><div class="photo-card tilt"><img src="{a['img']}" alt="{html.escape(a.get('alt', plain))}"{dims}>{tag}</div></div>'''
     return f'''<header class="page-hero hero">
   <div class="wrap hero-grid">
     <div>

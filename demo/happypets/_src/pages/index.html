@@ -621,7 +621,7 @@ nav: home
           <div class="booth-fx" aria-hidden="true"></div>
           <div class="booth-floor" aria-hidden="true"></div>
           <div class="booth-props back" aria-hidden="true"></div>
-          <div class="booth-pup" aria-hidden="true"><span class="pup-hat"></span><span class="pup-face">🐶</span><span class="pup-bandana"></span></div>
+          <div class="booth-pup" aria-hidden="true"><div class="pup-body"><span class="pup-hat"></span><span class="pup-face">🐶</span><span class="pup-bandana"></span></div></div>
           <div class="booth-props front" aria-hidden="true"></div>
           <div class="booth-flash" aria-hidden="true"></div>
           <span class="booth-rec" aria-hidden="true">📸</span>
@@ -775,6 +775,32 @@ nav: home
     if ('IntersectionObserver' in window) new IntersectionObserver((en) => { onScreen = en[0].isIntersecting; restart(); }, { threshold: .35 }).observe(stage);
     else { onScreen = true; }
   }
+  // Every phone draws this emoji differently (where the chin and the top of the head fall), so measure the
+  // emoji on this device: draw it on a canvas, find its chin and head, then hang the bandana just under the
+  // chin (never over the mouth) and sit the hat on top of the head.
+  const fitPup = () => {
+    const body = pup.querySelector('.pup-body'), face = pup.querySelector('.pup-face');
+    const cs = getComputedStyle(face), fs = parseFloat(cs.fontSize); if (!fs) return;
+    const S = 160, W = S * 2, H = S * 2, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const g = cv.getContext('2d', { willReadFrequently: true }); if (!g) return;
+    g.font = `${S}px ${cs.fontFamily}`; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    const base = Math.round(S * 1.25); g.fillText(face.firstChild.nodeValue.trim(), W / 2, base);
+    let px; try { px = g.getImageData(0, 0, W, H).data; } catch (e) { return; }
+    const x0 = Math.round(W * .42), x1 = Math.round(W * .58);   // the middle of the face: muzzle, mouth and chin
+    const ink = (y) => { for (let x = x0; x < x1; x++) if (px[(y * W + x) * 4 + 3] > 140) return true; return false; };
+    let top = -1, chin = -1;
+    for (let y = 0; y < H; y++) if (ink(y)) { top = y; break; }
+    for (let y = H - 1; y >= 0; y--) if (ink(y)) { chin = y; break; }
+    if (top < 0 || chin <= top) return;
+    const mark = document.createElement('i'); mark.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+    face.appendChild(mark); const baseY = mark.offsetTop; mark.remove();   // the baseline, inside the pup (unaffected by the bobbing)
+    body.style.setProperty('--band-top', (baseY + (chin - base) / S * fs - fs * .025).toFixed(1) + 'px');
+    body.style.setProperty('--hat-top', (baseY + (top - base) / S * fs + fs * .05).toFixed(1) + 'px');
+  };
+  let fitT = 0;
+  const refit = () => { clearTimeout(fitT); fitT = setTimeout(() => requestAnimationFrame(fitPup), 60); };
+  refit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+  addEventListener('resize', refit);
   show(0); rec.textContent = '📸'; restart();
 })();
 </script>
