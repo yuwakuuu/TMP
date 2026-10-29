@@ -305,16 +305,6 @@ address { font-style: normal; font-size: 1.15rem; margin-bottom: 1rem; }
   100% { transform: translate(var(--x), 6px) rotate(var(--r)); opacity: 1; } }
 
 /* reviews */
-.reviews-in { display: grid; gap: 1.25rem; }
-.rating-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 1.5rem; }
-.rating-num { font: 700 clamp(3rem, 12vw, 4.2rem)/1 var(--serif); margin: 0; }
-.stars { margin: .5rem 0 .35rem; }
-.stars span { display: block; width: 150px; height: 28px;
-  background: linear-gradient(90deg, var(--mango) var(--fill), #dcd6c6 var(--fill));
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 28'%3E%3Cpath d='M15 1.5l3.9 8.3 9.1 1.1-6.7 6.2 1.8 9-8.1-4.6-8.1 4.6 1.8-9L2 10.9l9.1-1.1z'/%3E%3C/svg%3E") 0 0 / 30px 28px repeat-x;
-          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 28'%3E%3Cpath d='M15 1.5l3.9 8.3 9.1 1.1-6.7 6.2 1.8 9-8.1-4.6-8.1 4.6 1.8-9L2 10.9l9.1-1.1z'/%3E%3C/svg%3E") 0 0 / 30px 28px repeat-x; }
-.rating-count { color: var(--muted); margin: 0; }
-.rating-card .cta { margin-top: 1.25rem; }
 .review-rotator { background: var(--mint); border-radius: var(--r); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; }
 .review-slides { display: grid; flex: 1; }
 .review { grid-area: 1 / 1; margin: 0; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .5s ease, transform .5s ease, visibility 0s linear .5s; }
@@ -334,9 +324,10 @@ address { font-style: normal; font-size: 1.15rem; margin-bottom: 1rem; }
 .review-pause[aria-pressed="true"] .i-pause { display: none; }
 .review-pause[aria-pressed="true"] .i-play { display: block; }
 @media (min-width: 900px) {
-  .reviews-in { grid-template-columns: 300px 1fr; gap: 1.5rem; align-items: stretch; }
-  .rating-card { padding: 2rem; }
-  .review-rotator { padding: 2.25rem 2.5rem 1.5rem; }
+  .review-rotator { padding: 3rem 3rem 2rem; text-align: center; }
+  .review blockquote::before { margin-inline: auto; }
+  .review p { font-size: clamp(2rem, 2.8vw, 2.6rem); max-width: 30ch; margin-inline: auto; }
+  .review-ctrl { justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .review, .review.is-on { transform: none; }

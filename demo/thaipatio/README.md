@@ -16,8 +16,6 @@ All images come from the original site; nothing is stock, AI-made or redrawn.
 - `images/` — what the pages use: the original logo, old GIF logo, favicon and doodles unchanged, and JPEG copies of the photos (resized only when large, never enlarged)
 
 ## Google reviews
-The home page rotates four short quotes from Thai Patio's Google reviews, next to their overall rating
-(4.3 from 541 reviews, as of Oct 29, 2026), with links to read all reviews and write one on Google.
-To change the quotes, edit the `.review` figures in `index.html` (the dots and "N of 4" labels go with them).
-To show reviews live instead, use a Google reviews widget or the Google Places API with a key restricted to
-tmpbizz.com, and show only 4 and 5-star reviews.
+The home page rotates four short quotes from Thai Patio's good Google reviews (no star rating or review
+count is shown). To change the quotes, edit the `.review` figures in `index.html` (the dots and "N of 4"
+labels go with them).
