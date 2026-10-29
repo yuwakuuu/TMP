@@ -46,7 +46,17 @@ h2 .s{font-family:var(--font-s);font-weight:400;color:var(--teal);font-size:.9em
 :root[data-theme="dark"] .topbar{background:#3d0b26}
 .topbar .wrap{display:flex;gap:20px;justify-content:space-between;align-items:center;padding:8px 0;flex-wrap:wrap}
 .topbar a{text-decoration:none}
-.topbar .news{display:flex;gap:8px;align-items:center}
+.topbar .news{display:grid}
+.topbar .news>a{grid-area:1/1;display:flex;gap:8px;align-items:center;opacity:0;translate:0 7px;visibility:hidden;transition:opacity .45s var(--ease),translate .45s var(--ease),visibility 0s .45s}
+.topbar .news>a.on{opacity:1;translate:none;visibility:visible;transition-delay:0s}
+.topbar .news>a:hover,.tb-hours:hover .tb-h{text-decoration:underline;text-decoration-color:rgba(255,255,255,.45);text-underline-offset:3px}
+/* hours always sit in the top bar: Mon–Sat share one schedule, Sundays & holidays are the only different hours */
+.tb-hours{display:flex;flex-wrap:wrap;align-items:center;gap:2px 0;margin-right:auto;color:inherit}
+.tb-h{white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tb-h b{font-weight:600;color:var(--butter)}
+.tb-hours::before,.tb-h+.tb-h::before{content:"";width:1px;height:13px;background:rgba(255,255,255,.3);margin:0 6px 0 12px}
+.tb-hours::before{margin:0 12px 0 -4px}
+.tb-new{display:none;font:600 10.5px/1 var(--font-b);font-style:normal;letter-spacing:.06em;background:var(--butter);color:#521034;padding:3px 6px 2px;border-radius:999px}
 .topbar .news b{background:var(--butter);color:var(--plum);padding:2px 8px;border-radius:999px;font-size:12px}
 .nav{position:sticky;top:10px;z-index:60;margin:10px auto 0;width:min(1240px,100% - 20px);display:flex;align-items:center;gap:10px;padding:8px 10px 8px 10px;border-radius:24px;background:color-mix(in srgb,var(--card) 80%,transparent);backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--line);transition:box-shadow .4s var(--ease)}
 .nav.scrolled{box-shadow:var(--shadow)}
@@ -665,6 +675,9 @@ body>main,body>footer,body>.topbar{position:relative;z-index:1}
 .hours-mini{width:100%;font-size:15px;border-collapse:collapse}
 .hours-mini td{padding:6px 0;border-bottom:1px dashed var(--line)}
 .hours-mini td:last-child{text-align:right;color:var(--ink-2)}
+.hours .hours-note td,.hours-mini .hours-note td{text-align:left;border-bottom:0;padding:12px 0 0;font-size:14.5px;line-height:1.5;font-weight:400;color:var(--ink-2)}
+.hours-mini .hours-note td{padding-top:8px;font-size:13.5px}
+.hours-note b{color:var(--teal-d);font-weight:600}
 .sec-alt{background:transparent}   /* pure white pages; cards carry the separation */
 .nav .menu a[aria-current="page"],.nav .menu button.cur{background:var(--plum-soft);color:var(--plum)}
 @media (max-width:1080px){.split,.book-shell,.page-hero .hero-grid{grid-template-columns:1fr}.split.rev>:first-child{order:0}.feat-grid,.gallery{grid-template-columns:1fr 1fr}.book-side{position:static}}
@@ -754,7 +767,7 @@ h2.t-ready{line-height:1.36}   /* inflated 3D words need roomier lines when a he
 }
 @media (max-width:640px){
   .topbar .wrap{padding:6px 0;gap:8px;font-size:13px}
-  .topbar .wrap>a[href^="tel"]{display:none}
+  .topbar .tb-tel{display:none}
   .nav{top:6px;margin-top:6px;padding:6px;gap:6px;border-radius:18px}
   .icon-btn{width:40px;height:40px;border-radius:12px}
   .nav #theme{display:none}
@@ -1377,4 +1390,24 @@ html.lite .rv-hills,html.lite .rv-cacti,html.lite .rv-lane::after,html.lite .rv-
   #loader.arrive .trip-rv{left:30%}
   .trip-palace{right:3%;height:clamp(130px,22vh,170px)}
   .trip-woof{top:-44%}
+}
+
+/* ---------- top bar: status · hours · news · phone ----------
+   One line from 1232px up. Narrower screens put news + phone on a second line;
+   phones keep status + hours only, with a NEW tag on Mon–Sat standing in for the news. */
+.topbar{line-height:1.4}
+.topbar .wrap{column-gap:16px;row-gap:2px}
+.topbar .status{font-size:inherit}
+.tb-both{display:none}
+@media (max-width:1231px){
+  .topbar .wrap::after{content:"";flex-basis:100%;order:1}
+  .topbar .news,.topbar .tb-tel{order:2}
+}
+@media (max-width:640px){
+  .topbar .wrap{row-gap:3px}
+  .topbar .wrap::after{content:none}
+  .tb-both{display:inline}
+  .tb-new{display:inline-block}
+  .tb-hours{column-gap:14px}
+  .tb-hours::before,.tb-h+.tb-h::before{content:none}
 }

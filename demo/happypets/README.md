@@ -16,6 +16,10 @@ After editing, rebuild the site files in the root:
   Adventure RV down a desert road while the page loads, the Palace (with the original logo on its sign) rolls in,
   the RV parks and Lacy barks, then the page opens into her chat button. Return visits and Lite mode get the quick
   plum loader instead.
+- Hours: `HPP.sched` (live open/closed status) and `hoursRows` (every hours table) in `core.js`, plus the top bar in
+  `_src/layout.html`. Saturdays now run weekday hours (6 AM – 6:30 PM); Sundays & holidays (8–10:30 AM, 4–6:30 PM)
+  are the only different hours. The top bar shows both, and its NEW news takes turns between the Saturday change and
+  the meetups (it holds still on hover, focus and reduced motion). Lacy's hours answers live in `chat.js`.
 - `assets/js/puffy3d.js` — real-time three.js puffy 3D lettering (live hero titles + heading words)
 - `assets/js/fur.js` — hair-by-hair fluffy fur lettering (heading accent words in `<span class="s">`)
 - `assets/js/sfx.js` — synthesized sound effects (Web Audio, no files)

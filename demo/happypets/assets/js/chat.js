@@ -251,7 +251,7 @@
   }
 
   /* ---------------- knowledge base ---------------- */
-  const hoursHtml = () => { const s = HPP.status(); return `<b>${s.open ? '🟢' : '🔴'} ${s.text}</b> (both locations)<ul><li>Mon–Fri: 6:00 AM – 6:30 PM</li><li>Saturday: 8:00 AM – 6:30 PM</li><li>Sunday & holidays: 8–10:30 AM and 4–6:30 PM</li></ul><div class="mini">Boarding pickup/drop-off is available 365 days a year.</div>`; };
+  const hoursHtml = () => { const s = HPP.status(); return `<b>${s.open ? '🟢' : '🔴'} ${s.text}</b> (both locations)<ul><li>Mon–Sat: 6:00 AM – 6:30 PM</li><li>Sunday & holidays: 8–10:30 AM and 4–6:30 PM</li></ul>✨ <b>New:</b> Saturdays now have the same hours as weekdays, so pups get the same amount of play on Saturdays too. Sundays & holidays are the only different hours.<div class="mini">Boarding pickup/drop-off is available 365 days a year.</div>`; };
   const KB = [
     { k: [/^(hi|hey|hello|howdy|yo|sup)\b/, /good (morning|afternoon|evening)/], a: () => 'Woof woof! 🐶 I’m Lacy. Ask me anything about the Palace, or let me help you book.', c: 'home' },
     { k: [/^(thanks|thank you|thx|ty)\b|thanks!?$|awesome|perfect/], a: 'Anytime! *happy tail wag* 🐾 Anything else?', c: 'home' },
@@ -267,7 +267,7 @@
     { k: [/pre.?screen|evaluat|assess|meet (and|&) greet|temperament test|first (day|visit|time)|new (client|customer|dog)/], a: '📋 Every new dog does a <b>5-step pre-screen</b> on their first daycare day (3–4 hrs, regular daycare rates): say hello → leash intros → join the group → pack feedback → two-staff sign-off. Pre-screens run <b>Mon, Tue, Thu & Fri</b> with advance notice.', c: 'pre' },
     { k: [/tour|visit|look around|see the facility/], a: '🏰 Yes — we <b>LOVE</b> giving tours! Stop by any time we’re open, no appointment needed.' },
     { k: [/check.?out|pick.?up|late/], a: '🕡 Boarding checkout is <b>10:30 AM</b>. Late checkout until 6:30 PM is <b>$24</b>. Half-day daycare pickup is by 3 PM; full-day by 6:30 PM.' },
-    { k: [/check.?in|drop.?off|early/], a: '🌅 Drop-off/check-in starts at <b>6 AM</b> weekdays and <b>8 AM</b> weekends & holidays — no early drop-off fee.' },
+    { k: [/check.?in|drop.?off|early/], a: '🌅 Drop-off/check-in starts at <b>6 AM</b> Monday–Saturday and <b>8 AM</b> Sundays & holidays — no early drop-off fee.' },
     { k: [/holiday|christmas|thanksgiving|new year|july 4|labor day|memorial/], a: '🎉 We’re open 365 days for boarding pickup & drop-off. Holiday hours are 8–10:30 AM and 4–6:30 PM. Pickup on New Year’s, Memorial Day, July 4th, Labor Day, Thanksgiving or Christmas has a <b>$20</b> lobby fee.' },
     { k: [/cancel|refund|reschedul/], a: '📆 For boarding, please cancel at least <b>48 hours</b> before the first night.' },
     { k: [/military|veteran|discount|multi.?dog|deal|coupon|sale/], a: '💸 Discounts: <ul><li>Multi-dog villa rates ($44/$43/$42)</li><li>5% off 11+ consecutive nights</li><li>10% U.S. Military (with government ID) on boarding & full-price daycare</li></ul>Discounts can’t be combined, and military doesn’t apply to baths, add-ons or packages.' },
@@ -280,7 +280,7 @@
     { k: [/flea|tick|parasite|mite/], a: '🐛 Dogs must be free of fleas, ticks and ear mites. If we find any, the bath and removal can cost up to $80 depending on severity and size.' },
     { k: [/bully|pit ?bull|breed|small dog|teacup|tiny|big dog|large dog|aggressive|reactive/], a: '⚖️ Dogs are grouped by size and temperament across separate yards. Teacup pups (10 lb and under) have their own space. We’re one of the few facilities that welcome <b>bully breeds</b>! All dogs must be suitable for group play.' },
     { k: [/\bforms?\b|paperwork|waiver|sign.?up|register/], a: '📝 You’ll need a <b>Client Profile</b>, <b>Pet Profile</b> and <b>Waiver & Release</b>. <a href="new-clients.html">Start new client sign-up →</a>' },
-    { k: [/event|meetup|meet up|dog park|social|saturday/], a: '🎉 <b>Free Saturday meetups</b> start Nov 21 at Ruff Ranch Dog Park (Painted Sky Park, Apache Junction):<ul><li>8–9:30 AM Toy Breeds (up to 20 lb)</li><li>10–11:30 AM Featured Breed Group</li><li>12–1:30 PM Large-Breed Puppy Social (under 6mo)</li></ul>You stay with your dog. <a href="events.html">Details →</a>' },
+    { k: [/event|meetup|meet up|dog park|social/, /meet ?ups?\b|ruff ranch/], a: '🎉 <b>Free Saturday meetups</b> start Nov 21 at Ruff Ranch Dog Park (Painted Sky Park, Apache Junction):<ul><li>8–9:30 AM Toy Breeds (up to 20 lb)</li><li>10–11:30 AM Featured Breed Group</li><li>12–1:30 PM Large-Breed Puppy Social (under 6mo)</li></ul>You stay with your dog. <a href="events.html">Details →</a>' },
     { k: [/train|akc|obedien|class|manners/], a: '🎓 We offer <b>AKC training courses</b> plus our Canine Enrichment daycare program. <a href="dog-training.html">See courses →</a>' },
     { k: [/spa|bath|groom|nail|wash|de-?shed|doodle|facial/], a: '🛁 Spa services are added to a daycare or boarding day. Baths by weight:<ul><li><b>Dog bath</b> $35 (≤20 lb) · $45 (≤40) · $60 (≤80) · $70 (≤95) · $80 (95+)</li><li><b>Doodle bath</b> $55 · $65 · $85 · $115 · inquire</li><li><b>De-shed bath</b> $55 · $80 · $110 · $125 · $140</li></ul>Nail trim $20 · teeth brushing $10 · blueberry facial $15 · paw balm $15. Coat condition can affect price. <a href="spa.html">Full spa menu →</a>' },
     { k: [/\brv\b|camper|motorhome|road trip|adventure/], a: '🚐 Yes! You can rent our <b>Adventure RV</b> and bring your dog along on vacation. It sleeps six, pets are welcome from the start, and bowls, poop bags and treats are included. Call <a href="tel:+14802071852">480-207-1852</a> for dates and rates. <a href="adventure-rv.html">See the RV →</a>' },
@@ -294,7 +294,7 @@
     { k: [/pool|swim|bubble|agility|play|activit/], a: '🏊 Daily fun: above-ground splash pools, playground & agility gear, chasing bubbles and afternoon <b>story hour</b> — plus fresh water every hour.' },
     { k: [/\bcats?\b|kitten|rabbit|bird/], a: '🐾 Our programs are built around dogs. For other pets, please give us a call at ' + HPP.phone + '.' },
     { k: [/review|rating|google|best/], a: '⭐ Voted <b>Best Pet Boarding Services in Mesa</b> six years running, and top-rated on Google. <a href="reviews.html">Read reviews →</a>' },
-    { k: [/\bhours?\b/, /\bopen\b/, /\bclose[sd]?\b/, /what time/, /today/], a: hoursHtml }
+    { k: [/\bhours?\b/, /\bopen\b/, /\bclose[sd]?\b/, /what time/, /today/, /\b(saturdays?|sundays?|weekends?)\b/], a: hoursHtml }
   ];
   const FOLLOW = {
     home: [['📅 Book a stay', 'book'], ['💲 Prices', 'prices'], ['🕐 Hours', 'hours'], ['📋 New client?', 'pre-screen']],

@@ -27,7 +27,7 @@
     price: { board: { 1: 48, 2: 44, 3: 43, 4: 42 }, deluxe: 25, cam: 10, play: 24, late: 24, holiday: 20,
       daycare: { full: 38, half: 33, puppyWed: 33, puppy: 30 } },
     // minutes from midnight, Arizona time (no DST). 0 = Sunday
-    sched: { 0: [[480, 630], [960, 1110]], 1: [[360, 1110]], 2: [[360, 1110]], 3: [[360, 1110]], 4: [[360, 1110]], 5: [[360, 1110]], 6: [[480, 1110]] },
+    sched: { 0: [[480, 630], [960, 1110]], 1: [[360, 1110]], 2: [[360, 1110]], 3: [[360, 1110]], 4: [[360, 1110]], 5: [[360, 1110]], 6: [[360, 1110]] },
     days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   };
 
@@ -629,11 +629,23 @@
 
   /* ================= status / hours / locations ================= */
   const paint = (dot, txt, pre = '') => { if (!dot || !txt) return; const s = HPP.status(); dot.classList.toggle('closed', !s.open); txt.textContent = pre + s.text; };
-  const paintAll = () => { paint($('#topDot'), $('#topStatus'), 'Both locations · '); paint($('#locDot'), $('#locStatus')); $$('[data-status]').forEach(el => paint($('.dot', el), $('.txt', el))); };
+  const paintAll = () => { paint($('#topDot'), $('#topStatus')); paint($('#locDot'), $('#locStatus')); $$('[data-status]').forEach(el => paint($('.dot', el), $('.txt', el))); };
   const today = azNow().d;
-  const hoursRows = [['Monday – Friday', '6:00 AM – 6:30 PM', [1, 2, 3, 4, 5]], ['Saturday', '8:00 AM – 6:30 PM', [6]], ['Sunday &amp; holidays', '8–10:30 AM · 4–6:30 PM', [0]]]
+  // Saturdays run weekday hours now; Sundays & holidays are the only different hours
+  const hoursRows = [['Monday – Saturday', '6:00 AM – 6:30 PM', [1, 2, 3, 4, 5, 6]], ['Sunday &amp; holidays', '8–10:30 AM · 4–6:30 PM', [0]]]
     .map(([a, b, ds]) => `<tr class="${ds.includes(today) ? 'today' : ''}"><td>${a}</td><td>${b}</td></tr>`).join('');
-  $$('.hours,[data-hours]').forEach(t => t.innerHTML = hoursRows);
+  const satNote = mini => `<tfoot><tr class="hours-note"><td colspan="2"><b>New:</b> ${mini ? 'Saturdays now match weekday hours.'
+    : 'Saturdays now have the same hours as weekdays, so pups get the same amount of play on Saturdays too. Sundays &amp; holidays are the only different hours.'}</td></tr></tfoot>`;
+  $$('.hours,[data-hours]').forEach(t => t.innerHTML = '<tbody>' + hoursRows + '</tbody>' + satNote(t.classList.contains('hours-mini')));
+  // top bar news: two items take turns; hover or focus holds one, and it stays still with reduced motion
+  on('#topNews', box => {
+    const items = $$('a', box); if (items.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let i = 0;
+    setInterval(() => {
+      if (document.hidden || !box.offsetParent || box.matches(':hover, :focus-within')) return;
+      items[i].classList.remove('on'); i = (i + 1) % items.length; items[i].classList.add('on');
+    }, 6500);
+  });
   const setLoc = key => {
     const L = HPP.locs[key];
     const set = (id, fn) => on(id, fn);
