@@ -126,3 +126,43 @@ if (chips.length && 'IntersectionObserver' in window) {
   }, { rootMargin: '-45% 0px -50% 0px' });
   byId.forEach((_, id) => { const el = document.getElementById(id); if (el) io.observe(el); });
 }
+
+
+// Google reviews: one quote at a time, changing every 7 seconds. Pauses while hovered or focused,
+// has a pause button, and never moves on its own for visitors who ask for reduced motion.
+const rot = document.querySelector('.review-rotator');
+if (rot) {
+  const slides = [...rot.querySelectorAll('.review')];
+  const dots = [...rot.querySelectorAll('.review-dots button')];
+  const pauseBtn = rot.querySelector('.review-pause');
+  const live = rot.querySelector('.review-slides');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let i = 0, timer = 0, paused = still, holding = false;
+  const show = (n) => {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k) => { s.classList.toggle('is-on', k === i); s.setAttribute('aria-hidden', String(k !== i)); });
+    dots.forEach((d, k) => { if (k === i) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+  };
+  const stop = () => { clearInterval(timer); timer = 0; };
+  const run = () => { stop(); if (!paused && !holding && !document.hidden) timer = setInterval(() => show(i + 1), 7000); };
+  dots.forEach((d, k) => d.addEventListener('click', () => { show(k); run(); }));
+  if (!still) {
+    pauseBtn.hidden = false;
+    pauseBtn.setAttribute('aria-pressed', 'false');
+    pauseBtn.addEventListener('click', () => {
+      paused = !paused;
+      pauseBtn.setAttribute('aria-pressed', String(paused));
+      pauseBtn.setAttribute('aria-label', paused ? 'Play reviews' : 'Pause reviews');
+      live.setAttribute('aria-live', paused ? 'polite' : 'off');
+      run();
+    });
+    rot.addEventListener('mouseenter', () => { holding = true; stop(); });
+    rot.addEventListener('mouseleave', () => { holding = false; run(); });
+    rot.addEventListener('focusin', () => { holding = true; stop(); });
+    rot.addEventListener('focusout', (e) => { if (!rot.contains(e.relatedTarget)) { holding = false; run(); } });
+    document.addEventListener('visibilitychange', run);
+  } else {
+    live.setAttribute('aria-live', 'polite');
+  }
+  run();
+}
