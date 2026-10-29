@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yuwakuuu.github.io/TMP/sitemap.xml
+Sitemap: https://tmpbizz.com/sitemap.xml

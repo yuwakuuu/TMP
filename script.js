@@ -371,7 +371,7 @@
   /* Hero showcase: laptop + phone cycle through projects ---------------------- */
   const projects = [
     { name: 'MadeByWaku', url: 'yuwakuuu.github.io/madebywaku' },
-    { name: 'Happy Pets Palace', url: 'yuwakuuu.github.io/happypetspalace-redesign' },
+    { name: 'Happy Pets Palace', url: 'tmpbizz.com/demo/happypets' },
     { name: 'Total Quality Management', url: 'tqm-website.vercel.app' },
     { name: 'The TOB Company', url: 'thetobcompany · live demo' },
   ];
