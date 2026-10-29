@@ -752,7 +752,7 @@ details.crew__card:hover,details.crew__card[open]{border-color:var(--line-2)}
 .grass{position:relative;display:inline-block;font-weight:900;font-stretch:125%;font-size:1.06em;line-height:.92;letter-spacing:-.025em;padding:.04em .04em .06em;margin:-.04em -.02em -.06em;color:#3f9a2c;cursor:grab;-webkit-tap-highlight-color:transparent}
 .grass.is-ready{color:transparent}
 .grass__canvas{position:absolute;display:block;pointer-events:auto;touch-action:pan-y}
-.grass__fx{position:absolute;display:block;pointer-events:none}
+.grass__fx{position:fixed;inset:0;z-index:40;display:none;pointer-events:none}
 .grass__hint{margin:14px 0 0;font-size:.8125rem;font-weight:600;color:var(--muted)}
 .grass__hint::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:2px;background:#4aa336;vertical-align:.05em}
 .grass ::selection,.grass::selection{color:transparent}
@@ -1294,42 +1294,49 @@ html.is-locked .tob{display:none}
   <div class="cf" id="cf" role="region" aria-roledescription="carousel" aria-label="Our work">
     <div class="cf__stage" id="cf-stage" tabindex="0" data-cursor="Drag" aria-label="Project carousel. Use the left and right arrow keys to browse.">
       <ol class="cf__track" id="cf-track">
-        <li class="cf__card" data-i="0" aria-roledescription="slide" aria-label="1 of 6: Total Quality Management">
+        <li class="cf__card" data-i="0" aria-roledescription="slide" aria-label="1 of 7: Total Quality Management">
           <a class="cf__shot" href="https://tmpbizz.com/demo/tqm/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/tqm</span></span>
             <img src="new/assets/work/tqm-960.webp" srcset="new/assets/work/tqm-960.webp 960w, new/assets/work/tqm.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Total Quality Management's homepage: a polished grocery-store floor behind the headline Professional Cleaning, Exceptional Standards." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="new/assets/work/tqm-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
-        <li class="cf__card" data-i="1" aria-roledescription="slide" aria-label="2 of 6: Happy Pets Palace &amp; Playground">
+        <li class="cf__card" data-i="1" aria-roledescription="slide" aria-label="2 of 7: Happy Pets Palace &amp; Playground">
           <a class="cf__shot" href="https://yuwakuuu.github.io/happypetspalace-redesign/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/happypetspalace-redesign</span></span>
             <img src="new/assets/work/happypets-960.webp" srcset="new/assets/work/happypets-960.webp 960w, new/assets/work/happypets.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Happy Pets Palace &amp; Playground's homepage with the headline A palace to stay, a playground to play, beside a photo of five happy dogs." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="new/assets/work/happypets-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
-        <li class="cf__card" data-i="2" aria-roledescription="slide" aria-label="3 of 6: The Scuba Shop">
+        <li class="cf__card" data-i="2" aria-roledescription="slide" aria-label="3 of 7: The Scuba Shop">
           <a class="cf__shot" href="https://yuwakuuu.github.io/scubashop-revamp/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/scubashop-revamp</span></span>
             <img src="new/assets/work/scuba-960.webp" srcset="new/assets/work/scuba-960.webp 960w, new/assets/work/scuba.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="The Scuba Shop's homepage: a diver swimming underwater behind the headline Learn to dive." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="new/assets/work/scuba-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
-        <li class="cf__card" data-i="3" aria-roledescription="slide" aria-label="4 of 6: Thai Patio">
+        <li class="cf__card" data-i="3" aria-roledescription="slide" aria-label="4 of 7: Thai Patio">
           <a class="cf__shot" href="https://yuwakuuu.github.io/thaipatio/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/thaipatio</span></span>
             <img src="new/assets/work/thaipatio-960.webp" srcset="new/assets/work/thaipatio-960.webp 960w, new/assets/work/thaipatio.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Thai Patio's homepage: the headline Thai Restaurant in Mesa between a photo of the storefront and a chef tossing a flaming wok." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="new/assets/work/thaipatio-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
-        <li class="cf__card" data-i="4" aria-roledescription="slide" aria-label="5 of 6: The TOB Company">
+        <li class="cf__card" data-i="4" aria-roledescription="slide" aria-label="5 of 7: Bryco Asphalt Milling">
+          <a class="cf__shot" href="https://tmpbizz.com/demo/bryco/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
+            <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/bryco</span></span>
+            <img src="new/assets/work/bryco-960.webp" srcset="new/assets/work/bryco-960.webp 960w, new/assets/work/bryco.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="Bryco Asphalt Milling's homepage: the headline Clean cuts. Right depth. Ready to pave. above a drawing of a milling machine loading a dump truck at sunrise." loading="lazy" decoding="async" draggable="false">
+          </a>
+          <span class="cf__phone" aria-hidden="true"><img src="new/assets/work/bryco-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
+        </li>
+        <li class="cf__card" data-i="5" aria-roledescription="slide" aria-label="6 of 7: The TOB Company">
           <a class="cf__shot" href="https://tmpbizz.com/demo/tob/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/tob</span></span>
             <img src="new/assets/work/tob-960.webp" srcset="new/assets/work/tob-960.webp 960w, new/assets/work/tob.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="The TOB Company's homepage: TOB's glowing round face beside the headline Your own AI butler." loading="lazy" decoding="async" draggable="false">
           </a>
           <span class="cf__phone" aria-hidden="true"><img src="new/assets/work/tob-mobile.webp" width="780" height="1600" alt="" loading="lazy" decoding="async" draggable="false"></span>
         </li>
-        <li class="cf__card" data-i="5" aria-roledescription="slide" aria-label="6 of 6: MadeByWaku">
+        <li class="cf__card" data-i="6" aria-roledescription="slide" aria-label="7 of 7: MadeByWaku">
           <a class="cf__shot" href="https://yuwakuuu.github.io/madebywaku/" target="_blank" rel="noopener" tabindex="-1" draggable="false">
             <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/madebywaku</span></span>
             <img src="new/assets/work/madebywaku-960.webp" srcset="new/assets/work/madebywaku-960.webp 960w, new/assets/work/madebywaku.webp 1440w" sizes="(max-width: 760px) 86vw, 760px" width="1440" height="900" alt="MadeByWaku's homepage: a glossy 3D infinity loop beside the headline Made by Waku." loading="lazy" decoding="async" draggable="false">
@@ -1365,12 +1372,18 @@ html.is-locked .tob{display:none}
           <a class="btn btn--ghost btn--sm" href="https://yuwakuuu.github.io/thaipatio/" target="_blank" rel="noopener">Visit site</a>
         </article>
         <article class="cf__item" data-i="4" hidden>
+          <p class="cf__kind">Asphalt milling in the East Valley, AZ</p>
+          <h3>Bryco Asphalt Milling</h3>
+          <p>A new site with a hot-asphalt paving intro, an animated milling scene, their latest Instagram posts and a bid request form.</p>
+          <a class="btn btn--ghost btn--sm" href="https://tmpbizz.com/demo/bryco/" target="_blank" rel="noopener">Visit site</a>
+        </article>
+        <article class="cf__item" data-i="5" hidden>
           <p class="cf__kind">Software launch</p>
           <h3>The TOB Company</h3>
           <p>A launch site for TOB, a personal AI assistant for Windows, with a live animated face and a full product tour.</p>
           <a class="btn btn--ghost btn--sm" href="https://tmpbizz.com/demo/tob/" target="_blank" rel="noopener">Visit site</a>
         </article>
-        <article class="cf__item" data-i="5" hidden>
+        <article class="cf__item" data-i="6" hidden>
           <p class="cf__kind">Multimedia studio portfolio</p>
           <h3>MadeByWaku</h3>
           <p>A portfolio with a real-time 3D hero, built to turn visitors into quote requests.</p>
@@ -1379,7 +1392,7 @@ html.is-locked .tob{display:none}
       </div>
       <div class="cf__ctrl">
         <button class="cf__btn" type="button" data-dir="-1" aria-label="Previous project"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
-        <span class="cf__count" aria-hidden="true"><b id="cf-now">1</b><span>/ 6</span></span>
+        <span class="cf__count" aria-hidden="true"><b id="cf-now">1</b><span>/ 7</span></span>
         <button class="cf__btn" type="button" data-dir="1" aria-label="Next project"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
       </div>
     </div>
@@ -1449,7 +1462,7 @@ html.is-locked .tob{display:none}
         <div class="why__how">
           <p class="why__kind">How we do it</p>
           <h3>We put AI to work for you</h3>
-          <p>We use AI to help you. It's what lets us give you lower prices and faster turnarounds than the average agency, while our team gives every project its full attention, from the first call to launch&nbsp;day.</p>
+          <p>Big businesses and corporations are already using AI and profiting from it, so why shouldn't you? It's the new age of technology. We use AI to help you, which is what lets us give you lower prices and faster turnarounds than the average agency, while our team gives every project its full attention, from the first call to launch&nbsp;day.</p>
         </div>
         <div>
           <p class="why__steps-title" id="why-steps">On every project, our team</p>
@@ -1807,6 +1820,7 @@ html.is-locked .tob{display:none}
         <a href="https://yuwakuuu.github.io/happypetspalace-redesign/" target="_blank" rel="noopener">Happy Pets Palace</a>
         <a href="https://yuwakuuu.github.io/scubashop-revamp/" target="_blank" rel="noopener">The Scuba Shop</a>
         <a href="https://yuwakuuu.github.io/thaipatio/" target="_blank" rel="noopener">Thai Patio</a>
+        <a href="https://tmpbizz.com/demo/bryco/" target="_blank" rel="noopener">Bryco Asphalt Milling</a>
         <a href="https://tmpbizz.com/demo/tob/" target="_blank" rel="noopener">The TOB Company</a>
         <a href="https://yuwakuuu.github.io/madebywaku/" target="_blank" rel="noopener">MadeByWaku</a>
       </div>
@@ -3616,11 +3630,12 @@ const Contact = (() => {
     el.appendChild(canvas);
     const ctx = canvas.getContext('2d');
     if (!ctx) { canvas.remove(); return; }
-    // clippings fly beyond the word, so they get their own larger canvas that never takes clicks
+    // clippings fly past the word and fall off the bottom of the screen, so they get their own
+    // fixed layer over the whole viewport that never takes clicks
     const fx = document.createElement('canvas');
     fx.className = 'grass__fx';
     fx.setAttribute('aria-hidden', 'true');
-    el.appendChild(fx);
+    document.body.appendChild(fx);
     const fctx = fx.getContext('2d');
     let W = 0, H = 0, pad = 0, scale = 1, size = 0, N = 0, soil = null;
     let X, Y, LEN, LEAN, PH, OFF, VEL, SH, MX, MY, TX, TY, baseW = 0.6, buckets = [];
@@ -3709,13 +3724,6 @@ const Contact = (() => {
       }
       buckets = buckets.map((band) => band.map((list) => Uint32Array.from(list)));
       R = size * 0.5;
-      // the clippings canvas reaches past the word on every side
-      fxL = Math.round(size * 1.7); fxT = Math.round(size * 1.3);
-      fxW = W + fxL * 2; fxH = H + fxT + Math.round(size * 0.6);
-      fxS = Math.min(2, window.devicePixelRatio || 1);
-      fx.style.left = `${-pad - fxL}px`; fx.style.top = `${-pad - fxT}px`;
-      fx.style.width = `${fxW}px`; fx.style.height = `${fxH}px`;
-      fx.width = Math.round(fxW * fxS); fx.height = Math.round(fxH * fxS);
       bus.dispatchEvent(new CustomEvent('brush-size', { detail: R * 2 }));
       el.classList.add('is-ready');
       draw();
@@ -3776,12 +3784,14 @@ const Contact = (() => {
       for (let j = parts.length - 1; j >= 0; j--) {
         const q = parts[j];
         q.age += dt;
-        if (!q.landed) {
-          q.vx *= Math.exp(-2.2 * dt); q.vy += 1150 * dt;
-          q.x += q.vx * dt; q.y += q.vy * dt; q.a += q.va * dt;
-          if (q.vy > 0 && q.y >= q.ground) { q.y = q.ground; q.landed = q.age; q.va = 0; q.a = Math.PI / 2 + gauss() * 0.35; }
-        }
-        if (q.age > q.life) parts.splice(j, 1);
+        // up and out with the mower, then down: air drag holds each clipping near its own falling
+        // speed and it flutters side to side until it drops off the bottom of the screen
+        q.vx *= Math.exp(-1.6 * dt); q.vy += 1150 * dt;
+        if (q.vy > q.vt) q.vy += (q.vt - q.vy) * Math.min(1, 5 * dt);
+        const sway = q.vy > 0 ? Math.sin(q.age * q.fw + q.fp) * q.fa : 0;
+        q.x += (q.vx + sway) * dt; q.y += q.vy * dt;
+        q.va *= Math.exp(-0.5 * dt); q.a += q.va * dt;
+        if (q.gone || q.age > 12) parts.splice(j, 1);
       }
       return mowing > 0 || parts.length > 0;
     }
@@ -3791,15 +3801,25 @@ const Contact = (() => {
       const len = LEN[i] * (before - STUB[i]) * 0.9;
       const x = X[i] + Math.sin(a) * h, y = Y[i] - Math.cos(a) * h;
       parts.push({
-        x: x + fxL, y: y + fxT, a: a - Math.PI / 2, len, age: 0, landed: 0,
+        x, y, a: a - Math.PI / 2, len, age: 0, gone: false,
         vx: mowDir * (70 + Math.random() * 260) + gauss() * 50, vy: -(150 + Math.random() * 300), va: (Math.random() - 0.5) * 22,
-        life: 1.1 + Math.random() * 0.9, ground: baseY + fxT + gauss() * size * 0.03,
+        vt: 250 + Math.random() * 230, fw: 3.5 + Math.random() * 4.5, fa: 30 + Math.random() * 60, fp: Math.random() * Math.PI * 2,
         c: SHADES[Math.min(SHADES.length - 1, SH[i] + 1)][1],
       });
     }
     let mowDir = 1, regrowCue = 0;
+    // the clippings layer covers the viewport; size it when a mow starts and on resize
+    function sizeFx() {
+      fxW = document.documentElement.clientWidth || innerWidth; fxH = innerHeight;
+      fxS = Math.min(2, window.devicePixelRatio || 1);
+      const w = Math.round(fxW * fxS), h = Math.round(fxH * fxS);
+      if (fx.width !== w || fx.height !== h) { fx.width = w; fx.height = h; }
+      fx.style.display = 'block';
+    }
+    addEventListener('resize', () => { if (parts.length) sizeFx(); });
     function mow(x) {
       if (!N) return;
+      if (!reduced) sizeFx();
       mowDir = x < (inkL + inkR) / 2 ? 1 : -1;
       const t0 = t, span = inkR - inkL;
       clipOdds = Math.min(0.5, 520 / N);
@@ -3824,19 +3844,19 @@ const Contact = (() => {
       fctx.setTransform(fxS, 0, 0, fxS, 0, 0);
       fctx.clearRect(0, 0, fxW, fxH);
       fxDirty = parts.length > 0;
-      if (!fxDirty) return;
+      if (!fxDirty) { fx.style.display = 'none'; return; }
+      // clippings live in the word's coordinates, so they scroll with the page while they fall
+      const r = canvas.getBoundingClientRect(), k = W ? r.width / W : 1;
       fctx.lineCap = 'round';
-      fctx.lineWidth = baseW * 1.15;
+      fctx.lineWidth = baseW * 1.15 * k;
       for (let j = 0; j < parts.length; j++) {
         const q = parts[j];
-        const fade = q.landed ? clamp(1 - (q.age - q.landed) / 0.45, 0, 1) : clamp((q.life - q.age) / 0.3, 0, 1);
-        if (fade <= 0) continue;
-        const dx = Math.cos(q.a) * q.len * 0.5, dy = Math.sin(q.a) * q.len * 0.5;
-        fctx.globalAlpha = fade;
+        const x = r.left + q.x * k, y = r.top + q.y * k;
+        if (y - q.len * k > fxH + 24 || x < -200 || x > fxW + 200) { q.gone = true; continue; }
+        const dx = Math.cos(q.a) * q.len * 0.5 * k, dy = Math.sin(q.a) * q.len * 0.5 * k;
         fctx.strokeStyle = q.c;
-        fctx.beginPath(); fctx.moveTo(q.x - dx, q.y - dy); fctx.lineTo(q.x + dx, q.y + dy); fctx.stroke();
+        fctx.beginPath(); fctx.moveTo(x - dx, y - dy); fctx.lineTo(x + dx, y + dy); fctx.stroke();
       }
-      fctx.globalAlpha = 1;
     }
 
     function draw() {
@@ -3884,7 +3904,11 @@ const Contact = (() => {
 
     function frame(now) {
       raf = 0;
-      if (!visible || document.hidden || !N) return;
+      if (!visible || document.hidden || !N) {
+        // stopped mid-fall (scrolled away or tab hidden): drop the clippings instead of freezing them
+        if (parts.length) { parts.length = 0; fxDirty = false; fctx.setTransform(1, 0, 0, 1, 0, 0); fctx.clearRect(0, 0, fx.width, fx.height); fx.style.display = 'none'; }
+        return;
+      }
       if (P.power > 0.01 || gust || mowing || parts.length) settle = 1.2;   // full frame rate while you play with it
       const gap = settle > 0 ? 15 : 41;            // ~24fps for the idle breeze
       if (now - last >= gap) {
