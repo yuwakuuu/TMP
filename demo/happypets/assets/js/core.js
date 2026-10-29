@@ -89,8 +89,15 @@
     const t0 = performance.now(), min = visited ? 350 : 1500;
     const wait = ms => new Promise(r => setTimeout(r, ms));
     const domReady = document.readyState !== 'loading' ? Promise.resolve() : new Promise(r => document.addEventListener('DOMContentLoaded', r, { once: true }));
+    let finishing = false;
     const finish = async () => {
+      if (finishing) return; finishing = true;
       set(100); await wait(Math.max(0, min - (performance.now() - t0)) + 250);
+      if (!visited) {   // first visit: the RV pulls up at the Palace and Lacy barks before the page opens
+        const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        ld.classList.add('arrive'); await wait(still ? 250 : 950);
+        ld.classList.add('parked'); sfx('bark'); await wait(still ? 600 : 700);
+      }
       done = true; clearInterval(mi);
       const fab = $('#dogFab'); if (fab) { const r = fab.getBoundingClientRect(); ld.style.setProperty('--lx', r.left + r.width / 2 + 'px'); ld.style.setProperty('--ly', r.top + r.height / 2 + 'px'); }
       ld.classList.add('out'); sfx('whoosh');

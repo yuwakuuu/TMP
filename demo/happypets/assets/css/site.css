@@ -1314,3 +1314,67 @@ html.lite .pup-body,html.lite .booth-props i.bob{animation:none}
 @media (max-width:560px){.rv-feats{grid-template-columns:1fr}.rv-van{width:210px;left:calc(50% - 105px)}}
 html.lite .rv-hills,html.lite .rv-cacti,html.lite .rv-lane::after,html.lite .rv-van,html.lite .rv-wheel,html.lite .rv-lacy{animation:none}
 @media (prefers-reduced-motion:reduce){.rv-hills,.rv-cacti,.rv-lane::after,.rv-van,.rv-wheel,.rv-lacy{animation:none}.rv-postcard{transition:none}}
+
+/* =========================================================
+   First-visit intro: Lacy drives the Adventure RV to the Palace while the page loads
+   (return visits keep the quick plum loader; page transitions are untouched)
+   ========================================================= */
+#loader .trip{display:none}
+#loader:not(.quick) .trip{display:flex;flex-direction:column;align-items:center;width:100%}
+#loader:not(.quick) .ld,#loader:not(.quick) .fx{display:none}
+#loader .trip-title{margin:0 0 6px;padding:0 20px;min-height:0;text-align:center;font:600 clamp(19px,2.4vw,25px)/1.3 var(--font-d);color:var(--plum)}
+.trip-scene{position:relative;width:100%;height:clamp(230px,40vh,340px);overflow:hidden}
+.trip-sun{position:absolute;left:62%;bottom:24%;width:clamp(170px,24vw,300px);aspect-ratio:1;translate:-50% 30%;border-radius:50%;background:radial-gradient(circle,var(--teal-soft) 0 60%,transparent 61%)}
+.trip-hills,.trip-cacti{position:absolute;left:0;right:0}
+.trip-hills{bottom:calc(24% - 2px);height:120px;opacity:.16;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 120'%3E%3Cpath fill='%23521034' d='M0 120V86l44-28 34 18 60-58 34 38 24-12 52 44 44-38 30 20 54-64 38 42 30-14 50 50 40-32 36 30V120z'/%3E%3C/svg%3E") repeat-x 0 100%/520px 120px;animation:tripScroll 26s linear infinite}
+.trip-cacti{bottom:calc(24% - 2px);height:80px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 80'%3E%3Cg fill='%23287786'%3E%3Crect x='60' y='10' width='13' height='70' rx='6.5'/%3E%3Cpath d='M60 48H49a6.5 6.5 0 0 1-6.5-6.5V26a5.5 5.5 0 0 1 11 0v13H60zM73 40h9V22a5.5 5.5 0 0 1 11 0v18a6.5 6.5 0 0 1-6.5 6.5H73z'/%3E%3Crect x='228' y='44' width='9' height='36' rx='4.5'/%3E%3Cpath d='M228 63h-6.5a4.5 4.5 0 0 1-4.5-4.5v-9a3.8 3.8 0 0 1 7.6 0v6h3.4zM237 59h4v-8a3.8 3.8 0 0 1 7.6 0v9a4.5 4.5 0 0 1-4.5 4.5H237z'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 100%/320px 80px;animation:tripScroll2 6.5s linear infinite}
+:root[data-theme="dark"] .trip-hills{opacity:.5}
+.trip-palace{position:absolute;right:7%;bottom:calc(24% - 2px);height:clamp(150px,30vh,250px);width:auto;aspect-ratio:280/214;overflow:visible;transform:translateX(120vw);transition:transform .95s cubic-bezier(.16,.7,.24,1)}
+.pl-tower{fill:#7a2a56}.pl-roof{fill:#43a7b8}.pl-flag{fill:#a9dbe4;stroke:#287786;stroke-width:2;stroke-linejoin:round}
+.pl-hall{fill:#521034}.pl-gate{fill:#2a0d1d;stroke:#43a7b8;stroke-width:3}.pl-win{fill:#a9dbe4}.pl-sign{fill:#fff;stroke:#43a7b8;stroke-width:3}
+.trip-road{position:absolute;left:0;right:0;bottom:0;height:24%;background:#521034;border-top:4px solid #43a7b8}
+:root[data-theme="dark"] .trip-road{background:#2a0819}
+.trip-road i{position:absolute;left:0;right:0;top:50%;height:5px;margin-top:-2.5px;background:linear-gradient(90deg,rgba(255,255,255,.9) 0 50%,transparent 50%) 0 0/72px 5px repeat-x;animation:tripDash .42s linear infinite}
+.trip-rv{position:absolute;left:30%;bottom:8%;width:clamp(200px,28vw,300px);translate:-50% 0;transition:left .95s cubic-bezier(.16,.7,.24,1)}
+.trip-rv svg{display:block;width:100%;height:auto;overflow:visible;animation:tripBounce .4s ease-in-out infinite alternate}
+.trip-rv .rv-b{fill:#fff;stroke:#521034;stroke-width:2.6;stroke-linejoin:round}
+.trip-rv .rv-s1{fill:#43a7b8}.trip-rv .rv-s2{fill:#521034}
+.trip-rv .rv-g{fill:#cfe9ef;stroke:#521034;stroke-width:2}
+.trip-rv .rv-d{fill:#f5e8ef;stroke:#521034;stroke-width:2}
+.trip-rv .rv-t{font:700 7px var(--font-d);fill:#fff;letter-spacing:.08em}
+.trip-rv .rv-w circle{fill:#2a0d1d}.trip-rv .rv-w .h{fill:#dfeaef}.trip-rv .rv-w .k{stroke:#2a0d1d;stroke-width:1.8;stroke-linecap:round}
+.trip-rv .rv-w{animation:tripSpin .5s linear infinite}
+.trip-rv .rv-lacy{transform-origin:50px 48px;animation:tripLacy .7s ease-in-out infinite alternate}
+.trip-puff{position:absolute;left:3%;bottom:10%;width:20px;height:20px;border-radius:50%;background:rgba(82,16,52,.16);opacity:0;animation:tripPuff 1.1s ease-out infinite}
+.trip-puff.p2{animation-delay:.37s}.trip-puff.p3{animation-delay:.74s}
+:root[data-theme="dark"] .trip-puff{background:rgba(255,255,255,.18)}
+.trip-woof{position:absolute;left:2%;top:-34%;padding:8px 15px;border-radius:18px 18px 18px 5px;background:#fff;color:#521034;font:700 clamp(17px,2vw,21px) var(--font-d);box-shadow:0 12px 24px -10px rgba(42,8,25,.45);opacity:0;transform:translateY(10px) scale(.4);transform-origin:0 100%;transition:opacity .2s,transform .45s var(--spring)}
+#loader .trip-route{display:flex;align-items:center;gap:12px;margin-top:22px}
+#loader .trip-pin{font-size:20px;line-height:1}
+#loader .trip .bar{margin:0;width:min(320px,58vw);height:14px;overflow:visible}
+#loader .trip .bar b{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px var(--card),0 6px 12px -6px rgba(0,0,0,.45)}
+#loader .trip .bar b img{width:30px;height:30px;display:block}
+#loader .trip .msg{margin-top:18px}
+#loader .trip .pct{margin-top:4px}
+/* arriving: the Palace rolls in and the RV pulls up to the gate; parked: everything stops and Lacy barks */
+#loader.arrive .trip-palace{transform:none}
+#loader.arrive .trip-rv{left:42%}
+#loader.parked :is(.trip-hills,.trip-cacti,.trip-road i,.trip-rv svg,.trip-rv .rv-w){animation-play-state:paused}
+#loader.parked .trip-puff{animation:none;opacity:0}
+#loader.parked .trip-woof{opacity:1;transform:none}
+#loader.parked .trip-rv .rv-lacy{animation:tripBark .16s ease-in-out 4 alternate}
+@keyframes tripScroll{to{background-position-x:-520px}}
+@keyframes tripScroll2{to{background-position-x:-320px}}
+@keyframes tripDash{to{background-position-x:-72px}}
+@keyframes tripBounce{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+@keyframes tripSpin{to{transform:rotate(360deg)}}
+@keyframes tripLacy{from{transform:rotate(-5deg)}to{transform:rotate(5deg) translateY(-1px)}}
+@keyframes tripBark{from{transform:translateY(0) scale(1)}to{transform:translateY(-4px) scale(1.06)}}
+@keyframes tripPuff{0%{transform:translate(0,0) scale(.4);opacity:.9}100%{transform:translate(-64px,-20px) scale(1.7);opacity:0}}
+@media (max-width:640px){
+  .trip-scene{height:clamp(200px,28vh,250px)}
+  .trip-rv{width:46vw;left:28%}
+  #loader.arrive .trip-rv{left:30%}
+  .trip-palace{right:3%;height:clamp(130px,22vh,170px)}
+  .trip-woof{top:-44%}
+}

@@ -12,6 +12,10 @@ After editing, rebuild the site files in the root:
 
 ## What's where
 - `assets/js/core.js` — loader, raining paws, page transitions, sounds hooks, 3D/fur headings, all page features
+- First-visit intro (the loader in `_src/layout.html`, styles under "First-visit intro" in `site.css`): Lacy drives the
+  Adventure RV down a desert road while the page loads, the Palace (with the original logo on its sign) rolls in,
+  the RV parks and Lacy barks, then the page opens into her chat button. Return visits and Lite mode get the quick
+  plum loader instead.
 - `assets/js/puffy3d.js` — real-time three.js puffy 3D lettering (live hero titles + heading words)
 - `assets/js/fur.js` — hair-by-hair fluffy fur lettering (heading accent words in `<span class="s">`)
 - `assets/js/sfx.js` — synthesized sound effects (Web Audio, no files)
