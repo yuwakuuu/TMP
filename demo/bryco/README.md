@@ -11,7 +11,8 @@ Barlow Condensed, all SIL Open Font License) load from Google Fonts.
   lettering stamps in, a paver screed sweeps the screen and the logo settles into the header.
   A tap, click or key press skips it, and it is off for visitors who ask for reduced motion.
 - Hero: a drawn Wirtgen mill loading a dump truck at first light (inline SVG)
-- Services, crew, how a job runs, Instagram gallery, bid request form
+- Services (milling, removal, tie-ins, grade correction, trucking, sweeping), crew, how a job runs,
+  Instagram gallery, bid request form
 
 ## Images
 - `img/ig-*.webp`, `img/crew-mill.webp`: posts from instagram.com/brycoasphaltmilling
