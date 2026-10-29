@@ -17,6 +17,7 @@ Marketing site for The Marketing Partner. It is plain HTML, CSS and JavaScript w
 - `assets/video/tmp-reveal.mp4`: the TMP logo reveal with its soundtrack (vertical, 720×1280)
 - `assets/video/tmp-film-1080.mp4`, `tmp-film-720.mp4`: the brand film (2:04, H.264/AAC, fast start), with `tmp-film-poster.webp` (1600 wide) and `tmp-film-poster-800.webp` as its poster
 - `assets/work/`: screenshots of example projects, in full and half size
+- `new/assets/intros/`: the First impressions section's clips of the demo sites' intros (Bryco, Thai Patio, Happy Pets, TOB and the opening of TQM's reveal film), as MP4 with WebM copies, plus a poster and thumbnail for each. The section's markup, styles and script are in `index.html` (and `new/index.html`); the player picks MP4 or WebM, loads a clip only once the section is on screen, plays them in turn, and waits for a tap with reduced motion.
 - `404.html`, `robots.txt`, `sitemap.xml`, `site.webmanifest`: launch files
 - Fonts: Shrikhand (chrome lettering) and Inter, both SIL Open Font License, loaded from Google Fonts
 

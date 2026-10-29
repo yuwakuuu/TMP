@@ -975,6 +975,43 @@ html.is-locked .tob{display:none}
   .marquee__track{animation:none!important}
   .crew__card--locked .crew__face::after{display:none}
 }
+/* ---------- First impressions: the intro animations from our demo sites ---------- */
+.intros{padding-block:clamp(56px,8vw,110px)}
+.ix{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(280px,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+.ix__screen{border-radius:16px;overflow:hidden;background:var(--ink-3);border:1px solid var(--line-2);box-shadow:0 50px 90px -40px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.02)}
+.ix__frame{position:relative;aspect-ratio:16/10;background:#0b0c0e}
+.ix__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ix__toggle{position:absolute;left:14px;bottom:16px;width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(17,19,22,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--paper);display:grid;place-items:center;cursor:pointer;transition:border-color .25s,background-color .25s}
+.ix__toggle:hover{border-color:var(--teal)}
+.ix__toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ix__toggle .i-play{fill:currentColor;stroke-width:1.2}
+.ix__toggle .i-play,.ix__toggle[aria-pressed="true"] .i-pause{display:none}
+.ix__toggle[aria-pressed="true"] .i-play{display:block}
+.ix__bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.12)}
+.ix__bar i{display:block;height:100%;background:var(--teal);transform-origin:0 50%;transform:scaleX(0)}
+.ix__list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ix__item{position:relative;overflow:hidden;width:100%;display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:14px;align-items:center;padding:8px 14px 8px 8px;border-radius:14px;border:1px solid var(--line);background:var(--ink-2);color:var(--paper);font:inherit;text-align:left;cursor:pointer;transition:border-color .25s,background-color .25s}
+.ix__item:hover{border-color:var(--line-2)}
+.ix__item img{width:96px;height:60px;border-radius:8px;object-fit:cover;display:block;border:1px solid var(--line)}
+.ix__txt b{display:block;font-family:var(--font-display);font-weight:760;font-stretch:104%;font-size:1rem;line-height:1.2}
+.ix__txt small{display:block;margin-top:3px;color:var(--muted);font-size:.875rem;line-height:1.35}
+.ix__time{font-family:var(--font-num);font-weight:600;font-size:.8125rem;color:var(--muted)}
+.ix__item[aria-pressed="true"]{border-color:color-mix(in srgb,var(--teal) 55%,transparent);background:color-mix(in srgb,var(--teal) 7%,var(--ink-2))}
+.ix__item[aria-pressed="true"] .ix__time{color:var(--teal)}
+.ix__item::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal);transform-origin:0 50%;transform:scaleX(var(--p,0));opacity:0}
+.ix__item[aria-pressed="true"]::after{opacity:1}
+.ix__info{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.ix__desc{margin:0 0 16px;color:var(--muted);max-width:46ch;min-height:3em}
+@media (max-width:980px){
+  .ix{grid-template-columns:minmax(0,1fr)}
+  .ix__list{grid-auto-flow:column;grid-auto-columns:minmax(190px,46%);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:thin}
+  .ix__item{scroll-snap-align:start;height:100%;grid-template-columns:minmax(0,1fr);align-content:start;gap:10px;padding:8px 8px 12px}
+  .ix__item img{width:100%;height:auto;aspect-ratio:16/10}
+  .ix__txt{padding-inline:4px}
+  .ix__time{position:absolute;top:14px;right:14px;padding:2px 8px;border-radius:999px;background:rgba(17,19,22,.78);color:var(--paper)}
+}
+@media (max-width:520px){.ix__list{grid-auto-columns:minmax(170px,62%)}}
+@media (max-width:520px){.ix__toggle{left:10px;bottom:12px;width:40px;height:40px}.ix__desc{min-height:0}}
 </style>
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
@@ -1413,6 +1450,58 @@ html.is-locked .tob{display:none}
 </section>
 
 <!-- CLIENT STORY: TQM -->
+<section class="intros" id="intros" aria-labelledby="intros-title">
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 id="intros-title" data-reveal="rise">First impressions<span class="dot">.</span></h2>
+      <p class="sec-lead">A site gets a few seconds to make an impression, so we give each one its own opening, made for that business. Here are a few.</p>
+    </header>
+    <div class="ix" id="ix">
+      <div class="ix__screen">
+        <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url" id="ix-url">tmpbizz.com/demo/bryco</span></span>
+        <div class="ix__frame">
+          <video class="ix__video" id="ix-video" muted playsinline preload="none" poster="assets/intros/bryco-poster.webp" aria-label="Bryco Asphalt Milling&#x27;s intro animation"></video>
+          <button class="ix__toggle" id="ix-toggle" type="button" aria-label="Pause the intros" aria-pressed="false" data-sfx="none"><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5.8v12.4L18.6 12z"/></svg></button>
+          <div class="ix__bar" aria-hidden="true"><i id="ix-progress"></i></div>
+        </div>
+      </div>
+      <div class="ix__side">
+        <ol class="ix__list" id="ix-list" aria-label="Intros">
+          <li><button class="ix__item" type="button" aria-pressed="true" data-src="assets/intros/bryco" data-poster="assets/intros/bryco-poster.webp" data-url="tmpbizz.com/demo/bryco" data-href="https://tmpbizz.com/demo/bryco/" data-cta="See it live" data-label="Bryco Asphalt Milling&#x27;s intro animation" data-desc="Hot asphalt pours into the road stripe of the logo, the saw-blade &quot;O&quot; rolls it flat, and a paver sweeps the site into view.">
+            <img src="assets/intros/bryco-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
+            <span class="ix__txt"><b>Bryco Asphalt Milling</b><small>Hot asphalt paves the logo</small></span>
+            <span class="ix__time">0:05</span>
+          </button></li>
+          <li><button class="ix__item" type="button" aria-pressed="false" data-src="assets/intros/thaipatio" data-poster="assets/intros/thaipatio-poster.webp" data-url="tmpbizz.com/demo/thaipatio" data-href="https://tmpbizz.com/demo/thaipatio/?intro" data-cta="See it live" data-label="Thai Patio&#x27;s intro animation" data-desc="A wok bursts into flames while the logo writes itself above it, then the fire clears to the real kitchen.">
+            <img src="assets/intros/thaipatio-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
+            <span class="ix__txt"><b>Thai Patio</b><small>A flaming wok writes the logo</small></span>
+            <span class="ix__time">0:05</span>
+          </button></li>
+          <li><button class="ix__item" type="button" aria-pressed="false" data-src="assets/intros/happypets" data-poster="assets/intros/happypets-poster.webp" data-url="tmpbizz.com/demo/happypets" data-href="https://tmpbizz.com/demo/happypets/" data-cta="See it live" data-label="Happy Pets Palace&#x27;s loading screen" data-desc="Lacy, the owner&#x27;s dog, keeps visitors company while the page loads, then the 3D lettering drops in.">
+            <img src="assets/intros/happypets-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
+            <span class="ix__txt"><b>Happy Pets Palace</b><small>Lacy keeps you company</small></span>
+            <span class="ix__time">0:07</span>
+          </button></li>
+          <li><button class="ix__item" type="button" aria-pressed="false" data-src="assets/intros/tob" data-poster="assets/intros/tob-poster.webp" data-url="tmpbizz.com/demo/tob" data-href="https://tmpbizz.com/demo/tob/" data-cta="See it live" data-label="The TOB Company&#x27;s boot screen" data-desc="TOB starts up like an operating system, running a real check of your device before his face lights up.">
+            <img src="assets/intros/tob-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
+            <span class="ix__txt"><b>The TOB Company</b><small>An AI butler boots up</small></span>
+            <span class="ix__time">0:05</span>
+          </button></li>
+          <li><button class="ix__item" type="button" aria-pressed="false" data-src="assets/intros/tqm" data-poster="assets/intros/tqm-poster.webp" data-url="tmpbizz.com/demo/tqm/reveal" data-href="https://tmpbizz.com/demo/tqm/reveal/" data-cta="Watch the full film" data-label="The opening of TQM&#x27;s website reveal film" data-desc="Our neon sign hands off to TQM&#x27;s logo in the opening of a 45-second film that walks through their new site.">
+            <img src="assets/intros/tqm-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
+            <span class="ix__txt"><b>Total Quality Management</b><small>A website reveal film</small></span>
+            <span class="ix__time">0:12</span>
+          </button></li>
+        </ol>
+        <div class="ix__info">
+          <p class="ix__desc" id="ix-desc" aria-live="polite">Hot asphalt pours into the road stripe of the logo, the saw-blade &quot;O&quot; rolls it flat, and a paver sweeps the site into view.</p>
+          <a class="btn btn--ghost btn--sm" id="ix-open" href="https://tmpbizz.com/demo/bryco/" target="_blank" rel="noopener">See it live</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="case" id="tqm" aria-labelledby="case-title">
   <div class="wrap case__grid">
     <div class="case__copy">
@@ -2717,6 +2806,69 @@ const Loader = (() => {
   $$('.cf__btn').forEach((b) => b.addEventListener('click', () => { go(active + +b.dataset.dir); SFX.play('swipe'); }));
   addEventListener('resize', () => { G = geom(); layout(); });
   G = geom(); setActive(0); layout();
+})();
+
+/* ================================================================
+   First impressions: one screen plays the intros from our demo sites in turn. Clips only load and play
+   while the section is on screen, pause in a hidden tab, and wait for a tap with reduced motion.
+   ================================================================ */
+(() => {
+  const root = $('#ix');
+  if (!root) return;
+  const video = $('#ix-video'), items = $$('.ix__item', root), bar = $('#ix-progress'), toggle = $('#ix-toggle');
+  const urlEl = $('#ix-url'), desc = $('#ix-desc'), open = $('#ix-open');
+  // H.264 where the browser has it (nearly everywhere), WebM otherwise
+  const ext = video.canPlayType('video/mp4; codecs="avc1.640020"') ? '.mp4' : '.webm';
+  let cur = 0, inView = false, paused = reduced, loaded = false, raf = 0;
+  const showToggle = () => {
+    toggle.setAttribute('aria-pressed', String(paused));
+    toggle.setAttribute('aria-label', paused ? 'Play the intros' : 'Pause the intros');
+  };
+  const progress = () => {
+    const p = video.duration ? clamp(video.currentTime / video.duration, 0, 1) : 0;
+    bar.style.transform = `scaleX(${p})`;
+    items[cur].style.setProperty('--p', p);
+    raf = video.paused ? 0 : requestAnimationFrame(progress);
+  };
+  const play = () => {
+    if (paused || !inView || document.hidden) return;
+    if (!loaded) { loaded = true; video.src = items[cur].dataset.src + ext; }
+    const p = video.play();
+    if (p && p.catch) p.catch(() => {});
+  };
+  const pick = (i, start) => {
+    cur = (i + items.length) % items.length;
+    const it = items[cur];
+    items.forEach((b, k) => { b.setAttribute('aria-pressed', String(k === cur)); b.style.setProperty('--p', 0); });
+    bar.style.transform = 'scaleX(0)';
+    video.poster = it.dataset.poster;
+    video.setAttribute('aria-label', it.dataset.label);
+    urlEl.textContent = it.dataset.url;
+    desc.textContent = it.dataset.desc;
+    open.href = it.dataset.href;
+    open.textContent = it.dataset.cta;
+    if (loaded || start) { loaded = true; video.src = it.dataset.src + ext; }
+    if (start) play();
+  };
+  video.addEventListener('play', () => { if (!raf) raf = requestAnimationFrame(progress); });
+  video.addEventListener('ended', () => pick(cur + 1, true));
+  items.forEach((b, k) => b.addEventListener('click', () => {
+    paused = false; showToggle();
+    pick(k, true);
+    if (innerWidth <= 980) b.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest', inline: 'start' });
+  }));
+  toggle.addEventListener('click', () => {
+    paused = !paused; showToggle();
+    if (paused) video.pause(); else play();
+  });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((en) => {
+      inView = en[0].isIntersecting;
+      if (inView) play(); else video.pause();
+    }, { threshold: 0.35 }).observe(root.querySelector('.ix__frame'));
+  } else { inView = true; }
+  document.addEventListener('visibilitychange', () => { if (document.hidden) video.pause(); else play(); });
+  showToggle();
 })();
 
 /* ================================================================
