@@ -123,27 +123,35 @@ h2 .s{font-family:var(--font-s);font-weight:400;color:var(--teal);font-size:.9em
 .bob{animation:bob 5s ease-in-out infinite}
 .f2 .bob{animation-delay:-1.6s}.f3 .bob{animation-delay:-3.2s}
 @keyframes bob{50%{translate:0 -10px}}
-/* floating 5-star reviews around the hero photo (core.js swaps in a new review every few seconds) */
-.rvf{position:relative;inset:auto;align-self:flex-end;margin:16px 4% 0 0;width:min(300px,80%);padding:12px 15px;font-weight:500;font-size:14px;line-height:1.4;z-index:2}
-.rvf .bob{animation:none}
-.rvf{animation:rvFloat 10s ease-in-out infinite}   /* the whole card floats gently, so the text never leaves its bubble */
-@keyframes rvFloat{0%,100%{translate:0 0;rotate:-.4deg}50%{translate:0 -6px;rotate:.4deg}}
-.rvf-in{display:grid;gap:4px;transition:opacity .8s var(--ease),translate .8s var(--ease)}
-.rvf.swap .rvf-in{opacity:0;translate:0 8px}
-.rvf .stars{color:#f5b301;font-size:14px;letter-spacing:2px}
-.rvf q{color:var(--ink);quotes:'“' '”'}
-.rvf small{color:var(--teal-d);font-size:12.5px;font-weight:600}
-.hero-art:has(.rvf){flex-direction:column}
-.hero-art:has(.rvf) .f2{top:40%;bottom:auto}.hero-art:has(.rvf) .f3{top:57%;bottom:auto}   /* keep the chips on the photo's edges, clear of the review */
-@media (prefers-reduced-motion:reduce){.rvf{animation:none}}
+/* homepage: rotating review quotes. Above the photo on computers, above the headline on phones (core.js rotates them) */
+.hero-home{grid-template-areas:"copy ." "copy rv" "copy art" "copy .";grid-template-rows:1fr auto auto 1fr;row-gap:0}   /* quotes + photo stay together, centred beside the headline */
+.hero-home>.hero-rv{margin-bottom:10px}
+.hero-home>.hero-copy{grid-area:copy}.hero-home>.hero-art{grid-area:art}.hero-home>.hero-rv{grid-area:rv}
+.hero-rv{position:relative;z-index:2;justify-self:center;width:100%;max-width:520px;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;padding:14px 16px 12px 14px;border-radius:20px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.hero-rv-mark{font:700 48px/1 var(--font-d);color:var(--teal);height:30px;margin-top:-4px}
+.hero-rv-q{display:grid;cursor:pointer}
+.hero-rv-q figure{grid-area:1/1;margin:0;opacity:0;visibility:hidden;translate:0 6px;transition:opacity .55s var(--ease),translate .55s var(--ease),visibility 0s .55s}
+.hero-rv-q figure.on{opacity:1;visibility:visible;translate:none;transition-delay:0s}
+.hero-rv blockquote{margin:0;padding:0;background:none;border:0;border-radius:0;font-size:16px;line-height:1.45;font-weight:500;color:var(--ink)}
+.hero-rv figcaption{margin-top:6px;padding-right:72px;font-size:13px;font-weight:600;color:var(--teal-d)}
+.hero-rv-ctl{position:absolute;right:10px;bottom:8px;display:flex;gap:6px}
+.hero-rv-btn{width:30px;height:30px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink-2);display:grid;place-items:center;cursor:pointer;transition:border-color .2s,color .2s}
+.hero-rv-btn:hover{border-color:var(--teal);color:var(--teal-d)}
+.hero-rv-btn svg{width:14px;height:14px;fill:currentColor}
+.hero-rv-btn .i-play,.hero-rv-btn[aria-pressed="true"] .i-pause{display:none}
+.hero-rv-btn[aria-pressed="true"] .i-play{display:block}
+@media (max-width:1080px){.hero-home{grid-template-areas:"rv" "copy" "art";grid-template-rows:none;row-gap:40px}.hero-home>.hero-rv{margin-bottom:0}}
+@media (max-width:640px){.hero-rv{padding:11px 12px 9px 11px;border-radius:18px}.hero-rv blockquote{font-size:15px;line-height:1.42}.hero-rv-mark{font-size:42px;height:26px}}
 
 /* ---------- marquee ---------- */
-.mq{overflow:hidden;padding:24px 0}
-.marquee{background:var(--teal-fill);color:#fff;padding:20px 0;overflow:hidden;rotate:-1.5deg;margin:0 -20px;box-shadow:var(--shadow)}
+/* the clip lives on the straight wrapper (not the tilted strips), with room for the tilt on wide screens */
+.mq{overflow:hidden;padding:max(24px,calc(1.31vw + 4px)) 0}
+.marquee{background:var(--teal-fill);color:#fff;padding:20px 0;rotate:-1.5deg;margin:0 -20px;box-shadow:var(--shadow)}
 .marquee.alt{background:var(--plum-fill);rotate:-1.5deg;margin-top:10px}   /* parallel strips so neither hides the other's text */
 .track{display:flex;gap:44px;width:max-content;animation:scroll 34s linear infinite;font:600 clamp(22px,3vw,36px) var(--font-d);white-space:nowrap;align-items:center}
 .marquee.alt .track{animation-direction:reverse}
 .track i{font-style:normal;opacity:.6}
+.marquee.still .track{width:auto;justify-content:center;animation:none;gap:28px}.track [hidden]{display:none}   /* Lite / reduced motion: whole words only, centred */
 @keyframes scroll{to{transform:translateX(-50%)}}
 
 /* ---------- cards / generic ---------- */
@@ -345,12 +353,12 @@ blockquote{margin-top:24px;padding:22px 26px;border-radius:22px;background:var(-
 .cam-band{border-radius:40px;background:linear-gradient(135deg,var(--teal-fill),var(--teal));color:#fff;padding:56px;display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center;overflow:hidden;position:relative}
 .cam-band h2{color:#fff}
 .cam-band p{font-size:19px;opacity:.95}
-.screen{aspect-ratio:16/10;border-radius:22px;background:#0d2b33;border:6px solid rgba(255,255,255,.25);position:relative;overflow:hidden;display:grid;place-items:center}
+.screen{container-type:inline-size;aspect-ratio:16/10;border-radius:22px;background:#0d2b33;border:6px solid rgba(255,255,255,.25);position:relative;overflow:hidden;display:grid;place-items:center}
 .screen .live{position:absolute;top:14px;left:14px;background:#ef4444;font:700 12px var(--font-b);padding:4px 10px;border-radius:6px;letter-spacing:.1em;animation:blinkL 1.4s infinite}
 @keyframes blinkL{50%{opacity:.4}}
-.screen .walker{font-size:52px;position:absolute;bottom:18%;animation:walk 9s linear infinite}
+.screen .walker{font-size:52px;position:absolute;left:0;bottom:18%;transform:scaleX(-1);animation:walk 9s linear infinite}
 .screen .walker.b{font-size:38px;bottom:12%;animation-duration:13s;animation-delay:-4s}
-@keyframes walk{from{left:-15%;transform:scaleX(-1)}to{left:110%;transform:scaleX(-1)}}
+@keyframes walk{from{translate:-15cqw 0}to{translate:110cqw 0}}
 .screen .ts{position:absolute;bottom:12px;right:14px;font:500 13px monospace;opacity:.7}
 
 /* ---------- locations ---------- */
@@ -750,10 +758,10 @@ h2.t-ready{line-height:1.36}   /* inflated 3D words need roomier lines when a he
 /* background music button */
 .mus{position:relative;overflow:hidden}
 .mus .eq{display:flex;gap:2px;align-items:flex-end;height:16px}
-.mus .eq i{width:3px;height:4px;border-radius:2px;background:var(--plum-fill);transition:height .2s}
+.mus .eq i{width:3px;height:15px;border-radius:2px;background:var(--plum-fill);transform-origin:50% 100%;transform:scaleY(.27);transition:transform .2s}
 .mus[aria-pressed="true"] .eq i{animation:eq 1s ease-in-out infinite alternate}
 .mus[aria-pressed="true"] .eq i:nth-child(2){animation-delay:-.3s}.mus[aria-pressed="true"] .eq i:nth-child(3){animation-delay:-.6s}.mus[aria-pressed="true"] .eq i:nth-child(4){animation-delay:-.15s}
-@keyframes eq{0%{height:3px}100%{height:15px}}
+@keyframes eq{0%{transform:scaleY(.2)}100%{transform:scaleY(1)}}
 .mus[aria-pressed="false"]::after{content:"";position:absolute;width:26px;height:2.5px;background:var(--ink-2);rotate:-45deg;border-radius:2px}
 .music-hint{position:fixed;left:50%;bottom:22px;translate:-50% 0;z-index:190;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:999px;padding:10px 16px;font-size:14.5px;display:flex;gap:10px;align-items:center;opacity:0;pointer-events:none;transition:opacity .4s,translate .5s var(--spring)}
 .music-hint.show{opacity:1;translate:-50% -6px;pointer-events:auto}
@@ -783,6 +791,7 @@ h2.t-ready{line-height:1.36}   /* inflated 3D words need roomier lines when a he
   .page-hero{padding:24px 0 40px}
   .photo-card{border-width:5px;border-radius:24px}
   .marquee .track{font-size:20px}
+  .marquee.still .track{font-size:18px}
   .stats{gap:10px}
   .stat b{font-size:38px}
   .day{height:300vh}
@@ -1018,7 +1027,8 @@ footer .credits a{color:inherit}
 
 /* ---------- homepage categories: six big buttons; one category opens beneath them at a time ---------- */
 .cat-hub-sec{padding:70px 0 40px}
-.cat-hub{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:26px}
+.cat-hub{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:26px}
+.cat-hub>.cat-btn{flex:0 1 calc((100% - 32px) / 3);min-width:0}
 .cat-btn{position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;gap:2px 14px;align-items:center;text-align:left;
   padding:20px 22px;border-radius:22px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;
   box-shadow:0 10px 30px -18px rgba(82,16,52,.25);transition:transform .45s var(--spring),border-color .25s,box-shadow .3s,background .3s}
@@ -1044,8 +1054,8 @@ footer .credits a{color:inherit}
 .cat-close{margin-left:auto;padding:10px 16px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 15px var(--font-b);cursor:pointer}
 .cat-close:hover{border-color:var(--teal);color:var(--teal-d)}
 .cat-panel>section:first-of-type{padding-top:50px}
-@media (max-width:980px){.cat-hub{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.cat-hub{grid-template-columns:1fr}.cat-btn{padding:16px 18px}.cat-btn .cat-e{width:52px;height:52px;font-size:28px}}
+@media (max-width:980px){.cat-hub>.cat-btn{flex-basis:calc((100% - 16px) / 2)}}
+@media (max-width:600px){.cat-hub>.cat-btn{flex-basis:100%}.cat-btn{padding:16px 18px}.cat-btn .cat-e{width:52px;height:52px;font-size:28px}}
 @media (prefers-reduced-motion:reduce){.cat-panel.open{animation:none}}
 
 /* ---------- trophy stage: one-time curtain reveal (closed velvet drapes, spotlight sweep, drapes gather open) ---------- */
@@ -1126,7 +1136,7 @@ html.lite .nav{background:var(--card)}
 html.lite #paws,html.lite .fx,html.lite .bubbles,html.lite .stage .rays{display:none!important}
 html.lite .marquee .track,html.lite .stage .ring,html.lite .stage .ring span i,html.lite .dog-fab::before,html.lite .dog-fab .fab-dog{animation:none!important}
 html.lite [data-reveal]{opacity:1!important;transform:none!important;translate:none!important;scale:none!important;transition:none!important}
-html.lite .card,html.lite .svc,html.lite .panel,html.lite .rvf-in{box-shadow:0 6px 18px -12px rgba(42,8,25,.35)}
+html.lite .card,html.lite .svc,html.lite .panel{box-shadow:0 6px 18px -12px rgba(42,8,25,.35)}
 html.lite[data-theme="dark"] h2 .s{color:var(--teal)}
 .lite-toast span{min-width:0}
 @media (max-width:640px){.lite-toast{width:calc(100vw - 32px);bottom:calc(100px + env(safe-area-inset-bottom,0px));font-size:14px}}
@@ -1240,10 +1250,10 @@ html.lite .cam-band h2 .s{color:#cfe9ef}
 .booth-pup{position:absolute;left:50%;bottom:8%;z-index:6;width:46cqw;height:46cqw;translate:-50% 0;display:grid;place-items:center}
 .pup-body{position:relative;width:100%;height:100%;display:grid;place-items:center;transform-origin:50% 92%;animation:pupBob 2.6s ease-in-out infinite}
 .booth-pup.hop .pup-body{animation:pupHop .62s var(--spring)}
-.pup-face{display:block;font-size:40cqw;line-height:1}
-.pup-hat{--r:-10deg;position:absolute;left:50%;top:var(--hat-top,6%);white-space:nowrap;z-index:2;font-size:16cqw;line-height:1;transform:translate(-50%,-50%) rotate(-10deg);animation:propIn .5s var(--spring) both .12s}
+.pup-face{position:relative;z-index:2;display:block;font-size:40cqw;line-height:1}
+.pup-hat{--r:-10deg;position:absolute;left:50%;top:var(--hat-top,6%);white-space:nowrap;z-index:3;font-size:16cqw;line-height:1;transform:translate(-50%,-50%) rotate(-10deg);animation:propIn .5s var(--spring) both .12s}
 .pup-hat:empty{display:none}
-.pup-bandana{position:absolute;left:50%;top:var(--band-top,90%);z-index:1;width:24cqw;height:12cqw;translate:-50% 0;clip-path:polygon(0 0,100% 0,50% 100%);background:var(--band,#43a7b8);filter:drop-shadow(0 2px 0 rgba(0,0,0,.15));transition:background .4s ease}
+.pup-bandana{position:absolute;left:50%;top:var(--band-top,84%);z-index:1;width:29cqw;height:15cqw;translate:-50% 0;clip-path:polygon(0 0,100% 0,50% 100%);background:var(--band,#43a7b8);filter:drop-shadow(0 2px 0 rgba(0,0,0,.15));transition:background .4s ease}
 @keyframes pupBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-1.6cqw) rotate(2deg)}}
 @keyframes pupHop{0%{transform:translateY(0) rotate(0)}35%{transform:translateY(-9cqw) rotate(-8deg)}70%{transform:translateY(0) rotate(4deg)}100%{transform:translateY(0) rotate(0)}}
 .booth-flash{position:absolute;inset:0;z-index:8;background:#fff;opacity:0;pointer-events:none}
@@ -1296,10 +1306,10 @@ html.lite .pup-body,html.lite .booth-props i.bob{animation:none}
 .rv-stamp small{font:700 10.5px/1.15 var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:#521034;text-align:center}
 .rv-road{grid-area:road;position:relative;height:178px;margin:0 -56px;overflow:hidden}
 .rv-hills,.rv-cacti,.rv-lane{position:absolute;left:0;right:0}
-.rv-hills{bottom:44px;height:96px;opacity:.28;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 96'%3E%3Cpath fill='%237a2a56' d='M0 96V70l40-22 30 14 56-46 30 30 22-10 48 36 40-30 26 16 50-52 34 34 28-12 46 40 36-26 34 24V96z'/%3E%3C/svg%3E") repeat-x 0 100%/520px 96px;animation:rvScroll 46s linear infinite}
-.rv-cacti{bottom:42px;height:74px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 74'%3E%3Cg fill='%23287786'%3E%3Crect x='56' y='10' width='12' height='64' rx='6'/%3E%3Cpath d='M56 44H46a6 6 0 0 1-6-6V24a5 5 0 0 1 10 0v12h6zM68 36h8V20a5 5 0 0 1 10 0v16a6 6 0 0 1-6 6H68z'/%3E%3Crect x='214' y='40' width='8' height='34' rx='4'/%3E%3Cpath d='M214 58h-6a4 4 0 0 1-4-4v-8a3.5 3.5 0 0 1 7 0v5h3zM222 54h4v-7a3.5 3.5 0 0 1 7 0v8a4 4 0 0 1-4 4h-7z'/%3E%3Cellipse cx='140' cy='71' rx='16' ry='4' opacity='.5'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 100%/300px 74px;animation:rvScroll2 16s linear infinite}
+.rv-hills{bottom:44px;height:96px;opacity:.28;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 96'%3E%3Cpath fill='%237a2a56' d='M0 96V70l40-22 30 14 56-46 30 30 22-10 48 36 40-30 26 16 50-52 34 34 28-12 46 40 36-26 34 24V96z'/%3E%3C/svg%3E") repeat-x 0 100%/520px 96px;animation:rvHillsPan 46s linear infinite}
+.rv-cacti{bottom:42px;height:74px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 74'%3E%3Cg fill='%23287786'%3E%3Crect x='56' y='10' width='12' height='64' rx='6'/%3E%3Cpath d='M56 44H46a6 6 0 0 1-6-6V24a5 5 0 0 1 10 0v12h6zM68 36h8V20a5 5 0 0 1 10 0v16a6 6 0 0 1-6 6H68z'/%3E%3Crect x='214' y='40' width='8' height='34' rx='4'/%3E%3Cpath d='M214 58h-6a4 4 0 0 1-4-4v-8a3.5 3.5 0 0 1 7 0v5h3zM222 54h4v-7a3.5 3.5 0 0 1 7 0v8a4 4 0 0 1-4 4h-7z'/%3E%3Cellipse cx='140' cy='71' rx='16' ry='4' opacity='.5'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 100%/300px 74px;animation:rvCactiPan 16s linear infinite}
 .rv-lane{bottom:0;height:46px;background:#3d0b26;border-top:4px solid #43a7b8}
-.rv-lane::after{content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:linear-gradient(90deg,rgba(255,255,255,.85) 0 50%,transparent 50%) 0 0/64px 4px repeat-x;animation:rvDash .7s linear infinite}
+.rv-lane::after{content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:linear-gradient(90deg,rgba(255,255,255,.85) 0 50%,transparent 50%) 0 0/64px 4px repeat-x;animation:rvLanePan .7s linear infinite}
 .rv-van{position:absolute;left:calc(50% - 125px);bottom:20px;width:250px;height:auto;overflow:visible;animation:rvBounce .45s ease-in-out infinite alternate}
 .rv-body{fill:#fff;stroke:#521034;stroke-width:2.6;stroke-linejoin:round}
 .rv-stripe{fill:#43a7b8}.rv-stripe2{fill:#521034}
@@ -1310,9 +1320,12 @@ html.lite .pup-body,html.lite .booth-props i.bob{animation:none}
 .rv-wheel circle{fill:#2a0d1d}.rv-wheel .hub{fill:#dfeaef}.rv-wheel .spoke{stroke:#2a0d1d;stroke-width:1.8;stroke-linecap:round}
 .rv-wheel{animation:rvSpin .55s linear infinite}
 .rv-lacy{transform-origin:50px 44px;animation:rvLacy .9s ease-in-out infinite alternate}
-@keyframes rvScroll{to{background-position-x:-520px}}
-@keyframes rvScroll2{to{background-position-x:-300px}}
-@keyframes rvDash{to{background-position-x:-64px}}
+/* each strip is one tile wider than the road and slides by exactly one tile (transform only, no repaint) */
+.rv-hills{right:auto;width:calc(100% + 520px)}.rv-cacti{right:auto;width:calc(100% + 300px)}.rv-lane::after{right:auto;width:calc(100% + 64px)}
+.rv-hills,.rv-cacti,.rv-lane::after{will-change:transform}
+@keyframes rvHillsPan{to{transform:translateX(-520px)}}
+@keyframes rvCactiPan{to{transform:translateX(-300px)}}
+@keyframes rvLanePan{to{transform:translateX(-64px)}}
 @keyframes rvBounce{from{transform:translateY(0)}to{transform:translateY(-2px)}}
 @keyframes rvSpin{to{transform:rotate(360deg)}}
 @keyframes rvLacy{from{transform:rotate(-4deg)}to{transform:rotate(5deg) translateY(-1px)}}
@@ -1329,26 +1342,40 @@ html.lite .rv-hills,html.lite .rv-cacti,html.lite .rv-lane::after,html.lite .rv-
 @media (prefers-reduced-motion:reduce){.rv-hills,.rv-cacti,.rv-lane::after,.rv-van,.rv-wheel,.rv-lacy{animation:none}.rv-postcard{transition:none}}
 
 /* =========================================================
-   First-visit intro: Lacy drives the Adventure RV to the Palace while the page loads
-   (return visits keep the quick plum loader; page transitions are untouched)
+   First-visit intro: Lacy drives the Adventure RV through the Arizona desert to the Palace while the page loads
+   (return visits keep the quick plum loader; page transitions are untouched).
+   Blue sky, the Superstitions on the horizon, red-rock mesas, saguaros and the open road. Every moving layer is a
+   wide strip of one repeating SVG slid sideways with transform, so the browser only moves finished pictures.
    ========================================================= */
 #loader .trip{display:none}
-#loader:not(.quick) .trip{display:flex;flex-direction:column;align-items:center;width:100%}
+#loader:not(.quick) .trip{display:block;position:absolute;inset:0;overflow:hidden;--hz:60%;--road:74%;--road-h:12%}
 #loader:not(.quick) .ld,#loader:not(.quick) .fx{display:none}
-#loader .trip-title{margin:0 0 6px;padding:0 20px;min-height:0;text-align:center;font:600 clamp(19px,2.4vw,25px)/1.3 var(--font-d);color:var(--plum)}
-.trip-scene{position:relative;width:100%;height:clamp(230px,40vh,340px);overflow:hidden}
-.trip-sun{position:absolute;left:62%;bottom:24%;width:clamp(170px,24vw,300px);aspect-ratio:1;translate:-50% 30%;border-radius:50%;background:radial-gradient(circle,var(--teal-soft) 0 60%,transparent 61%)}
-.trip-hills,.trip-cacti{position:absolute;left:0;right:0}
-.trip-hills{bottom:calc(24% - 2px);height:120px;opacity:.16;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 120'%3E%3Cpath fill='%23521034' d='M0 120V86l44-28 34 18 60-58 34 38 24-12 52 44 44-38 30 20 54-64 38 42 30-14 50 50 40-32 36 30V120z'/%3E%3C/svg%3E") repeat-x 0 100%/520px 120px;animation:tripScroll 26s linear infinite}
-.trip-cacti{bottom:calc(24% - 2px);height:80px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 80'%3E%3Cg fill='%23287786'%3E%3Crect x='60' y='10' width='13' height='70' rx='6.5'/%3E%3Cpath d='M60 48H49a6.5 6.5 0 0 1-6.5-6.5V26a5.5 5.5 0 0 1 11 0v13H60zM73 40h9V22a5.5 5.5 0 0 1 11 0v18a6.5 6.5 0 0 1-6.5 6.5H73z'/%3E%3Crect x='228' y='44' width='9' height='36' rx='4.5'/%3E%3Cpath d='M228 63h-6.5a4.5 4.5 0 0 1-4.5-4.5v-9a3.8 3.8 0 0 1 7.6 0v6h3.4zM237 59h4v-8a3.8 3.8 0 0 1 7.6 0v9a4.5 4.5 0 0 1-4.5 4.5H237z'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 100%/320px 80px;animation:tripScroll2 6.5s linear infinite}
-:root[data-theme="dark"] .trip-hills{opacity:.5}
-.trip-palace{position:absolute;right:7%;bottom:calc(24% - 2px);height:clamp(150px,30vh,250px);width:auto;aspect-ratio:280/214;overflow:visible;transform:translateX(120vw);transition:transform .95s cubic-bezier(.16,.7,.24,1)}
+.trip-scene{position:absolute;inset:0;background:linear-gradient(180deg,#1556bd 0,#2a78d4 calc(var(--hz) * .4),#58a5e6 calc(var(--hz) * .7),#9dcff2 calc(var(--hz) * .87),#d9edf3 calc(var(--hz) - 2.4%),#f6e2bf var(--hz))}
+.trip-sun{position:absolute;left:79%;top:14%;width:clamp(84px,9vw,140px);aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:radial-gradient(circle,#fffdf3 0 33%,#ffefb6 43%,rgba(255,228,150,.5) 55%,rgba(255,228,150,.16) 65%,rgba(255,228,150,0) 72%)}
+.trip-clouds i{position:absolute;left:100%;top:var(--y);width:var(--w);aspect-ratio:200/80;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 80%22%3E%3Cpath d=%22M22 70Q4 70 6 56Q8 42 26 44Q26 24 50 22Q60 6 84 10Q100 0 116 14Q138 8 146 28Q170 24 176 44Q196 46 194 60Q192 70 178 70Z%22 fill=%22%23fff%22/%3E%3Cpath d=%22M22 70Q12 70 10 63H190Q188 70 178 70Z%22 fill=%22%23dcecf8%22/%3E%3C/svg%3E") no-repeat 0 0/100% 100%;opacity:var(--o,.95);animation:tripCloud var(--d) linear var(--dl) infinite}
+.trip-clouds .c1{--y:30%;--w:clamp(120px,13vw,210px);--d:120s;--dl:-34s}
+.trip-clouds .c2{--y:37%;--w:clamp(80px,9vw,150px);--d:96s;--dl:-70s;--o:.85}
+.trip-clouds .c3{--y:2.5%;--w:clamp(70px,7vw,120px);--d:150s;--dl:-118s;--o:.8}
+.trip-clouds .c4{--y:43%;--w:clamp(100px,11vw,180px);--d:108s;--dl:-8s;--o:.9}
+.trip-far,.trip-mesas,.trip-mid,.trip-near{position:absolute;left:0;right:0;height:var(--h)}
+.trip-far i,.trip-mesas i,.trip-mid i,.trip-near i{position:absolute;top:0;bottom:0;left:0;width:calc(100% + var(--tw));background-repeat:repeat-x;background-position:0 100%;background-size:var(--tw) 100%;animation:tripPan var(--d) linear infinite}
+.trip-far{--h:clamp(76px,17vh,190px);--tw:calc(var(--h) * 16);--d:320s;bottom:calc(100% - var(--hz) - 1px)}
+.trip-far i{background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 3200 200%22 preserveAspectRatio=%22none%22%3E%3Cpath d=%22M0 150 L120 140 L260 126 L380 116 L520 108 L660 100 L800 110 L940 98 L1080 104 L1220 116 L1380 110 L1520 120 L1680 112 L1840 100 L1980 92 L2120 96 L2280 104 L2440 98 L2600 112 L2760 122 L2920 134 L3060 142 L3200 150 V200 H0Z%22 fill=%22%23c4c9ec%22/%3E%3Cpath d=%22M0 168 L60 162 L120 154 L170 144 L206 134 L234 118 L252 98 L262 80 L272 74 L282 62 L290 66 L298 54 L306 60 L318 56 L330 60 L342 50 L352 56 L366 54 L380 60 L396 56 L414 62 L432 58 L452 66 L470 64 L490 72 L512 70 L532 80 L556 90 L584 102 L620 110 L664 122 L712 136 L770 146 L830 148 L880 140 L922 132 L960 128 L1000 132 L1040 124 L1076 118 L1104 122 L1140 132 L1188 144 L1240 150 L1300 152 L1400 158 L1500 156 L1600 160 L1700 158 L1800 150 L1880 140 L1940 124 L1980 106 L2004 88 L2016 92 L2030 70 L2044 90 L2062 86 L2078 62 L2094 84 L2112 80 L2128 58 L2146 82 L2166 80 L2182 68 L2200 92 L2232 112 L2280 126 L2340 136 L2420 142 L2520 140 L2600 146 L2700 150 L2820 156 L2960 160 L3080 164 L3200 168 V200 H0Z%22 fill=%22%239ba2d6%22/%3E%3Cpath d=%22M262 80 L272 74 L282 62 L290 66 L298 54 L306 60 L300 110 L276 132 L252 140 L240 120 Z M342 50 L352 56 L346 92 L330 112 L322 96 Z M2030 70 L2036 96 L2016 112 L2004 88 L2016 92 Z M2078 62 L2086 92 L2068 108 L2062 86 Z M2128 58 L2136 90 L2120 104 L2112 80 Z%22 fill=%22%238a8fc8%22/%3E%3C/svg%3E")}
+.trip-ground{position:absolute;left:0;right:0;top:var(--hz);bottom:0;background:linear-gradient(180deg,#f2d6a6 0,#eac089 32%,#e0ab70 100%)}
+.trip-mesas{--h:clamp(46px,10vh,116px);--tw:calc(var(--h) * 17.5);--d:160s;bottom:calc(100% - var(--hz) - 2.2%)}
+.trip-mesas i{background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 2800 160%22 preserveAspectRatio=%22none%22%3E%3Cpath d=%22M40 160L93.2 104L101.2 64H358.8L366.8 104L420 160Z%22 fill=%22%23c96b3f%22/%3E%3Cpath d=%22M279.2 64H358.8L366.8 104L420 160H257.4Z%22 fill=%22%23a9532f%22/%3E%3Cpath d=%22M101.2 64H358.8L360.8 71H99.2Z%22 fill=%22%239c4a2a%22/%3E%3Cpath d=%22M97.2 82H362.8M95.2 94H364.8%22 stroke=%22%23de9264%22 stroke-width=%222.4%22 opacity=%22.55%22/%3E%3Cpath d=%22M504 160L560.3 112L568 78H632L639.7 112L696 160Z%22 fill=%22%23c4643a%22/%3E%3Cpath d=%22M606.4 78H632L639.7 112L696 160H612.8Z%22 fill=%22%23a44f2d%22/%3E%3Cpath d=%22M568 78H632L630.7 84H569.3Z%22 fill=%22%2394452a%22/%3E%3Cpath d=%22M860 160L900.6 138L908.6 98H1101.4L1109.4 138L1150 160Z%22 fill=%22%23c96b3f%22/%3E%3Cpath d=%22M1042.6 98H1101.4L1109.4 138L1150 160H1025.9Z%22 fill=%22%23a9532f%22/%3E%3Cpath d=%22M908.6 98H1101.4L1103.4 105H906.6Z%22 fill=%22%239c4a2a%22/%3E%3Cpath d=%22M904.6 116H1105.4M902.6 128H1107.4%22 stroke=%22%23de9264%22 stroke-width=%222.4%22 opacity=%22.55%22/%3E%3Cpath d=%22M1256 160L1278 110L1283 70H1297L1301 116L1326 160Z%22 fill=%22%23bf5f37%22/%3E%3Cpath d=%22M1291 70H1297L1301 116L1326 160H1294Z%22 fill=%22%239f4b2b%22/%3E%3Cpath d=%22M1480 160L1550 128L1558 88H1902L1910 128L1980 160Z%22 fill=%22%23c96b3f%22/%3E%3Cpath d=%22M1794.8 88H1902L1910 128L1980 160H1766Z%22 fill=%22%23a9532f%22/%3E%3Cpath d=%22M1558 88H1902L1904 95H1556Z%22 fill=%22%239c4a2a%22/%3E%3Cpath d=%22M1554 106H1906M1552 118H1908%22 stroke=%22%23de9264%22 stroke-width=%222.4%22 opacity=%22.55%22/%3E%3Cpath d=%22M2091 160L2131.5 92L2137 58H2183L2188.5 92L2229 160Z%22 fill=%22%23c4643a%22/%3E%3Cpath d=%22M2164.6 58H2183L2188.5 92L2229 160H2169.2Z%22 fill=%22%23a44f2d%22/%3E%3Cpath d=%22M2137 58H2183L2182.1 64H2137.9Z%22 fill=%22%2394452a%22/%3E%3Cpath d=%22M2296 160L2318 136L2323 96H2337L2341 142L2366 160Z%22 fill=%22%23bf5f37%22/%3E%3Cpath d=%22M2331 96H2337L2341 142L2366 160H2334Z%22 fill=%22%239f4b2b%22/%3E%3Cpath d=%22M2460 160L2496.4 148L2504.4 108H2675.6L2683.6 148L2720 160Z%22 fill=%22%23c96b3f%22/%3E%3Cpath d=%22M2623.7 108H2675.6L2683.6 148L2720 160H2608.7Z%22 fill=%22%23a9532f%22/%3E%3Cpath d=%22M2504.4 108H2675.6L2677.6 115H2502.4Z%22 fill=%22%239c4a2a%22/%3E%3Cpath d=%22M2500.4 126H2679.6M2498.4 138H2681.6%22 stroke=%22%23de9264%22 stroke-width=%222.4%22 opacity=%22.55%22/%3E%3C/svg%3E")}
+.trip-mid{--h:clamp(46px,9vh,104px);--tw:calc(var(--h) * 16.667);--d:25s;bottom:calc(100% - var(--road) - 1.2%)}
+.trip-mid i{background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 2000 120%22%3E%3Cg fill=%22%2397a167%22%3E%3Ccircle cx=%2254.9%22 cy=%22109.9%22 r=%226.1%22/%3E%3Ccircle cx=%2247.7%22 cy=%22110.1%22 r=%227.3%22/%3E%3Ccircle cx=%2247.3%22 cy=%22111.8%22 r=%227.2%22/%3E%3Ccircle cx=%2258.1%22 cy=%22112.4%22 r=%225.8%22/%3E%3Ccircle cx=%2257.8%22 cy=%22110.8%22 r=%228.2%22/%3E%3Ccircle cx=%2252%22 cy=%22106.8%22 r=%227.6%22/%3E%3Crect x=%2242.4%22 y=%22110.4%22 width=%2235.2%22 height=%225.6%22 rx=%222.7%22/%3E%3C/g%3E%3Crect x=%22143.1%22 y=%2224%22 width=%2213.8%22 height=%2293%22 rx=%226.9%22 fill=%22%235a9677%22/%3E%3Crect x=%22154.9%22 y=%2260.3%22 width=%2218%22 height=%2210.2%22 rx=%225.1%22 fill=%22%235a9677%22/%3E%3Crect x=%22162.7%22 y=%2239.4%22 width=%2210.2%22 height=%2231.1%22 rx=%225.1%22 fill=%22%235a9677%22/%3E%3Crect x=%22129.1%22 y=%2272.3%22 width=%2216%22 height=%2210.2%22 rx=%225.1%22 fill=%22%235a9677%22/%3E%3Crect x=%22129.1%22 y=%2257.4%22 width=%2210.2%22 height=%2225.1%22 rx=%225.1%22 fill=%22%235a9677%22/%3E%3Cpath d=%22M167.8 45V64.4 M134.2 63V76.3 M147.2 31.6V113 M152.8 31.6V113%22 stroke=%22%2379b394%22 stroke-width=%221.2%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3Cpath d=%22M226 116L228.8 108.3L236.5 104.1L246.3 106.2L254 113.2L254.7 116Z%22 fill=%22%23cf9a70%22/%3E%3Cpath d=%22M240.7 116L241.4 108.3L246.3 106.2L254 113.2L254.7 116Z%22 fill=%22%23b27b55%22/%3E%3Cpath d=%22M330 116Q320.5 87.3 303 86.5%22 stroke=%22%238a7a56%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%22303%22 cy=%2286.5%22 r=%222.5%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M330 116Q324.6 91 314.5 74.7%22 stroke=%22%238a7a56%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%22314.5%22 cy=%2274.7%22 r=%222.5%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M330 116Q327.1 88.5 321.8 63%22 stroke=%22%238a7a56%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%22321.8%22 cy=%2263%22 r=%222.5%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M330 116Q329.3 90.3 327.9 64.7%22 stroke=%22%238a7a56%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%22327.9%22 cy=%2264.7%22 r=%222.5%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M330 116Q333.9 82.9 341.1 53%22 stroke=%22%238a7a56%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%22341.1%22 cy=%2253%22 r=%222.5%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M330 116Q337 85.4 349.9 66.6%22 stroke=%22%238a7a56%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%22349.9%22 cy=%2266.6%22 r=%222.5%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M330 116Q339.6 87.6 357.5 89%22 stroke=%22%238a7a56%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%22357.5%22 cy=%2289%22 r=%222.5%22 fill=%22%23e2553f%22/%3E%3Cellipse cx=%22430%22 cy=%22102.5%22 rx=%227.2%22 ry=%229.3%22 transform=%22rotate(0 430 102.5)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%22430.4%22 cy=%2293.5%22 r=%221.8%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%22421.8%22 cy=%22109.2%22 rx=%227.2%22 ry=%229.3%22 transform=%22rotate(-28 421.8 109.2)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%22421.7%22 cy=%22100.2%22 r=%221.8%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%22438.7%22 cy=%22108.5%22 rx=%227.2%22 ry=%229.3%22 transform=%22rotate(26 438.7 108.5)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%22440.4%22 cy=%2299.5%22 r=%221.8%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%22427%22 cy=%2289.8%22 rx=%227.2%22 ry=%229.3%22 transform=%22rotate(-12 427 89.8)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%22429.5%22 cy=%2280.8%22 r=%221.8%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%22436.3%22 cy=%2292.8%22 rx=%227.2%22 ry=%229.3%22 transform=%22rotate(18 436.3 92.8)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%22434.8%22 cy=%2283.8%22 r=%221.8%22 fill=%22%23e0588a%22/%3E%3Cg fill=%22%2397a167%22%3E%3Ccircle cx=%22508.5%22 cy=%22109.9%22 r=%2210.1%22/%3E%3Ccircle cx=%22512.8%22 cy=%22108.9%22 r=%229%22/%3E%3Ccircle cx=%22518.2%22 cy=%22110.3%22 r=%229.4%22/%3E%3Ccircle cx=%22520.4%22 cy=%22110%22 r=%227.7%22/%3E%3Ccircle cx=%22535.6%22 cy=%22105.4%22 r=%228.7%22/%3E%3Ccircle cx=%22504.8%22 cy=%22105.8%22 r=%229.2%22/%3E%3Crect x=%22498%22 y=%22109%22 width=%2244%22 height=%227%22 rx=%223.4%22/%3E%3C/g%3E%3Crect x=%22634.8%22 y=%2246%22 width=%2210.5%22 height=%2271%22 rx=%225.2%22 fill=%22%235a9677%22/%3E%3Crect x=%22643.2%22 y=%2277.1%22 width=%2215%22 height=%227.8%22 rx=%223.9%22 fill=%22%235a9677%22/%3E%3Crect x=%22650.5%22 y=%2263%22 width=%227.8%22 height=%2221.9%22 rx=%223.9%22 fill=%22%235a9677%22/%3E%3Cpath d=%22M654.4 67.3V80.2 M637.9 51.8V113 M642.1 51.8V113%22 stroke=%22%2379b394%22 stroke-width=%221.2%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3Cpath d=%22M710 116L712 110.5L717.5 107.5L724.5 109L730 114L730.5 116Z%22 fill=%22%23cf9a70%22/%3E%3Cpath d=%22M720.5 116L721 110.5L724.5 109L730 114L730.5 116Z%22 fill=%22%23b27b55%22/%3E%3Cg fill=%22%2397a167%22%3E%3Ccircle cx=%22808%22 cy=%22111.3%22 r=%225.9%22/%3E%3Ccircle cx=%22799.9%22 cy=%22111.7%22 r=%227.1%22/%3E%3Ccircle cx=%22789.8%22 cy=%22110.1%22 r=%225.7%22/%3E%3Ccircle cx=%22789%22 cy=%22110.7%22 r=%226.9%22/%3E%3Ccircle cx=%22802%22 cy=%22110.1%22 r=%226.8%22/%3E%3Ccircle cx=%22805.5%22 cy=%22110.1%22 r=%227.4%22/%3E%3Crect x=%22784.6%22 y=%22111.1%22 width=%2230.8%22 height=%224.9%22 rx=%222.4%22/%3E%3C/g%3E%3Crect x=%22892.2%22 y=%2212%22 width=%2215.6%22 height=%22105%22 rx=%227.8%22 fill=%22%235a9677%22/%3E%3Crect x=%22875.2%22 y=%2249.9%22 width=%2219%22 height=%2211.5%22 rx=%225.8%22 fill=%22%235a9677%22/%3E%3Crect x=%22875.2%22 y=%2225.7%22 width=%2211.5%22 height=%2235.8%22 rx=%225.8%22 fill=%22%235a9677%22/%3E%3Crect x=%22905.8%22 y=%2263.4%22 width=%2218%22 height=%2211.5%22 rx=%225.8%22 fill=%22%235a9677%22/%3E%3Crect x=%22912.3%22 y=%2245.2%22 width=%2211.5%22 height=%2229.8%22 rx=%225.8%22 fill=%22%235a9677%22/%3E%3Crect x=%22905.8%22 y=%2237.4%22 width=%2215%22 height=%2211.5%22 rx=%225.8%22 fill=%22%235a9677%22/%3E%3Crect x=%22909.3%22 y=%2227.2%22 width=%2211.5%22 height=%2221.8%22 rx=%225.8%22 fill=%22%235a9677%22/%3E%3Cpath d=%22M881 32V54.5 M918 51.5V68 M915 33.5V42 M896.9 20.6V113 M903.1 20.6V113%22 stroke=%22%2379b394%22 stroke-width=%221.4%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3Cellipse cx=%221000%22 cy=%22105.2%22 rx=%225.8%22 ry=%227.4%22 transform=%22rotate(0 1000 105.2)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%221000.5%22 cy=%2298%22 r=%221.4%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%22993.4%22 cy=%22110.6%22 rx=%225.8%22 ry=%227.4%22 transform=%22rotate(-28 993.4 110.6)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%22992%22 cy=%22103.4%22 r=%221.4%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%221007%22 cy=%22110%22 rx=%225.8%22 ry=%227.4%22 transform=%22rotate(26 1007 110)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%221008.1%22 cy=%22102.8%22 r=%221.4%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%22997.6%22 cy=%2295%22 rx=%225.8%22 ry=%227.4%22 transform=%22rotate(-12 997.6 95)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%22999.6%22 cy=%2287.8%22 r=%221.4%22 fill=%22%23e0588a%22/%3E%3Cpath d=%22M1064 116L1067.2 107.2L1076 102.4L1087.2 104.8L1096 112.8L1096.8 116Z%22 fill=%22%23cf9a70%22/%3E%3Cpath d=%22M1080.8 116L1081.6 107.2L1087.2 104.8L1096 112.8L1096.8 116Z%22 fill=%22%23b27b55%22/%3E%3Cg fill=%22%2397a167%22%3E%3Ccircle cx=%221149.9%22 cy=%22111.2%22 r=%225.7%22/%3E%3Ccircle cx=%221144%22 cy=%22111.2%22 r=%225.7%22/%3E%3Ccircle cx=%221151.4%22 cy=%22106.9%22 r=%227.4%22/%3E%3Ccircle cx=%221154.9%22 cy=%22111.5%22 r=%226.4%22/%3E%3Ccircle cx=%221138.7%22 cy=%22110.2%22 r=%225.7%22/%3E%3Ccircle cx=%221136.8%22 cy=%22110.8%22 r=%227.7%22/%3E%3Crect x=%221133.5%22 y=%22110.8%22 width=%2233%22 height=%225.2%22 rx=%222.6%22/%3E%3C/g%3E%3Crect x=%221245.7%22 y=%2258%22 width=%228.7%22 height=%2259%22 rx=%224.3%22 fill=%22%235a9677%22/%3E%3Crect x=%221234.7%22 y=%2283.8%22 width=%2213%22 height=%226.4%22 rx=%223.2%22 fill=%22%235a9677%22/%3E%3Crect x=%221234.7%22 y=%2273%22 width=%226.4%22 height=%2217.2%22 rx=%223.2%22 fill=%22%235a9677%22/%3E%3Cpath d=%22M1237.9 76.5V86.4 M1248.3 62.8V113 M1251.7 62.8V113%22 stroke=%22%2379b394%22 stroke-width=%221.2%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3Cpath d=%22M1340 116Q1332.1 92.9 1317.5 94.8%22 stroke=%22%238a7a56%22 stroke-width=%221.7%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%221317.5%22 cy=%2294.8%22 r=%222.2%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M1340 116Q1333.3 88.6 1320.8 73.8%22 stroke=%22%238a7a56%22 stroke-width=%221.7%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%221320.8%22 cy=%2273.8%22 r=%222.2%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M1340 116Q1336.7 93.1 1330.5 73.6%22 stroke=%22%238a7a56%22 stroke-width=%221.7%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%221330.5%22 cy=%2273.6%22 r=%222.2%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M1340 116Q1340.9 85.5 1342.5 55.1%22 stroke=%22%238a7a56%22 stroke-width=%221.7%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%221342.5%22 cy=%2255.1%22 r=%222.2%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M1340 116Q1344.1 87.4 1351.7 62.9%22 stroke=%22%238a7a56%22 stroke-width=%221.7%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%221351.7%22 cy=%2262.9%22 r=%222.2%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M1340 116Q1347.3 86.2 1360.8 70%22 stroke=%22%238a7a56%22 stroke-width=%221.7%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%221360.8%22 cy=%2270%22 r=%222.2%22 fill=%22%23e2553f%22/%3E%3Cpath d=%22M1340 116Q1349.8 88 1368 92.7%22 stroke=%22%238a7a56%22 stroke-width=%221.7%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%221368%22 cy=%2292.7%22 r=%222.2%22 fill=%22%23e2553f%22/%3E%3Cg fill=%22%2397a167%22%3E%3Ccircle cx=%221431.9%22 cy=%22109.6%22 r=%227.7%22/%3E%3Ccircle cx=%221429.4%22 cy=%22110.7%22 r=%227.7%22/%3E%3Ccircle cx=%221445.7%22 cy=%22111.1%22 r=%227.9%22/%3E%3Ccircle cx=%221433.3%22 cy=%22109.7%22 r=%226.7%22/%3E%3Ccircle cx=%221431.2%22 cy=%22106.5%22 r=%229.7%22/%3E%3Ccircle cx=%221416.1%22 cy=%22110.3%22 r=%227%22/%3E%3Crect x=%221410.2%22 y=%22109.7%22 width=%2239.6%22 height=%226.3%22 rx=%223.1%22/%3E%3C/g%3E%3Crect x=%221523.5%22 y=%2230%22 width=%2212.9%22 height=%2287%22 rx=%226.5%22 fill=%22%235a9677%22/%3E%3Crect x=%221534.5%22 y=%2268.2%22 width=%2217%22 height=%229.5%22 rx=%224.8%22 fill=%22%235a9677%22/%3E%3Crect x=%221541.9%22 y=%2247%22 width=%229.5%22 height=%2230.8%22 rx=%224.8%22 fill=%22%235a9677%22/%3E%3Crect x=%221510.5%22 y=%2257.9%22 width=%2215%22 height=%229.5%22 rx=%224.8%22 fill=%22%235a9677%22/%3E%3Crect x=%221510.5%22 y=%2244.7%22 width=%229.5%22 height=%2222.8%22 rx=%224.8%22 fill=%22%235a9677%22/%3E%3Cpath d=%22M1546.7 52.3V72 M1515.3 49.9V61.7 M1527.4 37.1V113 M1532.6 37.1V113%22 stroke=%22%2379b394%22 stroke-width=%221.2%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3Cellipse cx=%221620%22 cy=%22104.3%22 rx=%226.2%22 ry=%228.1%22 transform=%22rotate(0 1620 104.3)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%221619.2%22 cy=%2296.5%22 r=%221.6%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%221612.8%22 cy=%22110.2%22 rx=%226.2%22 ry=%228.1%22 transform=%22rotate(-28 1612.8 110.2)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%221610.9%22 cy=%22102.4%22 r=%221.6%22 fill=%22%23e0588a%22/%3E%3Cellipse cx=%221627.5%22 cy=%22109.5%22 rx=%226.2%22 ry=%228.1%22 transform=%22rotate(26 1627.5 109.5)%22 fill=%22%2378ad7c%22/%3E%3Cellipse cx=%221617.4%22 cy=%2293.2%22 rx=%226.2%22 ry=%228.1%22 transform=%22rotate(-12 1617.4 93.2)%22 fill=%22%2378ad7c%22/%3E%3Cellipse cx=%221625.5%22 cy=%2295.8%22 rx=%226.2%22 ry=%228.1%22 transform=%22rotate(18 1625.5 95.8)%22 fill=%22%2378ad7c%22/%3E%3Ccircle cx=%221625.4%22 cy=%2288%22 r=%221.6%22 fill=%22%23e0588a%22/%3E%3Cpath d=%22M1688 116L1690.4 109.4L1697 105.8L1705.4 107.6L1712 113.6L1712.6 116Z%22 fill=%22%23cf9a70%22/%3E%3Cpath d=%22M1700.6 116L1701.2 109.4L1705.4 107.6L1712 113.6L1712.6 116Z%22 fill=%22%23b27b55%22/%3E%3Cg fill=%22%2397a167%22%3E%3Ccircle cx=%221770.3%22 cy=%22112.2%22 r=%224.8%22/%3E%3Ccircle cx=%221774.5%22 cy=%22111.6%22 r=%226.7%22/%3E%3Ccircle cx=%221768.8%22 cy=%22109.5%22 r=%227%22/%3E%3Ccircle cx=%221771.7%22 cy=%22112.6%22 r=%226%22/%3E%3Ccircle cx=%221780.7%22 cy=%22107.8%22 r=%227.1%22/%3E%3Ccircle cx=%221784.6%22 cy=%22111.8%22 r=%225.2%22/%3E%3Crect x=%221765.7%22 y=%22111.5%22 width=%2228.6%22 height=%224.5%22 rx=%222.2%22/%3E%3C/g%3E%3Crect x=%221875.2%22 y=%2252%22 width=%229.6%22 height=%2265%22 rx=%224.8%22 fill=%22%235a9677%22/%3E%3Cpath d=%22M1878.1 57.3V113 M1881.9 57.3V113%22 stroke=%22%2379b394%22 stroke-width=%221.2%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3C/svg%3E")}
+.trip-near{--h:clamp(84px,15.5vh,170px);--tw:calc(var(--h) * 9.474);--d:9s;bottom:-2px}
+.trip-near i{background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1800 190%22%3E%3Cpath d=%22M36 190L42.8 171.3L61.5 161.1L85.3 166.2L104 183.2L105.7 190Z%22 fill=%22%23b97d55%22/%3E%3Cpath d=%22M71.7 190L73.4 171.3L85.3 166.2L104 183.2L105.7 190Z%22 fill=%22%2394603f%22/%3E%3Cellipse cx=%22190%22 cy=%22163%22 rx=%2214.4%22 ry=%2218.6%22 transform=%22rotate(0 190 163)%22 fill=%22%234f9363%22/%3E%3Cellipse cx=%22173.5%22 cy=%22176.5%22 rx=%2214.4%22 ry=%2218.6%22 transform=%22rotate(-28 173.5 176.5)%22 fill=%22%234f9363%22/%3E%3Cellipse cx=%22207.4%22 cy=%22175%22 rx=%2214.4%22 ry=%2218.6%22 transform=%22rotate(26 207.4 175)%22 fill=%22%234f9363%22/%3E%3Cellipse cx=%22184%22 cy=%22137.5%22 rx=%2214.4%22 ry=%2218.6%22 transform=%22rotate(-12 184 137.5)%22 fill=%22%234f9363%22/%3E%3Ccircle cx=%22188.3%22 cy=%22119.5%22 r=%223.6%22 fill=%22%23d9406f%22/%3E%3Crect x=%22316.8%22 y=%2214%22 width=%2226.4%22 height=%22177%22 rx=%2213.2%22 fill=%22%232f6f52%22/%3E%3Crect x=%22341.2%22 y=%2292.2%22 width=%2232%22 height=%2219.5%22 rx=%229.8%22 fill=%22%232f6f52%22/%3E%3Crect x=%22353.7%22 y=%2250%22 width=%2219.5%22 height=%2261.8%22 rx=%229.8%22 fill=%22%232f6f52%22/%3E%3Crect x=%22290.8%22 y=%22113.4%22 width=%2228%22 height=%2219.5%22 rx=%229.8%22 fill=%22%232f6f52%22/%3E%3Crect x=%22290.8%22 y=%2283.1%22 width=%2219.5%22 height=%2249.8%22 rx=%229.8%22 fill=%22%232f6f52%22/%3E%3Cpath d=%22M363.4 60.7V100 M300.6 93.9V121.2 M324.7 28.5V187 M335.3 28.5V187%22 stroke=%22%234f936d%22 stroke-width=%222.4%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3Cg fill=%22%23768a4c%22%3E%3Ccircle cx=%22451%22 cy=%22174.7%22 r=%2217.4%22/%3E%3Ccircle cx=%22477%22 cy=%22178.6%22 r=%2213.2%22/%3E%3Ccircle cx=%22448.1%22 cy=%22171.7%22 r=%2215.6%22/%3E%3Ccircle cx=%22478.2%22 cy=%22176.8%22 r=%2215.9%22/%3E%3Ccircle cx=%22467.1%22 cy=%22173%22 r=%2216.9%22/%3E%3Ccircle cx=%22477.5%22 cy=%22179.6%22 r=%2217.6%22/%3E%3Crect x=%22432.6%22 y=%22178.1%22 width=%2274.8%22 height=%2211.9%22 rx=%225.8%22/%3E%3C/g%3E%3Crect x=%22543%22 y=%22152.6%22 width=%2234%22 height=%2238.4%22 rx=%2217%22 fill=%22%233f7f58%22/%3E%3Cpath d=%22M553.9 157.7V188M566.1 157.7V188%22 stroke=%22%235d9c74%22 stroke-width=%223.1%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%22553.9%22 cy=%22153.3%22 r=%224.4%22 fill=%22%23f2b233%22/%3E%3Ccircle cx=%22565.4%22 cy=%22152.6%22 r=%224.4%22 fill=%22%23f2b233%22/%3E%3Cpath d=%22M618 190L622.4 177.9L634.5 171.3L649.9 174.6L662 185.6L663.1 190Z%22 fill=%22%23b97d55%22/%3E%3Cpath d=%22M641.1 190L642.2 177.9L649.9 174.6L662 185.6L663.1 190Z%22 fill=%22%2394603f%22/%3E%3Cg fill=%22%236f8448%22%3E%3Ccircle cx=%22736.6%22 cy=%22175.7%22 r=%2214.7%22/%3E%3Ccircle cx=%22774%22 cy=%22178.8%22 r=%2211.6%22/%3E%3Ccircle cx=%22744.6%22 cy=%22181.6%22 r=%2211.1%22/%3E%3Ccircle cx=%22735%22 cy=%22179.6%22 r=%2210.3%22/%3E%3Ccircle cx=%22755.3%22 cy=%22174.5%22 r=%2212.9%22/%3E%3Ccircle cx=%22739%22 cy=%22177.9%22 r=%2211.2%22/%3E%3Crect x=%22729.2%22 y=%22180.2%22 width=%2261.6%22 height=%229.8%22 rx=%224.8%22/%3E%3C/g%3E%3Cellipse cx=%22880%22 cy=%22166.6%22 rx=%2212.5%22 ry=%2216.1%22 transform=%22rotate(0 880 166.6)%22 fill=%22%234f9363%22/%3E%3Ccircle cx=%22875.5%22 cy=%22151%22 r=%223.1%22 fill=%22%23d9406f%22/%3E%3Cellipse cx=%22865.7%22 cy=%22178.3%22 rx=%2212.5%22 ry=%2216.1%22 transform=%22rotate(-28 865.7 178.3)%22 fill=%22%234f9363%22/%3E%3Cellipse cx=%22895.1%22 cy=%22177%22 rx=%2212.5%22 ry=%2216.1%22 transform=%22rotate(26 895.1 177)%22 fill=%22%234f9363%22/%3E%3Ccircle cx=%22898.7%22 cy=%22161.4%22 r=%223.1%22 fill=%22%23d9406f%22/%3E%3Cellipse cx=%22874.8%22 cy=%22144.5%22 rx=%2212.5%22 ry=%2216.1%22 transform=%22rotate(-12 874.8 144.5)%22 fill=%22%234f9363%22/%3E%3Ccircle cx=%22879.6%22 cy=%22128.9%22 r=%223.1%22 fill=%22%23d9406f%22/%3E%3Cellipse cx=%22890.9%22 cy=%22149.7%22 rx=%2212.5%22 ry=%2216.1%22 transform=%22rotate(18 890.9 149.7)%22 fill=%22%234f9363%22/%3E%3Crect x=%22980.1%22 y=%2258%22 width=%2219.8%22 height=%22133%22 rx=%229.9%22 fill=%22%23336f53%22/%3E%3Crect x=%22956.1%22 y=%22110.1%22 width=%2226%22 height=%2214.7%22 rx=%227.3%22 fill=%22%23336f53%22/%3E%3Crect x=%22956.1%22 y=%2281.4%22 width=%2214.7%22 height=%2243.3%22 rx=%227.3%22 fill=%22%23336f53%22/%3E%3Cpath d=%22M963.4 89.5V115.9 M986 68.9V187 M994 68.9V187%22 stroke=%22%23529470%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3Cpath d=%22M1082 190L1087.6 174.6L1103 166.2L1122.6 170.4L1138 184.4L1139.4 190Z%22 fill=%22%23b97d55%22/%3E%3Cpath d=%22M1111.4 190L1112.8 174.6L1122.6 170.4L1138 184.4L1139.4 190Z%22 fill=%22%2394603f%22/%3E%3Cg fill=%22%23768a4c%22%3E%3Ccircle cx=%221203%22 cy=%22176%22 r=%2211.8%22/%3E%3Ccircle cx=%221228.4%22 cy=%22176.4%22 r=%2216.4%22/%3E%3Ccircle cx=%221206.9%22 cy=%22174.4%22 r=%2214.3%22/%3E%3Ccircle cx=%221217.6%22 cy=%22181.4%22 r=%2211%22/%3E%3Ccircle cx=%221255.1%22 cy=%22180.5%22 r=%2215%22/%3E%3Ccircle cx=%221216.3%22 cy=%22183.4%22 r=%2211.1%22/%3E%3Crect x=%221197%22 y=%22179.5%22 width=%2266%22 height=%2210.5%22 rx=%225.1%22/%3E%3C/g%3E%3Crect x=%221316%22 y=%22159.2%22 width=%2228%22 height=%2231.8%22 rx=%2214%22 fill=%22%233f7f58%22/%3E%3Cpath d=%22M1325 163.4V188M1335 163.4V188%22 stroke=%22%235d9c74%22 stroke-width=%222.5%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%221325%22 cy=%22159.8%22 r=%223.6%22 fill=%22%23f2b233%22/%3E%3Ccircle cx=%221334.5%22 cy=%22159.2%22 r=%223.6%22 fill=%22%23f2b233%22/%3E%3Crect x=%221448.2%22 y=%2232%22 width=%2223.7%22 height=%22159%22 rx=%2211.8%22 fill=%22%232f6f52%22/%3E%3Crect x=%221420.2%22 y=%22108.6%22 width=%2230%22 height=%2217.5%22 rx=%228.8%22 fill=%22%232f6f52%22/%3E%3Crect x=%221420.2%22 y=%2271.3%22 width=%2217.5%22 height=%2254.8%22 rx=%228.8%22 fill=%22%232f6f52%22/%3E%3Crect x=%221469.8%22 y=%2286.4%22 width=%2226%22 height=%2217.5%22 rx=%228.8%22 fill=%22%232f6f52%22/%3E%3Crect x=%221478.3%22 y=%2261.2%22 width=%2217.5%22 height=%2242.8%22 rx=%228.8%22 fill=%22%232f6f52%22/%3E%3Cpath d=%22M1428.9 81V115.6 M1487.1 70.8V93.4 M1455.3 45V187 M1464.7 45V187%22 stroke=%22%234f936d%22 stroke-width=%222.1%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3Cellipse cx=%221600%22 cy=%22168.4%22 rx=%2211.5%22 ry=%2214.9%22 transform=%22rotate(0 1600 168.4)%22 fill=%22%234f9363%22/%3E%3Ccircle cx=%221600.6%22 cy=%22154%22 r=%222.9%22 fill=%22%23d9406f%22/%3E%3Cellipse cx=%221586.8%22 cy=%22179.2%22 rx=%2211.5%22 ry=%2214.9%22 transform=%22rotate(-28 1586.8 179.2)%22 fill=%22%234f9363%22/%3E%3Ccircle cx=%221583.8%22 cy=%22164.8%22 r=%222.9%22 fill=%22%23d9406f%22/%3E%3Cellipse cx=%221613.9%22 cy=%22178%22 rx=%2211.5%22 ry=%2214.9%22 transform=%22rotate(26 1613.9 178)%22 fill=%22%234f9363%22/%3E%3Ccircle cx=%221610.4%22 cy=%22163.6%22 r=%222.9%22 fill=%22%23d9406f%22/%3E%3Cellipse cx=%221595.2%22 cy=%22148%22 rx=%2211.5%22 ry=%2214.9%22 transform=%22rotate(-12 1595.2 148)%22 fill=%22%234f9363%22/%3E%3Ccircle cx=%221591.5%22 cy=%22133.6%22 r=%222.9%22 fill=%22%23d9406f%22/%3E%3Cpath d=%22M1700 190L1704 179L1715 173L1729 176L1740 186L1741 190Z%22 fill=%22%23b97d55%22/%3E%3Cpath d=%22M1721 190L1722 179L1729 176L1740 186L1741 190Z%22 fill=%22%2394603f%22/%3E%3C/svg%3E")}
+.trip-palace{position:absolute;right:6%;bottom:calc(100% - var(--road) - 2px);height:clamp(150px,30vh,300px);width:auto;aspect-ratio:280/214;overflow:visible;transform:translateX(120vw);transition:transform .95s cubic-bezier(.16,.7,.24,1)}
 .pl-tower{fill:#7a2a56}.pl-roof{fill:#43a7b8}.pl-flag{fill:#a9dbe4;stroke:#287786;stroke-width:2;stroke-linejoin:round}
 .pl-hall{fill:#521034}.pl-gate{fill:#2a0d1d;stroke:#43a7b8;stroke-width:3}.pl-win{fill:#a9dbe4}.pl-sign{fill:#fff;stroke:#43a7b8;stroke-width:3}
-.trip-road{position:absolute;left:0;right:0;bottom:0;height:24%;background:#521034;border-top:4px solid #43a7b8}
-:root[data-theme="dark"] .trip-road{background:#2a0819}
-.trip-road i{position:absolute;left:0;right:0;top:50%;height:5px;margin-top:-2.5px;background:linear-gradient(90deg,rgba(255,255,255,.9) 0 50%,transparent 50%) 0 0/72px 5px repeat-x;animation:tripDash .42s linear infinite}
-.trip-rv{position:absolute;left:30%;bottom:8%;width:clamp(200px,28vw,300px);translate:-50% 0;transition:left .95s cubic-bezier(.16,.7,.24,1)}
+.trip-road{position:absolute;left:0;right:0;top:var(--road);height:var(--road-h);border-top:3px solid #f3dfb8;border-bottom:4px solid #c8915c;
+  background:linear-gradient(#efe6d8,#efe6d8) 0 14%/100% 2px no-repeat,linear-gradient(#efe6d8,#efe6d8) 0 86%/100% 2px no-repeat,linear-gradient(180deg,#5b5056 0,#4a4047 22%,#3d353b 100%)}
+.trip-road i{position:absolute;left:0;top:50%;height:4px;margin-top:-2px;width:calc(100% + 80px);background:repeating-linear-gradient(90deg,#f3c34f 0 40px,transparent 40px 80px);animation:tripDash .46s linear infinite}
+.trip-rv{position:absolute;left:30%;bottom:calc(100% - var(--road) - var(--road-h) * .8);width:clamp(200px,24vw,320px);translate:-50% 0;transition:transform .95s cubic-bezier(.16,.7,.24,1)}
+.trip-rv::after{content:"";position:absolute;left:7%;right:5%;bottom:-3%;height:9%;border-radius:50%;background:rgba(36,22,18,.32);z-index:-1}
 .trip-rv svg{display:block;width:100%;height:auto;overflow:visible;animation:tripBounce .4s ease-in-out infinite alternate}
 .trip-rv .rv-b{fill:#fff;stroke:#521034;stroke-width:2.6;stroke-linejoin:round}
 .trip-rv .rv-s1{fill:#43a7b8}.trip-rv .rv-s2{fill:#521034}
@@ -1358,38 +1385,47 @@ html.lite .rv-hills,html.lite .rv-cacti,html.lite .rv-lane::after,html.lite .rv-
 .trip-rv .rv-w circle{fill:#2a0d1d}.trip-rv .rv-w .h{fill:#dfeaef}.trip-rv .rv-w .k{stroke:#2a0d1d;stroke-width:1.8;stroke-linecap:round}
 .trip-rv .rv-w{animation:tripSpin .5s linear infinite}
 .trip-rv .rv-lacy{transform-origin:50px 48px;animation:tripLacy .7s ease-in-out infinite alternate}
-.trip-puff{position:absolute;left:3%;bottom:10%;width:20px;height:20px;border-radius:50%;background:rgba(82,16,52,.16);opacity:0;animation:tripPuff 1.1s ease-out infinite}
+.trip-puff{position:absolute;left:3%;bottom:8%;width:22px;height:22px;border-radius:50%;background:rgba(238,208,164,.95);opacity:0;animation:tripPuff 1.1s ease-out infinite}
 .trip-puff.p2{animation-delay:.37s}.trip-puff.p3{animation-delay:.74s}
-:root[data-theme="dark"] .trip-puff{background:rgba(255,255,255,.18)}
 .trip-woof{position:absolute;left:2%;top:-34%;padding:8px 15px;border-radius:18px 18px 18px 5px;background:#fff;color:#521034;font:700 clamp(17px,2vw,21px) var(--font-d);box-shadow:0 12px 24px -10px rgba(42,8,25,.45);opacity:0;transform:translateY(10px) scale(.4);transform-origin:0 100%;transition:opacity .2s,transform .45s var(--spring)}
-#loader .trip-route{display:flex;align-items:center;gap:12px;margin-top:22px}
+/* the words sit in the deep blue of the upper sky, in white */
+.trip-hud{position:absolute;left:0;right:0;top:clamp(26px,7vh,84px);z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 18px}
+#loader .trip-title{margin:0;padding:0;min-height:0;text-align:center;font:600 clamp(21px,2.7vw,32px)/1.22 var(--font-d);text-wrap:balance;color:#fff;text-shadow:0 2px 0 rgba(9,52,124,.3),0 0 22px rgba(9,52,124,.4)}
+#loader .trip-route{display:flex;align-items:center;gap:12px;margin-top:20px}
 #loader .trip-pin{font-size:20px;line-height:1}
-#loader .trip .bar{margin:0;width:min(320px,58vw);height:14px;overflow:visible}
-#loader .trip .bar b{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px var(--card),0 6px 12px -6px rgba(0,0,0,.45)}
+#loader .trip .bar{margin:0;width:min(340px,58vw);height:14px;overflow:visible;background:rgba(255,255,255,.3);border:2px solid rgba(255,255,255,.88)}
+#loader .trip .bar i{border-radius:inherit}
+#loader .trip .bar b{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#43a7b8;box-shadow:0 0 0 3px #fff,0 6px 12px -6px rgba(0,0,0,.45)}
 #loader .trip .bar b img{width:30px;height:30px;display:block}
-#loader .trip .msg{margin-top:18px}
-#loader .trip .pct{margin-top:4px}
+#loader .trip .msg{margin-top:16px;color:#fff;text-shadow:0 1px 2px rgba(9,40,100,.55),0 0 14px rgba(9,52,124,.4)}
+#loader .trip .pct{margin-top:4px;color:#fff;opacity:.92;text-shadow:0 1px 2px rgba(9,40,100,.55)}
 /* arriving: the Palace rolls in and the RV pulls up to the gate; parked: everything stops and Lacy barks */
 #loader.arrive .trip-palace{transform:none}
-#loader.arrive .trip-rv{left:42%}
-#loader.parked :is(.trip-hills,.trip-cacti,.trip-road i,.trip-rv svg,.trip-rv .rv-w){animation-play-state:paused}
+#loader.arrive .trip-rv{transform:translateX(12vw)}
+#loader.parked :is(.trip-far i,.trip-mesas i,.trip-mid i,.trip-near i,.trip-road i,.trip-rv svg,.trip-rv .rv-w){animation-play-state:paused}
 #loader.parked .trip-puff{animation:none;opacity:0}
 #loader.parked .trip-woof{opacity:1;transform:none}
 #loader.parked .trip-rv .rv-lacy{animation:tripBark .16s ease-in-out 4 alternate}
-@keyframes tripScroll{to{background-position-x:-520px}}
-@keyframes tripScroll2{to{background-position-x:-320px}}
-@keyframes tripDash{to{background-position-x:-72px}}
+@keyframes tripPan{to{transform:translateX(calc(var(--tw) * -1))}}
+@keyframes tripCloud{to{transform:translateX(calc(-100vw - 100% - 40px))}}
+@keyframes tripDash{to{transform:translateX(-80px)}}
 @keyframes tripBounce{from{transform:translateY(0)}to{transform:translateY(-3px)}}
 @keyframes tripSpin{to{transform:rotate(360deg)}}
 @keyframes tripLacy{from{transform:rotate(-5deg)}to{transform:rotate(5deg) translateY(-1px)}}
 @keyframes tripBark{from{transform:translateY(0) scale(1)}to{transform:translateY(-4px) scale(1.06)}}
 @keyframes tripPuff{0%{transform:translate(0,0) scale(.4);opacity:.9}100%{transform:translate(-64px,-20px) scale(1.7);opacity:0}}
 @media (max-width:640px){
-  .trip-scene{height:clamp(200px,28vh,250px)}
-  .trip-rv{width:46vw;left:28%}
-  #loader.arrive .trip-rv{left:30%}
-  .trip-palace{right:3%;height:clamp(130px,22vh,170px)}
+  #loader:not(.quick) .trip{--hz:55%;--road:71%;--road-h:10%}
+  .trip-sun{left:84%;top:35%;width:62px}
+  .trip-clouds .c1{--y:31%}.trip-clouds .c2{--y:38%}.trip-clouds .c3{--y:1.5%}.trip-clouds .c4{--y:43%}
+  .trip-rv{width:46vw;left:29%}
+  #loader.arrive .trip-rv{transform:translateX(3vw)}
+  .trip-palace{right:2%;height:clamp(120px,21vh,170px)}
   .trip-woof{top:-44%}
+  .trip-near{--h:clamp(76px,14vh,130px)}
+  .trip-mid{--h:clamp(56px,11vh,104px)}
+  .trip-hud{top:clamp(20px,5vh,46px)}
+  #loader .trip-route{margin-top:16px}
 }
 
 /* ---------- top bar: status · hours · news · phone ----------
@@ -1411,3 +1447,21 @@ html.lite .rv-hills,html.lite .rv-cacti,html.lite .rv-lane::after,html.lite .rv-
   .tb-hours{column-gap:14px}
   .tb-hours::before,.tb-h+.tb-h::before{content:none}
 }
+
+/* ---------- performance (phones especially) ----------
+   Nothing animates where nobody can see it: off-screen sections (core.js marks them .anim-off) and the hidden
+   page-change overlay pause their CSS animations, which otherwise cost style and paint work every frame. */
+.anim-off *,.anim-off *::before,.anim-off *::after,#wipe:not(.in) *,#wipe:not(.in) *::before,#wipe:not(.in) *::after,
+.chat:not(.open) *,.chat:not(.open) *::before,.chat:not(.open) *::after{animation-play-state:paused!important}
+/* status dots: the ping is a scaled ring (compositor only) instead of an animated box-shadow */
+.dot{position:relative;box-shadow:none;animation:none}
+.dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:inherit;animation:ping2 2s ease-out infinite}
+.dot.closed::after{display:none}
+@keyframes ping2{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(3);opacity:0}}
+/* touch screens: the hero photo sways instead of redrawing its rounded corners every frame, and the nav drops its live blur */
+@media (hover:none),(max-width:700px){
+  .blob{animation:none}
+  .hero-art .blob{animation:softSway 9s ease-in-out infinite}
+  .nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:color-mix(in srgb,var(--card) 96%,transparent)}
+}
+@keyframes softSway{50%{rotate:-1deg}}

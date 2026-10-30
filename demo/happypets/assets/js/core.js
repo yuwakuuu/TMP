@@ -180,7 +180,7 @@
     addEventListener('pointerup', up, true); addEventListener('pointercancel', up, true); addEventListener('blur', up); addEventListener('dragend', up);
   }
 
-  /* ================= homepage categories: everything below the hero is tucked behind six buttons =================
+  /* ================= homepage categories: everything below the hero is tucked behind eight buttons =================
      One category opens at a time, right under the buttons. Links to a section inside a category (#pricing,
      index.html#plan from another page...) open that category first, then scroll to the section. */
   on('.cat-hub', hub => {
@@ -279,7 +279,31 @@
     cio.unobserve(el);
   }), { threshold: .6 });
   HPP.ready.then(() => $$('[data-count]').forEach(el => cio.observe(el)));
-  $$('.track').forEach(t => t.innerHTML += t.innerHTML);
+  /* marquee strips: each half of the loop is at least as wide as the strip, so wide screens never see a gap
+     (same speed). With Lite or reduced motion they stand still and show only the words that fit, centred,
+     so nothing is cut off at the screen edge. */
+  $$('.marquee .track').forEach(t => {
+    const strip = t.parentElement, unit = t.innerHTML, base = parseFloat(getComputedStyle(t).animationDuration) || 34;
+    const fill = () => {
+      t.innerHTML = unit;
+      if (reduce) {
+        strip.classList.add('still');
+        const room = strip.clientWidth - 72, gap = parseFloat(getComputedStyle(t).columnGap) || 0;
+        let used = 0, full = false, last = null;
+        [...t.children].forEach(k => {
+          if (!full && used + k.offsetWidth <= room) { used += k.offsetWidth + gap; last = k; } else { full = true; k.hidden = true; }
+        });
+        if (last && last.tagName === 'I') last.hidden = true;   // never end on a paw
+        return;
+      }
+      let n = 1;
+      while (t.offsetWidth < strip.clientWidth + 40 && n < 6) { t.insertAdjacentHTML('beforeend', unit); n++; }
+      t.insertAdjacentHTML('beforeend', t.innerHTML);
+      t.style.animationDuration = base * n + 's';
+    };
+    fill();
+    let w = innerWidth; addEventListener('resize', () => { if (innerWidth !== w) { w = innerWidth; fill(); } });
+  });
 
   /* ================= 3D puffy + fur headings ================= */
   const H3 = LITE ? {} : (window.HPP3D || {});
@@ -539,9 +563,18 @@
     new IntersectionObserver((es, io) => { if (es[0].intersectionRatio > .45) { io.disconnect(); show(); } }, { threshold: [.45, .7] }).observe(stage);
   });
 
+  /* ================= performance: pause CSS animations off screen =================
+     Every looping CSS animation costs style and paint work each frame, even when it's scrolled out of view.
+     Sections that are off screen get .anim-off, which pauses everything inside them (see site.css). */
+  if ('IntersectionObserver' in window) {
+    const aio = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('anim-off', !e.isIntersecting)), { rootMargin: '160px 0px' });
+    $$('main > :not(.cat-panel, script, style, template), .cat-panel > section, body > footer').forEach(el => aio.observe(el));
+  }
+
   /* ================= scroll-linked motion ================= */
   {
     const prog = $('#progress'), nav = $('#nav'), blob = $('#blob');
+    let dayOn = false;   // the day section reads layout every frame, so it only runs while it's near the screen
     const day = $('#day'), dayTrack = $('#dayTrack'), dayBar = $('#dayBar'), clock = $('#clock'), sun = $('#sun'), moments = $$('.moment');
     let ticking = false;
     const onScroll = () => {
@@ -549,21 +582,23 @@
       if (prog) prog.style.transform = `scaleX(${Hh > 0 ? y / Hh : 0})`;
       if (nav) nav.classList.toggle('scrolled', y > 60);
       if (blob && !reduce && y < innerHeight * 1.3) blob.style.transform = `translateY(${y * .1}px) rotate(${y * .012}deg)`;
-      if (day && dayTrack) {
+      if (day && dayTrack && dayOn) {
         const r = day.getBoundingClientRect(), total = day.offsetHeight - innerHeight;
         const p = Math.min(1, Math.max(0, -r.top / total));
         const maxX = Math.max(0, dayTrack.scrollWidth - innerWidth + 40);
         dayTrack.style.transform = `translateX(${-p * maxX}px)`;
         dayBar.style.transform = `scaleX(${p})`;
         const mins = 360 + p * 960;
-        clock.textContent = fmt(Math.round(mins / 15) * 15);
-        sun.textContent = mins > 1140 ? '🌙' : mins > 1050 ? '🌇' : '☀️';
+        const ck = fmt(Math.round(mins / 15) * 15), se = mins > 1140 ? '🌙' : mins > 1050 ? '🌇' : '☀️';
+        if (clock.textContent !== ck) clock.textContent = ck;
+        if (sun.textContent !== se) sun.textContent = se;
         sun.style.transform = `rotate(${p * 360}deg)`;
         const active = Math.min(moments.length - 1, Math.floor(p * moments.length));
         moments.forEach((m, i) => { if (i === active && !m.classList.contains('on')) sfx('tick'); m.classList.toggle('on', i === active); m.style.opacity = Math.abs(i - active) > 2 ? .5 : 1; });
       }
       ticking = false;
     };
+    if (day) new IntersectionObserver(es => { dayOn = es[0].isIntersecting; if (dayOn) onScroll(); }, { rootMargin: '200px 0px' }).observe(day);
     addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
     addEventListener('resize', onScroll);
     onScroll();
@@ -722,21 +757,29 @@
   });
 
   /* ================= floating hero reviews: every few seconds one card fades to the next review ================= */
-  on('#rvPool', poolEl => {
-    const pool = JSON.parse(poolEl.textContent), cards = $$('.rvf'); if (!cards.length || pool.length <= cards.length) return;
-    let next = cards.length, k = 0;
-    const shown = new Set(cards.map(c => $('q', c).textContent));
-    setInterval(() => {
-      if (document.hidden) return;
-      const card = cards[k++ % cards.length];
-      let r; do { r = pool[next++ % pool.length]; } while (shown.has(r.t));
-      card.classList.add('swap');
-      setTimeout(() => {
-        shown.delete($('q', card).textContent); shown.add(r.t);
-        $('q', card).textContent = r.t; $('small', card).textContent = `— ${r.n} · ${r.f}`;
-        card.classList.remove('swap');
-      }, 800);
-    }, 9000);   // a new review every 9 s
+  /* homepage review quotes: one at a time. Next and pause buttons (a tap on the quote shows the next one too);
+     holds while hovered or keyboard-focused, and starts paused with reduced motion */
+  on('#heroRv', box => {
+    const qs = $$('.hero-rv-q figure', box), pause = $('[data-rv="pause"]', box); if (qs.length < 2) return;
+    const hover = matchMedia('(hover: hover)').matches;
+    let i = 0, paused = matchMedia('(prefers-reduced-motion: reduce)').matches, timer = 0;
+    const go = n => {
+      qs[i].classList.remove('on'); qs[i].setAttribute('aria-hidden', 'true');
+      i = (n + qs.length) % qs.length; qs[i].classList.add('on'); qs[i].removeAttribute('aria-hidden');
+    };
+    const arm = () => { clearTimeout(timer); timer = setTimeout(tick, 6500); };
+    const tick = () => {
+      const held = paused || document.hidden || !box.offsetParent || (hover && box.matches(':hover')) || box.querySelector(':focus-visible');
+      if (!held) go(i + 1);
+      arm();
+    };
+    const setPaused = v => { paused = v; pause.setAttribute('aria-pressed', v); pause.setAttribute('aria-label', v ? 'Play reviews' : 'Pause reviews'); };
+    setPaused(paused);
+    pause.addEventListener('click', () => { setPaused(!paused); arm(); });
+    const next = () => { go(i + 1); arm(); };
+    $('[data-rv="next"]', box).addEventListener('click', next);
+    $('.hero-rv-q', box).addEventListener('click', next);
+    arm();
   });
 
   /* ================= staff ================= */
@@ -817,7 +860,13 @@
     if (LITE) { cv.remove(); return; }
     const ctx = cv.getContext('2d');
     let W, Hh, dpr;
-    const size = () => { dpr = Math.min(2, devicePixelRatio || 1); W = cv.width = innerWidth * dpr; Hh = cv.height = innerHeight * dpr; };
+    const PHONE = matchMedia('(max-width: 700px), (pointer: coarse)').matches;
+    let cw = 0, ch = 0, lastScroll = -1e4;
+    if (PHONE) addEventListener('scroll', () => { lastScroll = performance.now(); }, { passive: true });
+    const size = () => {
+      if (cw === innerWidth && Math.abs(ch - innerHeight) < 200) return;   // a sliding browser toolbar isn't worth a new canvas
+      cw = innerWidth; ch = innerHeight; dpr = PHONE ? 1 : Math.min(2, devicePixelRatio || 1); W = cv.width = cw * dpr; Hh = cv.height = ch * dpr;
+    };
     size(); addEventListener('resize', size);
     const PAL = ['#6b1c47', '#43a7b8', '#7fcad7', '#f2b233', '#521034'];
     const drawPaw = (x, y, ang, s, alpha, color) => {
@@ -840,7 +889,7 @@
     addEventListener('pointerleave', () => { mx = my = -1e4; });
     // click on empty background -> confetti of paws
     document.addEventListener('pointerdown', e => {
-      if (e.target.closest('a,button,input,select,textarea,label,summary,iframe,canvas,.chat,.w3d,.wfur,.live-title,.member,.svc,.pcard,.ptable,.map')) return;
+      if (e.target.closest('a,button,input,select,textarea,label,summary,iframe,canvas,.chat,.w3d,.wfur,.live-title,.member,.svc,.pcard,.ptable,.map,.hero-rv')) return;
       for (let i = 0; i < 9; i++) paws.push(make(e.clientX * dpr, e.clientY * dpr, true));
       sfx('pop', 1.1 + Math.random() * .3);
     });
@@ -849,6 +898,10 @@
     for (let i = 0; i < target(); i++) paws.push(make(Math.random() * W, Math.random() * Hh));
     let last = performance.now();
     const frame = t => {
+      if (PHONE) {
+        if (t - lastScroll < 140) { last = t; requestAnimationFrame(frame); return; }   // hold still while scrolling
+        if (t - last < 30) { requestAnimationFrame(frame); return; }                     // ~30 fps is plenty for drifting paws
+      }
       const dt = Math.min(.05, (t - last) / 1000); last = t;
       ctx.clearRect(0, 0, W, Hh);
       const want = target(); let falling = 0;

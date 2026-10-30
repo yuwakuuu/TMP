@@ -67,14 +67,31 @@ def reviews_strip():
     rows = [REVIEWS[:half], REVIEWS[half:]]
     out = ''.join(f'<div class="rv-row{" rev" if k else ""}"><div class="rv-track">{"".join(review_card(r) for r in row * 2)}</div></div>' for k, row in enumerate(rows))
     return f'<div class="rv-marquee" aria-label="Customer reviews">{out}</div>'
-def reviews_float():
-    """One 5-star review card that floats under the homepage hero photo; core.js cycles it through every review."""
-    def short(t, n=115):
-        return t if len(t) <= n else t[:t.rfind(' ', 0, n)].rstrip(' ,.…') + '…'
-    pool = [{'t': short(r['text']), 'n': r['name'], 'f': r['from']} for r in REVIEWS]
-    card = lambda k, r: (f'<div class="float rvf rvf{k}" data-depth="{(14, -18)[k - 1]}"><div class="bob"><div class="rvf-in">'
-                         f'<span class="stars" aria-label="5 out of 5 stars">★★★★★</span><q>{html.escape(r["t"])}</q><small>— {html.escape(r["n"])} · {html.escape(r["f"])}</small></div></div></div>')
-    return card(1, pool[0]) + '<script type="application/json" id="rvPool">' + json.dumps(pool, ensure_ascii=False).replace('</', r'<\/') + '</script>'
+def hero_reviews():
+    """Rotating quotes at the top of the homepage: just what people said (no stars). core.js shows one at a time.
+    Long reviews are cut at the end of a sentence; ones that can't be cut cleanly are left to the reviews page."""
+    def excerpt(t, n=105):
+        if len(t) <= n:
+            return t
+        m = re.match(r'(.{40,%d}?[.!?…])(?=\s|$)' % n, t)
+        return m.group(1) if m else None
+    figs = []
+    for r in REVIEWS:
+        q = excerpt(r['text'])
+        if not q:
+            continue
+        attrs = ' aria-hidden="true"' if figs else ' class="on"'
+        figs.append(f'<figure{attrs}><blockquote>{html.escape(q)}</blockquote>'
+                    f'<figcaption>— {html.escape(r["name"])} · {html.escape(r["from"])}</figcaption></figure>')
+    icons = ('<svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="3" width="3" height="10" rx="1"/><rect x="9.5" y="3" width="3" height="10" rx="1"/></svg>'
+             '<svg class="i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L5.9 2.7a.6.6 0 0 0-.9.5z"/></svg>')
+    return ('<div class="hero-rv" id="heroRv" role="group" aria-roledescription="carousel" aria-label="What pet parents say" data-reveal style="--i:4">'
+            '<span class="hero-rv-mark" aria-hidden="true">“</span>'
+            f'<div class="hero-rv-q">{"".join(figs)}</div>'
+            '<div class="hero-rv-ctl">'
+            f'<button class="hero-rv-btn" type="button" data-rv="pause" aria-label="Pause reviews" aria-pressed="false">{icons}</button>'
+            '<button class="hero-rv-btn" type="button" data-rv="next" aria-label="Next review"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+            '</div></div>')
 def reviews_grid():
     return '<div class="rv-grid">' + ''.join(review_card(r, i) for i, r in enumerate(REVIEWS)).replace('<figure class="rv"', '<figure class="rv" data-reveal') + '</div>'
 
@@ -166,7 +183,7 @@ def build(page, brand='current', out_name=None):
             k, _, v = line.partition(':'); meta[k.strip()] = v.strip()
         text = text[m.end():]
     text = re.sub(r'\[\[hero (.*?)\]\]', lambda mm: hero(attrs(mm.group(1))), text, flags=re.S)
-    text = text.replace('[[book_cta]]', BOOK_CTA).replace('[[book_buttons]]', BOOK_BUTTONS).replace('[[reviews_strip]]', reviews_strip()).replace('[[reviews_grid]]', reviews_grid()).replace('[[reviews_float]]', reviews_float()).replace('[[award]]', AWARD).replace('[[cta_badge]]', B['cta_badge'])
+    text = text.replace('[[book_cta]]', BOOK_CTA).replace('[[book_buttons]]', BOOK_BUTTONS).replace('[[reviews_strip]]', reviews_strip()).replace('[[reviews_grid]]', reviews_grid()).replace('[[hero_reviews]]', hero_reviews()).replace('[[award]]', AWARD).replace('[[cta_badge]]', B['cta_badge'])
     name = page.stem
     out_name = out_name or name
     title = meta.get('title', 'Happy Pets Palace')

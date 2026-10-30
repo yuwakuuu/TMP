@@ -13,6 +13,9 @@
   const SIZE = 100;                       // world units per em
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const MOBILE = matchMedia('(max-width: 700px), (pointer: coarse)').matches;   // lighter geometry + resolution on phones
+  // phones: live titles draw at ~30 fps and hold still while the page scrolls, so scrolling stays smooth
+  let lastScroll = -1e4;
+  if (MOBILE) addEventListener('scroll', () => { lastScroll = performance.now(); }, { passive: true });
   H.colors = { plum: '#6b1c47', teal: '#2e8496', pink: '#43a7b8', white: '#f4fbfc', butter: '#ffc23d', grape: '#7a2a56', brown: '#b0703c' };
 
   /* ---------- shared building blocks ---------- */
@@ -211,9 +214,16 @@
     });
 
     let visible = true, raf = 0, last = performance.now(), running = false;
+    let held = 0, drawn = 0;
     new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && running && !raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }).observe(el);
     function tick(now) {
       raf = 0;
+      if (MOBILE) {
+        if (now - lastScroll < 140) { if (!held) held = now; if (visible) raf = requestAnimationFrame(tick); return; }
+        if (held) { t0 += now - held; last = now; held = 0; }   // pick up where it paused, no jump
+        if (now - drawn < 30) { if (visible) raf = requestAnimationFrame(tick); return; }
+        drawn = now;
+      }
       const elapsed = Math.min(.5, Math.max(0, (now - last) / 1000)); last = now;   // real time, so low frame rates don't mean slow motion
       const t = (now - t0) / 1000;
       group.rotation.y += ((reduce ? 0 : tx * .14) - group.rotation.y) * .06;
@@ -539,9 +549,16 @@
       onHit && onHit('pop', l);
     });
     let visible = true, raf = 0, last = performance.now(), running = false;
+    let held = 0, drawn = 0;
     new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && running && !raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }).observe(el);
     function tick(now) {
       raf = 0;
+      if (MOBILE) {
+        if (now - lastScroll < 140) { if (!held) held = now; if (visible) raf = requestAnimationFrame(tick); return; }
+        if (held) { t0 += now - held; last = now; held = 0; }   // pick up where it paused, no jump
+        if (now - drawn < 30) { if (visible) raf = requestAnimationFrame(tick); return; }
+        drawn = now;
+      }
       const elapsed = Math.min(.5, Math.max(0, (now - last) / 1000)); last = now;
       const t = (now - t0) / 1000;
       allMats.forEach(m => m.uniforms.uTime.value = t);
