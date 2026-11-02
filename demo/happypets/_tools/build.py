@@ -6,7 +6,10 @@ Page files start with a front-matter comment:
     title: Dog Boarding
     description: One sentence for search results.
     nav: services            (locations | services | events | about | new — highlights that menu)
+    image: assets/img/x.jpg  (optional: the share-card picture; otherwise the page's hero photo, else hero.webp)
     -->
+Every page gets a canonical link and share-card (Open Graph) tags. Structured data goes in the page source as
+<script type="application/ld+json"> blocks: the build checks that each one parses and moves it into the head.
 Macros available inside pages:
     [[hero crumb="Services" emoji="🏰" eyebrow="..." title='Dog <span class="s">Boarding</span>' sub="..." img="assets/img/x.webp" alt="..." tag="..."]]
     [[book_cta]]        "Ready to book?" band with both locations + phone
@@ -173,6 +176,25 @@ BRANDS = {
     },
 }
 
+SITE = 'https://tmpbizz.com/demo/happypets/'   # where the site lives: canonical links, share cards, structured data
+LD_BLOCK = re.compile(r'\s*<script type="application/ld\+json">(.*?)</script>', re.S)
+
+def head_meta(url, title, desc, image, ld_blocks):
+    """Canonical link, share card, and the page's structured data (re-serialised, so a typo fails the build)."""
+    esc = lambda s: html.escape(s, quote=True)
+    tags = [f'<link rel="canonical" href="{url}">',
+            '<meta property="og:type" content="website">',
+            '<meta property="og:site_name" content="Happy Pets Palace &amp; Playground">',
+            f'<meta property="og:title" content="{esc(title)}">',
+            f'<meta property="og:description" content="{esc(desc)}">',
+            f'<meta property="og:url" content="{url}">',
+            f'<meta property="og:image" content="{SITE}{image}">',
+            '<meta name="twitter:card" content="summary_large_image">']
+    for block in ld_blocks:
+        data = json.dumps(json.loads(block), ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+        tags.append(f'<script type="application/ld+json">{data}</script>')
+    return '\n'.join(tags)
+
 def build(page, brand='current', out_name=None):
     B = BRANDS[brand]
     text = page.read_text(encoding='utf-8')
@@ -182,6 +204,11 @@ def build(page, brand='current', out_name=None):
         for line in m.group(1).strip().splitlines():
             k, _, v = line.partition(':'); meta[k.strip()] = v.strip()
         text = text[m.end():]
+    # the rebrand preview is a copy of the homepage, so it doesn't repeat the homepage's structured data
+    ld_blocks = LD_BLOCK.findall(text) if brand == 'current' else []
+    text = LD_BLOCK.sub('', text)
+    hero_m = re.search(r'\[\[hero (.*?)\]\]', text, re.S)
+    share_img = meta.get('image') or (hero_m and attrs(hero_m.group(1)).get('img')) or 'assets/img/hero.webp'
     text = re.sub(r'\[\[hero (.*?)\]\]', lambda mm: hero(attrs(mm.group(1))), text, flags=re.S)
     text = text.replace('[[book_cta]]', BOOK_CTA).replace('[[book_buttons]]', BOOK_BUTTONS).replace('[[reviews_strip]]', reviews_strip()).replace('[[reviews_grid]]', reviews_grid()).replace('[[hero_reviews]]', hero_reviews()).replace('[[award]]', AWARD).replace('[[cta_badge]]', B['cta_badge'])
     name = page.stem
@@ -193,7 +220,10 @@ def build(page, brand='current', out_name=None):
         out = out.replace('{{cur_%s}}' % key, ' class="cur"' if nav == key else '')
     for key in ('events', 'new'):
         out = out.replace('{{cur_%s}}' % key, ' aria-current="page"' if nav == key else '')
-    out = (out.replace('{{doc_title}}', 'Happy Pets Palace' if name == 'index' else f'{title} | Happy Pets Palace')
+    doc_title = 'Happy Pets Palace' if name == 'index' else f'{title} | Happy Pets Palace'
+    url = SITE + ('' if out_name == 'index' else f'{out_name}.html')
+    out = (out.replace('{{head_meta}}', head_meta(url, doc_title, meta.get('description', ''), share_img, ld_blocks))
+              .replace('{{doc_title}}', doc_title)
               .replace('{{description}}', html.escape(meta.get('description', ''), quote=True))
               .replace('{{page}}', name).replace('{{bulldog}}', bulldog).replace('{{pup}}', pup).replace('{{lacy}}', lacy).replace('{{v}}', VERSION).replace('{{body}}', B['banner'] + text.strip()))
     for k in ('icons', 'logo_head', 'logo_foot', 'logo_foot_cls'):

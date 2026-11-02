@@ -1,8 +1,71 @@
 <!--
 title: Happy Pets Palace
-description: Happy Pets Palace & Playground — dog boarding, doggy daycare, puppy socializing, enrichment, AKC training and spa in Mesa and Chandler, AZ. Six years running as Mesa's Best Pet Boarding.
+description: Happy Pets Palace & Playground — dog boarding, doggy daycare, puppy socializing, enrichment, AKC training and spa in Mesa and Chandler, AZ. New: a seasonal photo booth, and a pet-friendly RV to rent, coming soon.
 nav: home
 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": "https://tmpbizz.com/demo/happypets/#business",
+  "name": "Happy Pets Palace & Playground",
+  "description": "Dog boarding, doggy daycare, puppy socializing, canine enrichment, AKC training and spa services in Mesa and Chandler, Arizona, with a seasonal pet photo booth and, coming soon, a pet-friendly RV to rent.",
+  "url": "https://tmpbizz.com/demo/happypets/",
+  "logo": "https://tmpbizz.com/demo/happypets/assets/logo.png",
+  "image": "https://tmpbizz.com/demo/happypets/assets/img/hero.webp",
+  "telephone": "+1-480-207-1852",
+  "sameAs": [
+    "https://www.facebook.com/happypetspalacemesa",
+    "https://www.facebook.com/happypetspalacechandler",
+    "https://www.instagram.com/happypetspalacemesa",
+    "https://www.instagram.com/happypetspalacechandler",
+    "https://www.youtube.com/channel/UCDkNALJrFr_xBVoTshVaLCw"
+  ],
+  "department": [
+    {
+      "@type": "LocalBusiness",
+      "name": "Happy Pets Palace & Playground Mesa",
+      "url": "https://tmpbizz.com/demo/happypets/mesa.html",
+      "telephone": "+1-480-207-1852",
+      "email": "happypetspalacemesa@gmail.com",
+      "address": {"@type": "PostalAddress", "streetAddress": "1918 East McKellips Road", "addressLocality": "Mesa", "addressRegion": "AZ", "postalCode": "85203", "addressCountry": "US"},
+      "openingHoursSpecification": [
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "opens": "06:00", "closes": "18:30"},
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "08:00", "closes": "10:30"},
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "16:00", "closes": "18:30"}
+      ]
+    },
+    {
+      "@type": "LocalBusiness",
+      "name": "Happy Pets Palace & Playground Chandler",
+      "url": "https://tmpbizz.com/demo/happypets/chandler.html",
+      "telephone": "+1-480-207-1852",
+      "email": "happypetschandler@gmail.com",
+      "address": {"@type": "PostalAddress", "streetAddress": "1080 E Pecos Road, Suite 16", "addressLocality": "Chandler", "addressRegion": "AZ", "postalCode": "85225", "addressCountry": "US"},
+      "openingHoursSpecification": [
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "opens": "06:00", "closes": "18:30"},
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "08:00", "closes": "10:30"},
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "16:00", "closes": "18:30"}
+      ]
+    }
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Services",
+    "itemListElement": [
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Dog Boarding", "url": "https://tmpbizz.com/demo/happypets/dog-boarding.html"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Doggy Daycare", "url": "https://tmpbizz.com/demo/happypets/doggy-daycare.html"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Puppy Socializing", "url": "https://tmpbizz.com/demo/happypets/puppy-socializing.html"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Canine Enrichment", "url": "https://tmpbizz.com/demo/happypets/canine-enrichment.html"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "AKC Dog Training", "url": "https://tmpbizz.com/demo/happypets/dog-training.html"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Spa Services", "url": "https://tmpbizz.com/demo/happypets/spa.html"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pet Portrait Studio & Seasonal Photo Booth", "url": "https://tmpbizz.com/demo/happypets/portrait-studio.html"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Adventure RV Rental (coming soon)", "url": "https://tmpbizz.com/demo/happypets/adventure-rv.html"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pet Professional Academy", "url": "https://tmpbizz.com/demo/happypets/pet-professional-academy.html"}}
+    ]
+  }
+}
+</script>
 <header class="hero" id="top">
   <div class="wrap hero-grid hero-home">
     [[hero_reviews]]
@@ -30,12 +93,44 @@ nav: home
 
 <div class="mq">
 <div class="marquee" aria-hidden="true"><div class="track">
-  <span>Dog Boarding</span><i>🐾</i><span>Doggy Daycare</span><i>🐾</i><span>Puppy Wednesdays</span><i>🐾</i><span>Canine Enrichment</span><i>🐾</i><span>AKC Training</span><i>🐾</i><span>Spa Days</span><i>🐾</i><span>Pet Portraits</span><i>🐾</i><span>Adventure RV</span><i>🐾</i>
+  <span>Dog Boarding</span><i>🐾</i><span>Doggy Daycare</span><i>🐾</i><span>Puppy Wednesdays</span><i>🐾</i><span>Canine Enrichment</span><i>🐾</i><span>AKC Training</span><i>🐾</i><span>Spa Days</span><i>🐾</i><span>Photo Booth</span><i>🐾</i><span>Adventure RV: coming soon</span><i>🐾</i>
 </div></div>
 <div class="marquee alt" aria-hidden="true"><div class="track">
   <span>Splash pools</span><i>👑</i><span>Story hour</span><i>👑</i><span>Chasing bubbles</span><i>👑</i><span>Agility gear</span><i>👑</i><span>Live webcams</span><i>👑</i><span>Meds at no charge</span><i>👑</i>
 </div></div>
 </div>
+
+<!-- ============ NEW AT THE PALACE: the Adventure RV (coming soon) and the photo booth; each card opens its section below ============ -->
+<section class="news-sec" id="whats-new">
+  <div class="wrap">
+    <span class="eyebrow" data-reveal>✨ New at the Palace</span>
+    <h2 data-reveal style="--i:1">Something new to <span class="s">wag about.</span></h2>
+    <div class="news-grid">
+      <div data-reveal style="--i:2">
+        <a class="news-card tilt" href="#adventure-rv">
+          <span class="news-img"><img src="assets/img/rv-coming-soon-960.webp" srcset="assets/img/rv-coming-soon-960.webp 960w, assets/img/rv-coming-soon.webp 1600w" sizes="(max-width:760px) calc(100vw - 32px), (max-width:1232px) calc(50vw - 27px), 589px" alt="A golden retriever in a teal bandana sitting in front of a white motorhome at a desert campsite" width="960" height="549" loading="lazy"></span>
+          <span class="news-tag soon">🚐 Coming soon</span>
+          <div class="news-body">
+            <h3>The Adventure RV</h3>
+            <p>Our custom, pet-friendly RV is almost ready to rent, so your dog can come along on vacation.</p>
+            <span class="more">See the RV <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+      </div>
+      <div data-reveal style="--i:3">
+        <a class="news-card tilt" href="#photo-booth">
+          <span class="news-img"><img src="assets/img/photo-booth-960.webp" srcset="assets/img/photo-booth-960.webp 960w, assets/img/photo-booth.webp 1600w" sizes="(max-width:760px) calc(100vw - 32px), (max-width:1232px) calc(50vw - 27px), 589px" alt="A corgi in a plaid bandana posing on a hay bale in front of a fall backdrop with pumpkins and sunflowers" width="960" height="549" loading="lazy"></span>
+          <span class="news-tag">📸 New every season</span>
+          <div class="news-body">
+            <h3>The Photo Booth</h3>
+            <p>New backdrops and props every season, so you can always get a fresh, fun photo of your dog.</p>
+            <span class="more">Step into the booth <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============ TALK TO LACY: the Palace's own Pomeranian, now an AI concierge ============ -->
 <section class="lacy-sec" id="lacy">
@@ -102,7 +197,7 @@ nav: home
       <button class="cat-btn" type="button" role="tab" id="tab-pack" aria-controls="cat-pack" aria-selected="false" data-cat="pack" data-reveal="pop" style="--i:3"><span class="cat-e" aria-hidden="true">👋</span><b>Meet the Pack</b><small>Our story, our staff, and what families say about us.</small><span class="cat-open" aria-hidden="true">Open</span></button>
       <button class="cat-btn" type="button" role="tab" id="tab-events" aria-controls="cat-events" aria-selected="false" data-cat="events" data-reveal="pop" style="--i:4"><span class="cat-e" aria-hidden="true">🎉</span><b>Events &amp; Webcams</b><small>Free Saturday meetups and live cams of the yards.</small><span class="cat-open" aria-hidden="true">Open</span></button>
       <button class="cat-btn" type="button" role="tab" id="tab-booth" aria-controls="cat-booth" aria-selected="false" data-cat="booth" data-reveal="pop" style="--i:5"><span class="cat-e" aria-hidden="true">📸</span><b>Photo Booth</b><small>Seasonal backdrops and props in our portrait studio.</small><span class="cat-open" aria-hidden="true">Open</span></button>
-      <button class="cat-btn" type="button" role="tab" id="tab-rv" aria-controls="cat-rv" aria-selected="false" data-cat="rv" data-reveal="pop" style="--i:6"><span class="cat-e" aria-hidden="true">🚐</span><b>Adventure RV</b><small>Rent our pet-friendly RV and bring the pups on vacation.</small><span class="cat-open" aria-hidden="true">Open</span></button>
+      <button class="cat-btn" type="button" role="tab" id="tab-rv" aria-controls="cat-rv" aria-selected="false" data-cat="rv" data-reveal="pop" style="--i:6"><span class="cat-e" aria-hidden="true">🚐</span><b>Adventure RV</b><small>Coming soon: our pet-friendly RV for vacations with your pups.</small><span class="cat-open" aria-hidden="true">Open</span></button>
       <button class="cat-btn" type="button" role="tab" id="tab-visit" aria-controls="cat-visit" aria-selected="false" data-cat="visit" data-reveal="pop" style="--i:7"><span class="cat-e" aria-hidden="true">📍</span><b>Locations &amp; Hours</b><small>Mesa and Chandler: maps, hours and how to reach us.</small><span class="cat-open" aria-hidden="true">Open</span></button>
     </div>
   </div>
@@ -167,13 +262,14 @@ nav: home
       <a class="svc tilt" data-cat="pamper more" href="portrait-studio.html" style="--accent:var(--pink)" data-reveal>
         <span class="ico">📸</span>
         <h3>Portrait Studio</h3>
-        <p>Seasonal portrait shoots and professional pet photos worth framing.</p>
+        <p>A photo booth with new backdrops and props every season, and professional pet photos worth framing.</p>
         <span class="more">Learn more →</span>
       </a>
       <a class="svc tilt" data-cat="more" href="adventure-rv.html" style="--accent:var(--teal)" data-reveal>
+        <span class="tag">Coming soon</span>
         <span class="ico">🚐</span>
         <h3>Adventure RV</h3>
-        <p>Rent our Adventure RV and hit the open road with your best friend.</p>
+        <p>Our pet-friendly RV, available to rent soon. Hit the open road with your best friend.</p>
         <span class="more">Learn more →</span>
       </a>
       <a class="svc tilt" data-cat="learn more" href="pet-professional-academy.html" style="--accent:var(--plum)" data-reveal>
@@ -816,14 +912,14 @@ nav: home
 <!-- ============ CATEGORY: Adventure RV ============ -->
 <div class="cat-panel" id="cat-rv" role="tabpanel" aria-labelledby="tab-rv" hidden>
   <div class="wrap cat-bar"><span class="cat-e" aria-hidden="true">🚐</span><h2 class="cat-title" data-plain>Adventure RV</h2><button class="cat-close" type="button" data-cat-close>Close ✕</button></div>
-<!-- ------------ ADVENTURE RV: the pet-friendly RV clients can rent ------------ -->
+<!-- ------------ ADVENTURE RV: the pet-friendly RV clients will be able to rent soon ------------ -->
 <section class="rv-sec" id="adventure-rv">
   <div class="wrap">
     <div class="rv-card" data-reveal="scale">
       <div class="rv-copy">
-        <span class="eyebrow">🚐 Adventure RV rental</span>
+        <span class="eyebrow">🚐 Adventure RV rental <span class="soon-pill">Coming soon</span></span>
         <h2>Bring the whole pack on <span class="s">vacation.</span></h2>
-        <p class="lede">Rent the Happy Pets Adventure RV and take your dog along for the trip. It's a 27-foot 2025 Entegra Coach Odyssey that sleeps six, and pets are welcome from the moment you pick it up.</p>
+        <p class="lede">Our custom Happy Pets Adventure RV is almost ready, and it will be available to rent soon. It's a 27-foot 2025 Entegra Coach Odyssey that sleeps six, and pets are welcome from the moment you pick it up.</p>
         <ul class="rv-feats">
           <li><span aria-hidden="true">🛏️</span>Sleeps six</li>
           <li><span aria-hidden="true">🍳</span>Kitchen and bathroom</li>
@@ -833,10 +929,10 @@ nav: home
           <li><span aria-hidden="true">✨</span>Black-light inspected and sanitized after every trip</li>
         </ul>
         <div class="ctas">
-          <a class="btn magnetic" href="tel:+14802071852">📞 Call for dates &amp; rates</a>
+          <a class="btn magnetic" href="tel:+14802071852">📞 Be first in line</a>
           <a class="btn ghost magnetic" href="adventure-rv.html">See the RV <span class="arrow">→</span></a>
         </div>
-        <p class="rv-note">Online booking is on the way. Until then, give us a call and we'll check your dates and hold the trip for you.</p>
+        <p class="rv-note">Rentals open soon. Dates and rates will be announced when booking opens; until then, give us a call and we'll walk you through the RV.</p>
       </div>
       <figure class="rv-postcard">
         <img src="assets/img/rv-exterior.webp" alt="The Happy Pets Adventure RV, a white Class C motorhome" width="698" height="349" loading="lazy">

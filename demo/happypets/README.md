@@ -10,6 +10,12 @@ After editing, rebuild the site files in the root:
 
     python _tools/build.py
 
+Search and sharing: every page gets a canonical link and share-card tags (the picture is the page's `image:` front
+matter, else its hero photo, else `hero.webp`). Structured data lives in the page source as JSON-LD blocks, which the
+build checks and moves into the head: the business with both locations and its services on the homepage, and a
+`Service` on the Adventure RV page (coming soon, no dates or rates yet) and on the Portrait Studio page (with its
+session prices).
+
 ## What's where
 - `assets/js/core.js` — loader, raining paws, page transitions, sounds hooks, 3D/fur headings, all page features
 - First-visit intro (the loader in `_src/layout.html`, styles under "First-visit intro" in `site.css`): Lacy drives the
@@ -31,9 +37,14 @@ After editing, rebuild the site files in the root:
 - `assets/js/sfx.js` — synthesized sound effects (Web Audio, no files)
 - `assets/js/chat.js` — Lacy, Linda's princess and the AI concierge (FAQ, booking, pre-screen scheduling)
 - `assets/fonts/fredoka.js` — Fredoka Bold converted for three.js by `_tools/font2three.py`
-- `assets/img/` — photos pulled from the original site at full resolution, resized and sharpened
+- `assets/img/` — photos pulled from the original site at full resolution, resized and sharpened (plus the New at
+  the Palace pictures and share cards, below)
 
 Homepage extras (in `_src/pages/index.html`, styles at the end of `assets/css/site.css`):
+- **New at the Palace** (`#whats-new`, right under the banner strips): two picture cards, the Adventure RV (coming
+  soon) and the photo booth (new backdrops and props every season). Each opens its section in the category hub.
+  Pictures: `rv-coming-soon.webp` and `photo-booth.webp` (with `-960` copies for phones); the share cards use
+  `og-rv.jpg` and `og-photo-booth.jpg`.
 - **Review quotes** at the top (`[[hero_reviews]]` in `_tools/build.py`, from `_src/reviews.json`): one quote at a
   time, no stars, with next and pause buttons (tap a quote for the next one). Above the photo on computers, above
   the headline on phones. Long reviews are cut at the end of a sentence.
@@ -44,8 +55,9 @@ Homepage extras (in `_src/pages/index.html`, styles at the end of `assets/css/si
   winter and the Royal Birthday add-on). Visitors can tap a season; it pauses on hover, off screen and with
   the pause button, and stays put for reduced motion. The scenes are the `SCENES` list in the script under
   the section.
-- **Adventure RV** (`#adventure-rv`): the pet-friendly RV rental, with a postcard of the real RV and a little
-  road trip drawing with Lacy in the window.
+- **Adventure RV** (`#adventure-rv`): the pet-friendly RV rental, coming soon (no dates or rates until booking
+  opens), with a postcard of the real RV and a little road trip drawing with Lacy in the window. The RV page,
+  the services card, the hub button, the nav ("Soon") and Lacy's answer all say coming soon too.
 
 Phone performance: off-screen sections pause their CSS animations (`.anim-off`, set by core.js), as do the
 hidden page-change overlay and the closed chat. On phones the live 3D title and the raining paws draw at about

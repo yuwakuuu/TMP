@@ -1576,3 +1576,61 @@ html.lite .rv-hills,html.lite .rv-cacti,html.lite .rv-lane::after,html.lite .rv-
   .nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:color-mix(in srgb,var(--card) 96%,transparent)}
 }
 @keyframes softSway{50%{rotate:-1deg}}
+
+/* =========================================================
+   New at the Palace (homepage): picture cards for the Adventure RV (coming soon) and the photo booth, each opening
+   its section in the category hub. Also the "Soon" pill, the RV page's coming-soon card and the Portrait Studio's
+   booth photo. Reveals sit on wrappers, so the cards' own transforms (tilt, hover) never fight them.
+   ========================================================= */
+.news-sec{padding:80px 0 30px}
+.news-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:28px}
+.news-grid>div{min-width:0;display:flex}
+.news-card{position:relative;flex:1;display:flex;flex-direction:column;border-radius:var(--r);background:var(--card);border:1px solid var(--line);overflow:hidden;text-decoration:none;color:inherit;box-shadow:var(--shadow-sm);transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.news-card:hover{box-shadow:var(--shadow)}
+.news-img{display:block;overflow:hidden;background:var(--bg-2)}
+.news-img img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;transition:scale .7s var(--ease)}
+.news-card:hover .news-img img{scale:1.05}
+.news-tag{position:absolute;top:16px;left:16px;padding:8px 14px;border-radius:999px;background:#fff;color:#521034;font:700 14px/1.2 var(--font-l);box-shadow:0 10px 22px -12px rgba(42,8,25,.6)}
+.news-tag.soon{background:#521034;color:#fff}
+.news-body{display:flex;flex-direction:column;flex:1;padding:22px 26px 24px}
+.news-body h3{font-size:clamp(24px,2.3vw,29px);color:var(--plum);margin-bottom:6px}
+.news-body p{color:var(--ink-2);font-size:16.5px}
+.news-body .more{margin-top:auto;padding-top:14px;font-weight:600;font-size:15px;color:var(--teal-d)}
+:root[data-theme="dark"] .news-body .more{color:var(--teal)}
+@media (max-width:760px){.news-sec{padding:60px 0 20px}.news-grid{grid-template-columns:minmax(0,1fr);gap:18px}.news-body{padding:18px 20px 20px}.news-tag{top:12px;left:12px;font-size:13px;padding:7px 12px}}
+@media (prefers-reduced-motion:reduce){.news-card,.news-img img{transition:none}.news-card:hover .news-img img{scale:none}}
+
+/* "Soon": nav menu, eyebrows and the RV page */
+.soon-pill{display:inline-flex;align-items:center;padding:4px 10px 3px;border-radius:999px;background:#cfe9ef;color:#521034;font:800 11px/1.25 var(--font-l);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.drop .soon-pill{margin-left:auto}
+.drop a:has(.soon-pill){white-space:nowrap}   /* "Adventure RV" stays on one line next to its pill */
+.rv-copy .eyebrow{flex-wrap:wrap;row-gap:8px}   /* on phones the pill drops under the label instead of squeezing it */
+
+/* Adventure RV page: the coming-soon card (what we can say before booking opens) */
+.soon-sec{padding:16px 0 30px}
+.soon-card{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px 48px;align-items:center;padding:54px;border-radius:40px;background:var(--plum-fill);color:#fff;overflow:hidden;box-shadow:var(--shadow)}
+.soon-card::after{content:"🐾";position:absolute;right:-14px;bottom:-40px;font-size:190px;line-height:1;opacity:.07;rotate:-18deg;pointer-events:none}
+.soon-card .soon-pill{font-size:12.5px;padding:6px 13px 5px}
+.soon-card h2{color:#fff;margin:16px 0 12px}
+.soon-card h2 .s{color:#cfe9ef}
+.soon-copy p{font-size:19px;line-height:1.55;opacity:.92;max-width:520px}
+.soon-facts{list-style:none;display:grid;gap:12px;margin:0;padding:0;position:relative;z-index:1}
+.soon-facts li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 14px;align-items:center;padding:16px 18px;border-radius:20px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16)}
+.soon-facts .ic{grid-row:1/3;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.14);font-size:23px}
+.soon-facts b{font:700 18px/1.2 var(--font-l);color:#fff}
+.soon-facts small{font-size:15.5px;line-height:1.45;color:rgba(255,255,255,.86)}
+.soon-facts a{color:#fff;font-weight:700}
+html.lite .soon-card h2{color:#fff}
+html.lite .soon-card h2 .s{color:#cfe9ef}
+@media (max-width:900px){.soon-card{grid-template-columns:minmax(0,1fr);padding:36px 22px;border-radius:30px}.soon-copy p{font-size:17.5px}}
+
+/* Portrait Studio page: the photo booth, its picture in a white print frame like the homepage booth's polaroid */
+.booth-feature{padding:30px 0 40px}
+.booth-shot{margin:0 auto;max-width:620px;background:#fff;padding:14px 14px 0;border-radius:8px;box-shadow:0 34px 60px -30px rgba(42,8,25,.6),0 1px 0 rgba(42,8,25,.08);transform:rotate(-1.6deg);transition:transform .6s var(--spring)}
+.booth-shot:hover{transform:rotate(0) scale(1.01)}
+.booth-shot img{width:100%;height:auto;border-radius:3px}
+.booth-shot figcaption{font:600 clamp(17px,1.9vw,21px)/1.3 var(--font-d);color:#521034;text-align:center;padding:12px 8px 14px}
+.season-chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 26px;padding:0}
+.season-chips li{padding:8px 14px;border-radius:999px;background:var(--teal-soft);color:var(--ink);font:500 15.5px/1.3 var(--font-b)}
+@media (max-width:1080px){.booth-feature .split{gap:40px}}
+@media (prefers-reduced-motion:reduce){.booth-shot{transition:none}}
