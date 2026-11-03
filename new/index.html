@@ -975,43 +975,62 @@ html.is-locked .tob{display:none}
   .marquee__track{animation:none!important}
   .crew__card--locked .crew__face::after{display:none}
 }
-/* ---------- First impressions: the intro animations from our demo sites ---------- */
+/* ---------- First impressions: a card for each intro we've made; its clip plays on hover or tap ---------- */
 .intros{padding-block:clamp(56px,8vw,110px)}
-.ix{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(280px,1fr);gap:clamp(20px,3vw,40px);align-items:start}
-.ix__screen{border-radius:16px;overflow:hidden;background:var(--ink-3);border:1px solid var(--line-2);box-shadow:0 50px 90px -40px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.02)}
-.ix__frame{position:relative;aspect-ratio:16/10;background:#0b0c0e}
-.ix__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.ix__toggle{position:absolute;left:14px;bottom:16px;width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(17,19,22,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--paper);display:grid;place-items:center;cursor:pointer;transition:border-color .25s,background-color .25s}
-.ix__toggle:hover{border-color:var(--teal)}
-.ix__toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.ix__toggle .i-play{fill:currentColor;stroke-width:1.2}
-.ix__toggle .i-play,.ix__toggle[aria-pressed="true"] .i-pause{display:none}
-.ix__toggle[aria-pressed="true"] .i-play{display:block}
-.ix__bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.12)}
-.ix__bar i{display:block;height:100%;background:var(--teal);transform-origin:0 50%;transform:scaleX(0)}
-.ix__list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.ix__item{position:relative;overflow:hidden;width:100%;display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:14px;align-items:center;padding:8px 14px 8px 8px;border-radius:14px;border:1px solid var(--line);background:var(--ink-2);color:var(--paper);font:inherit;text-align:left;cursor:pointer;transition:border-color .25s,background-color .25s}
-.ix__item:hover{border-color:var(--line-2)}
-.ix__item img{width:96px;height:60px;border-radius:8px;object-fit:cover;display:block;border:1px solid var(--line)}
-.ix__txt b{display:block;font-family:var(--font-display);font-weight:760;font-stretch:104%;font-size:1rem;line-height:1.2}
-.ix__txt small{display:block;margin-top:3px;color:var(--muted);font-size:.875rem;line-height:1.35}
-.ix__time{font-family:var(--font-num);font-weight:600;font-size:.8125rem;color:var(--muted)}
-.ix__item[aria-pressed="true"]{border-color:color-mix(in srgb,var(--teal) 55%,transparent);background:color-mix(in srgb,var(--teal) 7%,var(--ink-2))}
-.ix__item[aria-pressed="true"] .ix__time{color:var(--teal)}
-.ix__item::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal);transform-origin:0 50%;transform:scaleX(var(--p,0));opacity:0}
-.ix__item[aria-pressed="true"]::after{opacity:1}
-.ix__info{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
-.ix__desc{margin:0 0 16px;color:var(--muted);max-width:46ch;min-height:3em}
-@media (max-width:980px){
-  .ix{grid-template-columns:minmax(0,1fr)}
-  .ix__list{grid-auto-flow:column;grid-auto-columns:minmax(190px,46%);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:thin}
-  .ix__item{scroll-snap-align:start;height:100%;grid-template-columns:minmax(0,1fr);align-content:start;gap:10px;padding:8px 8px 12px}
-  .ix__item img{width:100%;height:auto;aspect-ratio:16/10}
-  .ix__txt{padding-inline:4px}
-  .ix__time{position:absolute;top:14px;right:14px;padding:2px 8px;border-radius:999px;background:rgba(17,19,22,.78);color:var(--paper)}
+.ix-hint--tap,.ix-hint--click{display:none}
+@media (hover:none),(pointer:coarse){.ix-hint--hover{display:none}.ix-hint--tap{display:inline}}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:reduce){.ix-hint--hover{display:none}.ix-hint--click{display:inline}}
+.ix{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px)}
+.ixc{position:relative;min-width:0;display:flex;flex-direction:column;border-radius:18px;border:1px solid var(--line);background:var(--ink-2);overflow:hidden;transition:border-color .3s,box-shadow .5s var(--ease-out),transform .5s var(--ease-out)}
+.ixc:hover,.ixc:focus-within,.ixc.is-on{border-color:color-mix(in srgb,var(--teal) 50%,var(--line-2))}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.ixc:hover{transform:translateY(-4px);box-shadow:0 44px 70px -42px rgba(0,0,0,.95)}}
+.ixc .cf__url{max-width:74%}
+.ixc__frame{position:relative;display:block;width:100%;aspect-ratio:16/10;margin:0;padding:0;border:0;border-radius:0;background:#0b0c0e;color:var(--paper);cursor:pointer;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.ixc__frame:focus-visible{outline-offset:-4px;border-radius:0}
+.ixc__frame img,.ixc__frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ixc__frame video{opacity:0;transition:opacity .35s}
+.ixc.is-live .ixc__frame video{opacity:1}
+.ixc__badge{position:absolute;left:12px;bottom:14px;display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px 0 9px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(17,19,22,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-family:var(--font-num);font-weight:600;font-size:.8125rem;line-height:1;transition:border-color .25s,background-color .25s}
+.ixc__frame:hover .ixc__badge,.ixc__frame:focus-visible .ixc__badge{border-color:var(--teal)}
+.ixc__badge svg{width:15px;height:15px;flex:none;fill:currentColor}
+.ixc__i-pause,.ixc__i-wait,.ixc.is-on .ixc__i-play{display:none}
+.ixc.is-on .ixc__i-pause{display:inline}
+.ixc.is-on.is-wait .ixc__i-pause{display:none}
+.ixc.is-on.is-wait .ixc__i-wait{display:inline}
+.ixc.is-on.is-wait .ixc__badge svg{animation:ixSpin .8s linear infinite}
+@keyframes ixSpin{to{transform:rotate(1turn)}}
+.ixc__bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.14);opacity:0;transition:opacity .3s}
+.ixc__bar i{display:block;height:100%;background:var(--teal);transform-origin:0 50%;transform:scaleX(0)}
+.ixc.is-live .ixc__bar{opacity:1}
+.ixc__body{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:18px 20px 20px}
+.ixc__kind{font-weight:650;font-size:.8125rem;color:var(--teal)}
+.ixc__body h3{font-size:var(--step-1);font-weight:800;font-stretch:106%;letter-spacing:-.02em;line-height:1.15}
+.ixc__desc{margin-bottom:12px;color:var(--muted);font-size:.9375rem;line-height:1.5}
+.ixc__body .btn{margin-top:auto}
+.ixc__body .btn svg{transform:rotate(-45deg)}
+.ix__ctrl{display:none}
+.ix__btn{width:48px;height:48px;border-radius:14px;border:1px solid var(--line-2);background:transparent;color:var(--paper);display:grid;place-items:center;cursor:pointer;transition:border-color .25s,background-color .25s,opacity .25s,transform .2s}
+.ix__btn:hover{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 8%,transparent)}
+.ix__btn:active{transform:scale(.94)}
+.ix__btn:disabled{opacity:.35;cursor:default;border-color:var(--line-2);background:transparent}
+.ix__btn svg{width:20px;height:20px}
+.ix__count{display:flex;align-items:baseline;gap:4px;font-family:var(--font-num);font-weight:800;font-size:1.25rem}
+.ix__count span{font-size:.9375rem;color:var(--muted)}
+.ix-jump{justify-self:start;display:inline-flex;align-items:center;gap:12px;min-height:48px;padding-right:8px;color:var(--paper);font-family:var(--font-display);font-weight:700;font-stretch:104%;font-size:1rem;text-decoration:none;border-radius:12px}
+.ix-jump__icon{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:color-mix(in srgb,var(--teal) 16%,transparent);border:1px solid color-mix(in srgb,var(--teal) 55%,transparent);transition:transform .3s var(--spring),background-color .25s}
+.ix-jump__icon svg{width:17px;height:17px;fill:var(--teal);transition:fill .25s}
+.ix-jump:hover .ix-jump__icon{transform:scale(1.08);background:var(--teal)}
+.ix-jump:hover .ix-jump__icon svg{fill:var(--ink)}
+.ix-jump__n{font-family:var(--font-num);font-weight:600;color:var(--muted)}
+@media (max-width:1099px){.ix{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* phones: one swipeable row, the next card peeking in */
+@media (max-width:699px){
+  .ix{display:flex;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(var(--gutter) * -1) calc(var(--gutter-r) * -1);padding:4px var(--gutter-r) 6px var(--gutter);scroll-padding-inline:var(--gutter) var(--gutter-r)}
+  .ix::-webkit-scrollbar{display:none}
+  .ixc{flex:0 0 min(86%,380px);scroll-snap-align:start}
+  .ixc__body{padding:16px 18px 18px}
+  .ix__ctrl{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px}
 }
-@media (max-width:520px){.ix__list{grid-auto-columns:minmax(170px,62%)}}
-@media (max-width:520px){.ix__toggle{left:10px;bottom:12px;width:40px;height:40px}.ix__desc{min-height:0}}
 </style>
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
@@ -1105,6 +1124,7 @@ html.is-locked .tob{display:none}
     <a href="#services"><span>Services</span></a>
     <a href="#lab"><span>3D &amp; motion</span></a>
     <a href="#work"><span>Work</span></a>
+    <a href="#intros"><span>Intros</span></a>
     <a href="#why"><span>Why us</span></a>
     <a href="#pricing"><span>Pricing</span></a>
     <a href="#play"><span>Play</span></a>
@@ -1326,6 +1346,7 @@ html.is-locked .tob{display:none}
     <header class="sec-head">
       <h2 id="work-title" data-reveal="rise">Work we're proud of<span class="dot">.</span></h2>
       <p class="sec-lead">Real sites for real businesses. Open any of them and click around.</p>
+      <a class="ix-jump" href="#intros"><span class="ix-jump__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 5.8v12.4L18.6 12z"/></svg></span>Watch their intros <span class="ix-jump__n">6 clips</span></a>
     </header>
   </div>
   <div class="cf" id="cf" role="region" aria-roledescription="carousel" aria-label="Our work">
@@ -1449,59 +1470,112 @@ html.is-locked .tob{display:none}
   </div>
 </section>
 
-<!-- CLIENT STORY: TQM -->
+<!-- FIRST IMPRESSIONS: the intros we've made for sites -->
 <section class="intros" id="intros" aria-labelledby="intros-title">
   <div class="wrap">
     <header class="sec-head">
       <h2 id="intros-title" data-reveal="rise">First impressions<span class="dot">.</span></h2>
-      <p class="sec-lead">A site gets a few seconds to make an impression, so we give each one its own opening, made for that business. Here are a few.</p>
+      <p class="sec-lead">A site gets a few seconds to make an impression, so we give each one its own opening, made for that business. <span class="ix-hint--hover">Hover over one to play&nbsp;it.</span><span class="ix-hint--tap">Tap one to play&nbsp;it.</span><span class="ix-hint--click">Click one to play&nbsp;it.</span></p>
     </header>
-    <div class="ix" id="ix">
-      <div class="ix__screen">
-        <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url" id="ix-url">tmpbizz.com/demo/bryco</span></span>
-        <div class="ix__frame">
-          <video class="ix__video" id="ix-video" muted playsinline preload="none" poster="assets/intros/bryco-poster.webp" aria-label="Bryco Asphalt Milling&#x27;s intro animation"></video>
-          <button class="ix__toggle" id="ix-toggle" type="button" aria-label="Pause the intros" aria-pressed="false" data-sfx="none"><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5.8v12.4L18.6 12z"/></svg></button>
-          <div class="ix__bar" aria-hidden="true"><i id="ix-progress"></i></div>
+    <ul class="ix" id="ix" role="list" aria-label="Intros we've made">
+      <li class="ixc" data-clip="assets/intros/bryco">
+        <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/bryco</span></span>
+        <button class="ixc__frame" type="button" data-label="Bryco Asphalt Milling's intro, 6 seconds" aria-label="Play Bryco Asphalt Milling's intro, 6 seconds" data-sfx="none">
+          <img src="assets/intros/bryco-poster.webp" width="1280" height="800" alt="" loading="lazy" decoding="async">
+          <span class="ixc__badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ixc__i-play" d="M8 5.6v12.8L18.4 12z"/><path class="ixc__i-pause" d="M7.5 5h3.2v14H7.5zm5.8 0h3.2v14h-3.2z"/><path class="ixc__i-wait" d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>0:06</span>
+          <span class="ixc__bar" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="ixc__body">
+          <p class="ixc__kind">Asphalt milling in the East Valley, AZ</p>
+          <h3>Bryco Asphalt Milling</h3>
+          <p class="ixc__desc">Hot asphalt pours in, the saw-blade O rolls it into the logo's road stripe, and a paver sweeps the site into view.</p>
+          <a class="btn btn--ghost btn--sm" href="https://tmpbizz.com/demo/bryco/" target="_blank" rel="noopener">See it live<span class="sr-only"> (Bryco Asphalt Milling, opens in a new tab)</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
-      </div>
-      <div class="ix__side">
-        <ol class="ix__list" id="ix-list" aria-label="Intros">
-          <li><button class="ix__item" type="button" aria-pressed="true" data-src="assets/intros/bryco" data-poster="assets/intros/bryco-poster.webp" data-url="tmpbizz.com/demo/bryco" data-href="https://tmpbizz.com/demo/bryco/" data-cta="See it live" data-label="Bryco Asphalt Milling&#x27;s intro animation" data-desc="Hot asphalt pours into the road stripe of the logo, the saw-blade &quot;O&quot; rolls it flat, and a paver sweeps the site into view.">
-            <img src="assets/intros/bryco-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
-            <span class="ix__txt"><b>Bryco Asphalt Milling</b><small>Hot asphalt paves the logo</small></span>
-            <span class="ix__time">0:05</span>
-          </button></li>
-          <li><button class="ix__item" type="button" aria-pressed="false" data-src="assets/intros/thaipatio" data-poster="assets/intros/thaipatio-poster.webp" data-url="tmpbizz.com/demo/thaipatio" data-href="https://tmpbizz.com/demo/thaipatio/?intro" data-cta="See it live" data-label="Thai Patio&#x27;s intro animation" data-desc="A wok bursts into flames while the logo writes itself above it, then the fire clears to the real kitchen.">
-            <img src="assets/intros/thaipatio-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
-            <span class="ix__txt"><b>Thai Patio</b><small>A flaming wok writes the logo</small></span>
-            <span class="ix__time">0:05</span>
-          </button></li>
-          <li><button class="ix__item" type="button" aria-pressed="false" data-src="assets/intros/happypets" data-poster="assets/intros/happypets-poster.webp" data-url="tmpbizz.com/demo/happypets" data-href="https://tmpbizz.com/demo/happypets/" data-cta="See it live" data-label="Happy Pets Palace&#x27;s intro: Lacy drives the Adventure RV through the Arizona desert to the Palace" data-desc="Lacy, the owner&#x27;s dog, drives their Adventure RV through the Arizona desert to the Palace while the page loads, then barks hello and the site opens.">
-            <img src="assets/intros/happypets-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
-            <span class="ix__txt"><b>Happy Pets Palace</b><small>Lacy drives the RV through the desert</small></span>
-            <span class="ix__time">0:08</span>
-          </button></li>
-          <li><button class="ix__item" type="button" aria-pressed="false" data-src="assets/intros/tob" data-poster="assets/intros/tob-poster.webp" data-url="tmpbizz.com/demo/tob" data-href="https://tmpbizz.com/demo/tob/" data-cta="See it live" data-label="The TOB Company&#x27;s boot screen" data-desc="TOB starts up like an operating system, running a real check of your device before his face lights up.">
-            <img src="assets/intros/tob-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
-            <span class="ix__txt"><b>The TOB Company</b><small>An AI butler boots up</small></span>
-            <span class="ix__time">0:05</span>
-          </button></li>
-          <li><button class="ix__item" type="button" aria-pressed="false" data-src="assets/intros/tqm" data-poster="assets/intros/tqm-poster.webp" data-url="tmpbizz.com/demo/tqm/reveal" data-href="https://tmpbizz.com/demo/tqm/reveal/" data-cta="Watch the full film" data-label="The opening of TQM&#x27;s website reveal film" data-desc="Our neon sign hands off to TQM&#x27;s logo in the opening of a 45-second film that walks through their new site.">
-            <img src="assets/intros/tqm-thumb.webp" width="320" height="200" alt="" loading="lazy" decoding="async">
-            <span class="ix__txt"><b>Total Quality Management</b><small>A website reveal film</small></span>
-            <span class="ix__time">0:12</span>
-          </button></li>
-        </ol>
-        <div class="ix__info">
-          <p class="ix__desc" id="ix-desc" aria-live="polite">Hot asphalt pours into the road stripe of the logo, the saw-blade &quot;O&quot; rolls it flat, and a paver sweeps the site into view.</p>
-          <a class="btn btn--ghost btn--sm" id="ix-open" href="https://tmpbizz.com/demo/bryco/" target="_blank" rel="noopener">See it live</a>
+      </li>
+      <li class="ixc" data-clip="assets/intros/thaipatio">
+        <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/thaipatio</span></span>
+        <button class="ixc__frame" type="button" data-label="Thai Patio's intro, 5 seconds" aria-label="Play Thai Patio's intro, 5 seconds" data-sfx="none">
+          <img src="assets/intros/thaipatio-poster.webp" width="1280" height="800" alt="" loading="lazy" decoding="async">
+          <span class="ixc__badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ixc__i-play" d="M8 5.6v12.8L18.4 12z"/><path class="ixc__i-pause" d="M7.5 5h3.2v14H7.5zm5.8 0h3.2v14h-3.2z"/><path class="ixc__i-wait" d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>0:05</span>
+          <span class="ixc__bar" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="ixc__body">
+          <p class="ixc__kind">Thai restaurant in Mesa, AZ</p>
+          <h3>Thai Patio</h3>
+          <p class="ixc__desc">The logo writes itself above a flaming wok, then the flare opens onto the real kitchen.</p>
+          <a class="btn btn--ghost btn--sm" href="https://tmpbizz.com/demo/thaipatio/?intro" target="_blank" rel="noopener">See it live<span class="sr-only"> (Thai Patio, opens in a new tab)</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
-      </div>
+      </li>
+      <li class="ixc" data-clip="assets/intros/happypets">
+        <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/happypets</span></span>
+        <button class="ixc__frame" type="button" data-label="Happy Pets Palace's intro, 8 seconds" aria-label="Play Happy Pets Palace's intro, 8 seconds" data-sfx="none">
+          <img src="assets/intros/happypets-poster.webp" width="1280" height="800" alt="" loading="lazy" decoding="async">
+          <span class="ixc__badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ixc__i-play" d="M8 5.6v12.8L18.4 12z"/><path class="ixc__i-pause" d="M7.5 5h3.2v14H7.5zm5.8 0h3.2v14h-3.2z"/><path class="ixc__i-wait" d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>0:08</span>
+          <span class="ixc__bar" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="ixc__body">
+          <p class="ixc__kind">Dog boarding &amp; daycare in Mesa and Chandler</p>
+          <h3>Happy Pets Palace</h3>
+          <p class="ixc__desc">Lacy, the owner's dog, drives the Adventure RV across the Arizona desert to the Palace while the page loads.</p>
+          <a class="btn btn--ghost btn--sm" href="https://tmpbizz.com/demo/happypets/" target="_blank" rel="noopener">See it live<span class="sr-only"> (Happy Pets Palace, opens in a new tab)</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </li>
+      <li class="ixc" data-clip="assets/intros/tqm">
+        <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/tqm/reveal</span></span>
+        <button class="ixc__frame" type="button" data-label="the opening of Total Quality Management's reveal film, 12 seconds" aria-label="Play the opening of Total Quality Management's reveal film, 12 seconds" data-sfx="none">
+          <img src="assets/intros/tqm-poster.webp" width="1280" height="800" alt="" loading="lazy" decoding="async">
+          <span class="ixc__badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ixc__i-play" d="M8 5.6v12.8L18.4 12z"/><path class="ixc__i-pause" d="M7.5 5h3.2v14H7.5zm5.8 0h3.2v14h-3.2z"/><path class="ixc__i-wait" d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>0:12</span>
+          <span class="ixc__bar" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="ixc__body">
+          <p class="ixc__kind">Commercial cleaning in Mesa, AZ</p>
+          <h3>Total Quality Management</h3>
+          <p class="ixc__desc">The opening of the film that reveals their new website: our neon sign hands off to the TQM logo.</p>
+          <a class="btn btn--ghost btn--sm" href="https://tmpbizz.com/demo/tqm/reveal/" target="_blank" rel="noopener">Watch the film<span class="sr-only"> (Total Quality Management, opens in a new tab)</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </li>
+      <li class="ixc" data-clip="assets/intros/tob">
+        <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">tmpbizz.com/demo/tob</span></span>
+        <button class="ixc__frame" type="button" data-label="The TOB Company's boot screen, 5 seconds" aria-label="Play The TOB Company's boot screen, 5 seconds" data-sfx="none">
+          <img src="assets/intros/tob-poster.webp" width="1280" height="800" alt="" loading="lazy" decoding="async">
+          <span class="ixc__badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ixc__i-play" d="M8 5.6v12.8L18.4 12z"/><path class="ixc__i-pause" d="M7.5 5h3.2v14H7.5zm5.8 0h3.2v14h-3.2z"/><path class="ixc__i-wait" d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>0:05</span>
+          <span class="ixc__bar" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="ixc__body">
+          <p class="ixc__kind">Software launch</p>
+          <h3>The TOB Company</h3>
+          <p class="ixc__desc">TOB starts up like an operating system, checking your device line by line before his face lights up.</p>
+          <a class="btn btn--ghost btn--sm" href="https://tmpbizz.com/demo/tob/" target="_blank" rel="noopener">See it live<span class="sr-only"> (The TOB Company, opens in a new tab)</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </li>
+      <li class="ixc" data-clip="assets/intros/madebywaku">
+        <span class="cf__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="cf__url">yuwakuuu.github.io/madebywaku</span></span>
+        <button class="ixc__frame" type="button" data-label="MadeByWaku's intro, 5 seconds" aria-label="Play MadeByWaku's intro, 5 seconds" data-sfx="none">
+          <img src="assets/intros/madebywaku-poster.webp" width="1280" height="800" alt="" loading="lazy" decoding="async">
+          <span class="ixc__badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ixc__i-play" d="M8 5.6v12.8L18.4 12z"/><path class="ixc__i-pause" d="M7.5 5h3.2v14H7.5zm5.8 0h3.2v14h-3.2z"/><path class="ixc__i-wait" d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>0:05</span>
+          <span class="ixc__bar" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="ixc__body">
+          <p class="ixc__kind">Multimedia studio portfolio</p>
+          <h3>MadeByWaku</h3>
+          <p class="ixc__desc">A glowing infinity loop draws itself around the MBW monogram, then hands off to the 3D hero.</p>
+          <a class="btn btn--ghost btn--sm" href="https://yuwakuuu.github.io/madebywaku/" target="_blank" rel="noopener">See it live<span class="sr-only"> (MadeByWaku, opens in a new tab)</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </li>
+    </ul>
+    <div class="ix__ctrl">
+      <button class="ix__btn" type="button" id="ix-prev" aria-label="Previous intro" aria-controls="ix" data-sfx="none" disabled><svg aria-hidden="true"><use href="#i-left"/></svg></button>
+      <p class="ix__count" aria-hidden="true"><b id="ix-now">1</b><span>/ 6</span></p>
+      <button class="ix__btn" type="button" id="ix-next" aria-label="Next intro" aria-controls="ix" data-sfx="none"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+    </div>
+    <div class="lab__cta">
+      <p>Want an opening like these on your site?</p>
+      <a class="btn btn--primary btn--magnetic" href="#contact">Start your project</a>
     </div>
   </div>
 </section>
 
+<!-- CLIENT STORY: TQM -->
 <section class="case" id="tqm" aria-labelledby="case-title">
   <div class="wrap case__grid">
     <div class="case__copy">
@@ -2809,66 +2883,128 @@ const Loader = (() => {
 })();
 
 /* ================================================================
-   First impressions: one screen plays the intros from our demo sites in turn. Clips only load and play
-   while the section is on screen, pause in a hidden tab, and wait for a tap with reduced motion.
+   First impressions: a card for each intro we've made. A card shows a still until its clip is asked
+   for: on hover with a mouse, or with a click or tap (only a click or tap with reduced motion or Data
+   Saver, and then it plays once instead of looping). A clip loads on its first play, one plays at a
+   time, and it stops when its card leaves the screen or the tab is hidden. Phones get a swipeable row.
    ================================================================ */
 (() => {
   const root = $('#ix');
   if (!root) return;
-  const video = $('#ix-video'), items = $$('.ix__item', root), bar = $('#ix-progress'), toggle = $('#ix-toggle');
-  const urlEl = $('#ix-url'), desc = $('#ix-desc'), open = $('#ix-open');
   // H.264 where the browser has it (nearly everywhere), WebM otherwise
-  const ext = video.canPlayType('video/mp4; codecs="avc1.640020"') ? '.mp4' : '.webm';
-  let cur = 0, inView = false, paused = reduced, loaded = false, raf = 0;
-  const showToggle = () => {
-    toggle.setAttribute('aria-pressed', String(paused));
-    toggle.setAttribute('aria-label', paused ? 'Play the intros' : 'Pause the intros');
+  const ext = document.createElement('video').canPlayType('video/mp4; codecs="avc1.640020"') ? '.mp4' : '.webm';
+  const saveData = !!(navigator.connection && navigator.connection.saveData);
+  const hoverPlay = fine && !reduced && !saveData;
+  let current = null;
+  const cards = $$('.ixc', root).map((el) => {
+    const btn = $('.ixc__frame', el);
+    return { el, btn, label: btn.dataset.label, bar: $('.ixc__bar i', el), video: null, want: false, fresh: true, hoverT: 0, raf: 0 };
+  });
+
+  const progress = (c) => {
+    const v = c.video;
+    c.bar.style.transform = `scaleX(${v.duration ? clamp(v.currentTime / v.duration, 0, 1) : 0})`;
+    c.raf = v.paused ? 0 : requestAnimationFrame(() => progress(c));
   };
-  const progress = () => {
-    const p = video.duration ? clamp(video.currentTime / video.duration, 0, 1) : 0;
-    bar.style.transform = `scaleX(${p})`;
-    items[cur].style.setProperty('--p', p);
-    raf = video.paused ? 0 : requestAnimationFrame(progress);
+  const show = (c) => {
+    c.el.classList.toggle('is-on', c.want);
+    if (!c.want) c.el.classList.remove('is-wait');
+    c.btn.setAttribute('aria-label', `${c.want ? 'Pause' : 'Play'} ${c.label}`);
   };
-  const play = () => {
-    if (paused || !inView || document.hidden) return;
-    if (!loaded) { loaded = true; video.src = items[cur].dataset.src + ext; }
-    const p = video.play();
-    if (p && p.catch) p.catch(() => {});
+  const clip = (c) => {
+    if (c.video) return c.video;
+    const v = document.createElement('video');
+    v.muted = true; v.defaultMuted = true; v.playsInline = true; v.loop = !reduced && !saveData; v.preload = 'auto';
+    ['muted', 'playsinline', 'disablepictureinpicture', 'disableremoteplayback'].forEach((a) => v.setAttribute(a, ''));
+    v.setAttribute('aria-hidden', 'true');
+    v.addEventListener('playing', () => {
+      c.el.classList.add('is-live');
+      c.el.classList.remove('is-wait');
+      if (!c.raf) c.raf = requestAnimationFrame(() => progress(c));
+    });
+    v.addEventListener('waiting', () => { if (c.want) c.el.classList.add('is-wait'); });
+    // only without looping: the last frame stays, and the button offers to play it again
+    v.addEventListener('ended', () => { c.want = false; show(c); });
+    v.addEventListener('error', () => { c.want = false; show(c); c.el.classList.remove('is-live'); });
+    v.src = c.el.dataset.clip + ext;
+    c.btn.insertBefore(v, $('.ixc__badge', c.btn));
+    return (c.video = v);
   };
-  const pick = (i, start) => {
-    cur = (i + items.length) % items.length;
-    const it = items[cur];
-    items.forEach((b, k) => { b.setAttribute('aria-pressed', String(k === cur)); b.style.setProperty('--p', 0); });
-    bar.style.transform = 'scaleX(0)';
-    video.poster = it.dataset.poster;
-    video.setAttribute('aria-label', it.dataset.label);
-    urlEl.textContent = it.dataset.url;
-    desc.textContent = it.dataset.desc;
-    open.href = it.dataset.href;
-    open.textContent = it.dataset.cta;
-    if (loaded || start) { loaded = true; video.src = it.dataset.src + ext; }
-    if (start) play();
+  // back to the still; the next play starts from the top
+  const stop = (c) => {
+    clearTimeout(c.hoverT);
+    c.want = false; show(c);
+    if (c.video) c.video.pause();
+    c.fresh = true;
+    c.el.classList.remove('is-live');
+    c.bar.style.transform = 'scaleX(0)';
+    if (current === c) current = null;
   };
-  video.addEventListener('play', () => { if (!raf) raf = requestAnimationFrame(progress); });
-  video.addEventListener('ended', () => pick(cur + 1, true));
-  items.forEach((b, k) => b.addEventListener('click', () => {
-    paused = false; showToggle();
-    pick(k, true);
-    if (innerWidth <= 980) b.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest', inline: 'start' });
-  }));
-  toggle.addEventListener('click', () => {
-    paused = !paused; showToggle();
-    if (paused) video.pause(); else play();
+  const play = (c) => {
+    if (current && current !== c) stop(current);
+    current = c;
+    c.want = true; show(c);
+    if (document.hidden) return;
+    const v = clip(c);
+    if (c.fresh) { c.fresh = false; if (v.currentTime) v.currentTime = 0; }
+    if (v.readyState < 3) c.el.classList.add('is-wait');
+    const p = v.play();
+    if (p && p.catch) p.catch(() => { if (c.want && v.paused) { c.want = false; show(c); } });
+  };
+  const pause = (c) => {
+    c.want = false; show(c);
+    if (c.video) c.video.pause();
+  };
+
+  cards.forEach((c) => {
+    c.btn.addEventListener('click', () => {
+      clearTimeout(c.hoverT);
+      if (c.want) { pause(c); return; }
+      // in the phone row, a tap on the card peeking in from the side also brings it into view
+      if (root.scrollWidth > root.clientWidth + 2) c.el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest', inline: 'nearest' });
+      play(c);
+    });
+    if (!hoverPlay) return;
+    // a short wait, so a mouse passing over on its way somewhere else doesn't load anything
+    c.el.addEventListener('pointerenter', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      clearTimeout(c.hoverT);
+      c.hoverT = setTimeout(() => play(c), 140);
+    });
+    c.el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') stop(c); });
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (!current || !current.video) return;
+    if (document.hidden) current.video.pause();
+    else if (current.want) play(current);
   });
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver((en) => {
-      inView = en[0].isIntersecting;
-      if (inView) play(); else video.pause();
-    }, { threshold: 0.35 }).observe(root.querySelector('.ix__frame'));
-  } else { inView = true; }
-  document.addEventListener('visibilitychange', () => { if (document.hidden) video.pause(); else play(); });
-  showToggle();
+    // a clip stops once less than a quarter of its card is on screen
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      const c = cards.find((k) => k.el === en.target);
+      if (en.intersectionRatio < 0.25 && (c.want || c.el.classList.contains('is-live'))) stop(c);
+    }), { threshold: 0.25 });
+    cards.forEach((c) => io.observe(c.el));
+  }
+
+  // phones: previous/next and a count for the swipeable row (hidden on wider screens)
+  const prev = $('#ix-prev'), next = $('#ix-next'), now = $('#ix-now');
+  const stepW = () => (cards.length > 1 ? cards[1].el.offsetLeft - cards[0].el.offsetLeft : root.clientWidth);
+  const sync = rafThrottle(() => {
+    const w = stepW(), x = root.scrollLeft, end = x >= root.scrollWidth - root.clientWidth - 2;
+    now.textContent = end ? cards.length : (w > 0 ? clamp(Math.round(x / w), 0, cards.length - 1) : 0) + 1;
+    prev.disabled = x <= 2;
+    next.disabled = end;
+  });
+  const go = (dir) => {
+    root.scrollBy({ left: dir * stepW(), behavior: reduced ? 'auto' : 'smooth' });
+    SFX.play('swipe');
+  };
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
+  root.addEventListener('scroll', sync, { passive: true });
+  addEventListener('resize', sync);
+  sync();
 })();
 
 /* ================================================================
